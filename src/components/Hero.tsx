@@ -17,7 +17,7 @@ const Hero = () => {
             backgroundRepeat: 'no-repeat'
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/60 to-navy/80" />
+        
       </div>
 
       {/* Floating Elements */}
