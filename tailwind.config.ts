@@ -61,17 +61,17 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         // Corporate Brand Colors
-        navy: {
-          DEFAULT: "hsl(var(--navy))",
-          light: "hsl(var(--navy-light))",
+        charcoal: {
+          DEFAULT: "hsl(var(--charcoal))",
+          light: "hsl(var(--charcoal-light))",
         },
-        'blue-corporate': {
-          DEFAULT: "hsl(var(--blue-corporate))",
-          light: "hsl(var(--blue-light))",
+        golden: {
+          DEFAULT: "hsl(var(--golden))",
+          light: "hsl(var(--golden-light))",
         },
-        teal: {
-          DEFAULT: "hsl(var(--teal))",
-          light: "hsl(var(--teal-light))",
+        orange: {
+          DEFAULT: "hsl(var(--orange))",
+          light: "hsl(var(--orange-light))",
         },
         silver: {
           DEFAULT: "hsl(var(--silver))",

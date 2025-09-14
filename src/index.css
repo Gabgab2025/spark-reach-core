@@ -7,52 +7,52 @@
 
 @layer base {
   :root {
-    /* Brand Colors - Corporate Blue & Navy Palette */
+    /* Brand Colors - Modern Corporate Golden & Charcoal Palette */
     --background: 0 0% 100%;
-    --foreground: 215 25% 15%;
+    --foreground: 210 11% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 210 11% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 210 11% 15%;
 
-    --primary: 217 91% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 48 100% 50%;
+    --primary-foreground: 210 11% 15%;
 
-    --secondary: 214 32% 91%;
-    --secondary-foreground: 215 25% 15%;
+    --secondary: 210 11% 71%;
+    --secondary-foreground: 210 11% 15%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 11% 96%;
+    --muted-foreground: 210 11% 45%;
 
-    --accent: 174 72% 56%;
+    --accent: 33 100% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 50%;
+    --border: 210 11% 91%;
+    --input: 210 11% 91%;
+    --ring: 48 100% 50%;
 
     --radius: 1rem;
 
     /* Corporate Brand Colors */
-    --navy: 215 25% 15%;
-    --navy-light: 215 20% 25%;
-    --blue-corporate: 217 91% 50%;
-    --blue-light: 217 91% 60%;
-    --teal: 174 72% 56%;
-    --teal-light: 174 72% 66%;
-    --silver: 210 14% 89%;
-    --silver-dark: 210 14% 83%;
+    --charcoal: 210 11% 15%;
+    --charcoal-light: 210 11% 25%;
+    --golden: 48 100% 50%;
+    --golden-light: 48 100% 60%;
+    --orange: 33 100% 60%;
+    --orange-light: 33 100% 70%;
+    --silver: 210 11% 89%;
+    --silver-dark: 210 11% 71%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--blue-corporate)), hsl(var(--teal)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--navy)) 0%, hsl(var(--blue-corporate)) 50%, hsl(var(--teal)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--orange)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--charcoal)) 0%, hsl(var(--golden)) 50%, hsl(var(--orange)) 100%);
     --gradient-card: linear-gradient(145deg, hsl(var(--background)) 0%, hsl(var(--silver)) 100%);
-    --gradient-glow: linear-gradient(135deg, hsl(var(--blue-corporate) / 0.2), hsl(var(--teal) / 0.2));
+    --gradient-glow: linear-gradient(135deg, hsl(var(--golden) / 0.2), hsl(var(--orange) / 0.2));
     
     /* Glass Effects */
     --glass-bg: hsl(var(--background) / 0.8);
@@ -60,10 +60,10 @@
     --glass-shadow: 0 8px 32px hsl(var(--navy) / 0.1);
     
     /* Shadows */
-    --shadow-soft: 0 4px 20px hsl(var(--navy) / 0.08);
-    --shadow-medium: 0 8px 30px hsl(var(--navy) / 0.12);
-    --shadow-strong: 0 20px 60px hsl(var(--navy) / 0.15);
-    --shadow-glow: 0 0 40px hsl(var(--blue-corporate) / 0.3);
+    --shadow-soft: 0 4px 20px hsl(var(--charcoal) / 0.08);
+    --shadow-medium: 0 8px 30px hsl(var(--charcoal) / 0.12);
+    --shadow-strong: 0 20px 60px hsl(var(--charcoal) / 0.15);
+    --shadow-glow: 0 0 40px hsl(var(--golden) / 0.3);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -233,6 +233,6 @@
 }
 
 @keyframes glow {
-  from { box-shadow: 0 0 20px hsl(var(--blue-corporate) / 0.4); }
-  to { box-shadow: 0 0 40px hsl(var(--blue-corporate) / 0.8); }
+  from { box-shadow: 0 0 20px hsl(var(--golden) / 0.4); }
+  to { box-shadow: 0 0 40px hsl(var(--golden) / 0.8); }
 }
