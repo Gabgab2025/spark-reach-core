@@ -9,14 +9,14 @@ const Services = () => {
       title: 'Call Center Solutions',
       description: 'Comprehensive inbound and outbound call center services with advanced technology and skilled agents.',
       features: ['24/7 Customer Support', 'Multi-language Support', 'CRM Integration', 'Real-time Analytics'],
-      color: 'golden'
+      color: 'blue-corporate'
     },
     {
       icon: TrendingUp,
       title: 'Bank Collections',
       description: 'Professional debt recovery services for financial institutions with proven track record and compliance.',
       features: ['Regulatory Compliance', 'Advanced Negotiation', 'Payment Processing', 'Detailed Reporting'],
-      color: 'orange'
+      color: 'teal'
     },
     {
       icon: Users,
@@ -57,7 +57,7 @@ const Services = () => {
           {services.map((service, index) => (
             <div key={index} className="group">
               <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-${service.color} to-${service.color}-light flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
                 

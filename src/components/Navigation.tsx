@@ -32,7 +32,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-golden to-orange flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-corporate to-teal flex items-center justify-center">
               <Phone className="w-6 h-6 text-white" />
             </div>
             <div className="hidden sm:block">
