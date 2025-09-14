@@ -23,8 +23,8 @@ const Hero = () => {
 
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-teal/20 animate-float" />
-        <div className="absolute top-40 right-20 w-32 h-32 rounded-full bg-blue-corporate/20 animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-orange/20 animate-float" />
+        <div className="absolute top-40 right-20 w-32 h-32 rounded-full bg-golden/20 animate-float" style={{ animationDelay: '2s' }} />
         <div className="absolute bottom-20 left-20 w-16 h-16 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
@@ -63,21 +63,21 @@ const Hero = () => {
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
-                  <Users className="w-6 h-6 text-teal mr-2" />
+                  <Users className="w-6 h-6 text-golden mr-2" />
                   <span className="text-2xl font-bold text-white">500+</span>
                 </div>
                 <p className="text-white/70 text-sm">Active Clients</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
-                  <Phone className="w-6 h-6 text-teal mr-2" />
+                  <Phone className="w-6 h-6 text-golden mr-2" />
                   <span className="text-2xl font-bold text-white">10M+</span>
                 </div>
                 <p className="text-white/70 text-sm">Calls Handled</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
-                  <TrendingUp className="w-6 h-6 text-teal mr-2" />
+                  <TrendingUp className="w-6 h-6 text-golden mr-2" />
                   <span className="text-2xl font-bold text-white">95%</span>
                 </div>
                 <p className="text-white/70 text-sm">Success Rate</p>
@@ -88,26 +88,26 @@ const Hero = () => {
           {/* Visual Element */}
           <div className="hidden lg:block relative">
             <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-corporate/20 to-teal/20 rounded-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-br from-golden/20 to-orange/20 rounded-3xl" />
               <div className="relative z-10 h-full flex flex-col justify-center">
                 <h3 className="text-2xl font-bold text-white mb-4">Real-Time Analytics</h3>
                 <div className="space-y-4">
                   <div className="bg-white/10 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-white/80 text-sm">Active Calls</span>
-                      <span className="text-teal font-bold">1,247</span>
+                      <span className="text-golden font-bold">1,247</span>
                     </div>
                     <div className="w-full bg-white/20 rounded-full h-2">
-                      <div className="bg-teal h-2 rounded-full w-3/4" />
+                      <div className="bg-golden h-2 rounded-full w-3/4" />
                     </div>
                   </div>
                   <div className="bg-white/10 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-white/80 text-sm">Collection Rate</span>
-                      <span className="text-blue-corporate font-bold">94.2%</span>
+                      <span className="text-orange font-bold">94.2%</span>
                     </div>
                     <div className="w-full bg-white/20 rounded-full h-2">
-                      <div className="bg-blue-corporate h-2 rounded-full w-11/12" />
+                      <div className="bg-orange h-2 rounded-full w-11/12" />
                     </div>
                   </div>
                 </div>
