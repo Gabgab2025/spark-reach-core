@@ -17,7 +17,8 @@ const Hero = () => {
             backgroundRepeat: 'no-repeat'
           }}
         />
-        
+        {/* Text contrast overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/60" />
       </div>
 
       {/* Floating Elements */}
@@ -36,13 +37,13 @@ const Hero = () => {
               <span className="text-white text-sm font-medium">Trusted by 500+ Financial Institutions</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight drop-shadow-lg">
               Next-Gen
-              <span className="block text-gradient">Call Center</span>
-              <span className="block">& Collections</span>
+              <span className="block text-gradient font-extrabold drop-shadow-md">Call Center</span>
+              <span className="block font-black">& Collections</span>
             </h1>
 
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-xl text-white font-medium mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed drop-shadow-md">
               Revolutionizing customer service and debt recovery with AI-powered solutions, 
               cutting-edge technology, and industry-leading expertise.
             </p>
