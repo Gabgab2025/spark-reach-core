@@ -288,23 +288,56 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
         previewContent = '<div style="padding: 20px; text-align: center;">Preview not available for this content type</div>';
     }
 
-    // Open preview in a new tab
-    const previewWindow = window.open('', '_blank');
-    if (previewWindow) {
-      previewWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Preview: ${item.title || item.name || item.client_name}</title>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        <body style="margin: 0; background: #f9fafb;">
-          ${previewContent}
-        </body>
-        </html>
-      `);
-      previewWindow.document.close();
+    // Open preview in a new tab with better error handling
+    try {
+      const previewWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+      if (previewWindow) {
+        previewWindow.document.open();
+        previewWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <title>Preview: ${(item.title || item.name || item.client_name || 'Content').replace(/"/g, '&quot;')}</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+              body { margin: 0; padding: 0; background: #f8f9fa; }
+            </style>
+          </head>
+          <body>
+            ${previewContent}
+          </body>
+          </html>
+        `);
+        previewWindow.document.close();
+      } else {
+        // Fallback: create blob URL if popup is blocked
+        const blob = new Blob([`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <title>Preview</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+          </head>
+          <body style="margin: 0; background: #f9fafb;">
+            ${previewContent}
+          </body>
+          </html>
+        `], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const link = window.open(url, '_blank');
+        
+        if (!link) {
+          alert('Please allow popups to preview content, or check your browser settings.');
+        }
+        
+        // Clean up the blob URL after a delay
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    } catch (error) {
+      console.error('Preview error:', error);
+      alert('Unable to open preview. Please check your browser settings.');
     }
   };
 
