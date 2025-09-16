@@ -76,10 +76,6 @@ const Navigation = () => {
                     <Link to="/admin">Admin</Link>
                   </Button>
                 )}
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <User className="w-4 h-4" />
-                  <span>{user.email}</span>
-                </Button>
                 <Button variant="outline" size="sm" onClick={signOut}>
                   <LogOut className="w-4 h-4" />
                 </Button>
