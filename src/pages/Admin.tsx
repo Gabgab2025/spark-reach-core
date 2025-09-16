@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useRoles, UserRole } from '@/hooks/useRoles';
+import { useCMS } from '@/hooks/useCMS';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import CMSContentManager from '@/components/admin/CMSContentManager';
 import { 
   Shield, Users, UserCheck, Crown, BarChart3, FileText, Briefcase,
   MessageSquare, Settings, Globe, TrendingUp, Calendar, Phone,
-  Edit, Trash2, Plus, Eye, Upload, Star, Target, Building
+  Edit, Trash2, Plus, Eye, Upload, Star, Target, Building, Activity
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,7 +26,10 @@ const Admin = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
+  const [analyticsData, setAnalyticsData] = useState<any[]>([]);
   const { isAdmin, getAllUsersWithRoles, updateUserRole, loading: rolesLoading } = useRoles();
+  const cms = useCMS();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,19 +40,26 @@ const Admin = () => {
       return;
     }
 
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const usersData = await getAllUsersWithRoles();
+        const [usersData, stats, analytics] = await Promise.all([
+          getAllUsersWithRoles(),
+          cms.getDashboardStats(),
+          cms.getAnalyticsData()
+        ]);
+        
         setUsers(usersData);
+        setDashboardStats(stats);
+        setAnalyticsData(analytics);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
+    fetchData();
   }, [rolesLoading, isAdmin, getAllUsersWithRoles, navigate]);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
@@ -68,21 +80,80 @@ const Admin = () => {
     return role === 'admin' ? <Crown className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />;
   };
 
-  // Mock data for CMS sections
-  const dashboardStats = [
-    { title: 'Total Users', value: users.length, icon: Users, trend: '+12%' },
-    { title: 'Active Projects', value: 24, icon: Briefcase, trend: '+8%' },
-    { title: 'Monthly Calls', value: '15.2K', icon: Phone, trend: '+15%' },
-    { title: 'Client Satisfaction', value: '98%', icon: Star, trend: '+2%' }
-  ];
+  // Real-time dashboard statistics
+  const getRealDashboardStats = () => {
+    if (!dashboardStats || !analyticsData.length) {
+      return [
+        { title: 'Total Users', value: users.length, icon: Users, trend: '+12%', color: 'from-blue-500 to-indigo-500' },
+        { title: 'Website Pages', value: dashboardStats?.pages || 0, icon: FileText, trend: '+8%', color: 'from-teal-500 to-cyan-500' },
+        { title: 'Monthly Calls', value: '15.2K', icon: Phone, trend: '+15%', color: 'from-purple-500 to-pink-500' },
+        { title: 'Client Satisfaction', value: '98%', icon: Star, trend: '+2%', color: 'from-orange-500 to-red-500' }
+      ];
+    }
+
+    const websiteVisitors = analyticsData.find(item => item.metric_name === 'website_visitors')?.metric_value || 0;
+    const totalCalls = analyticsData.find(item => item.metric_name === 'total_calls')?.metric_value || 0;
+    const satisfaction = analyticsData.find(item => item.metric_name === 'customer_satisfaction')?.metric_value || 0;
+
+    return [
+      { title: 'Total Users', value: users.length, icon: Users, trend: '+12%', color: 'from-blue-500 to-indigo-500' },
+      { title: 'Website Visitors', value: websiteVisitors.toLocaleString(), icon: Globe, trend: '+8%', color: 'from-teal-500 to-cyan-500' },
+      { title: 'Monthly Calls', value: totalCalls.toLocaleString(), icon: Phone, trend: '+15%', color: 'from-purple-500 to-pink-500' },
+      { title: 'Client Satisfaction', value: `${satisfaction}%`, icon: Star, trend: '+2%', color: 'from-orange-500 to-red-500' }
+    ];
+  };
+
+  const realDashboardStats = getRealDashboardStats();
 
   const contentSections = [
-    { id: 'pages', title: 'Pages', description: 'Manage website pages and content', icon: FileText, count: 8 },
-    { id: 'services', title: 'Services', description: 'Call center and collections services', icon: Target, count: 6 },
-    { id: 'blog', title: 'Blog Posts', description: 'News and industry insights', icon: MessageSquare, count: 15 },
-    { id: 'careers', title: 'Job Listings', description: 'Open positions and hiring', icon: Building, count: 4 },
-    { id: 'testimonials', title: 'Testimonials', description: 'Client feedback and reviews', icon: Star, count: 12 },
-    { id: 'team', title: 'Team Members', description: 'Leadership and staff profiles', icon: Users, count: 18 }
+    { 
+      id: 'pages', 
+      title: 'Pages', 
+      description: 'Manage website pages and content', 
+      icon: FileText, 
+      count: dashboardStats?.pages || 0,
+      published: dashboardStats?.publishedPages || 0
+    },
+    { 
+      id: 'services', 
+      title: 'Services', 
+      description: 'Call center and collections services', 
+      icon: Target, 
+      count: dashboardStats?.services || 0,
+      featured: dashboardStats?.featuredServices || 0
+    },
+    { 
+      id: 'blog', 
+      title: 'Blog Posts', 
+      description: 'News and industry insights', 
+      icon: MessageSquare, 
+      count: dashboardStats?.blogPosts || 0,
+      draft: dashboardStats?.draftPages || 0
+    },
+    { 
+      id: 'careers', 
+      title: 'Job Listings', 
+      description: 'Open positions and hiring', 
+      icon: Building, 
+      count: dashboardStats?.jobListings || 0,
+      open: dashboardStats?.jobListings || 0
+    },
+    { 
+      id: 'testimonials', 
+      title: 'Testimonials', 
+      description: 'Client feedback and reviews', 
+      icon: Star, 
+      count: dashboardStats?.testimonials || 0,
+      featured: 3
+    },
+    { 
+      id: 'team', 
+      title: 'Team Members', 
+      description: 'Leadership and staff profiles', 
+      icon: Users, 
+      count: dashboardStats?.teamMembers || 0,
+      leadership: 3
+    }
   ];
 
   if (rolesLoading) {
@@ -155,8 +226,8 @@ const Admin = () => {
           <TabsContent value="dashboard" className="space-y-8">
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {dashboardStats.map((stat, index) => (
-                <Card key={index} className="glass border-slate-200/50 hover-lift">
+              {realDashboardStats.map((stat, index) => (
+                <Card key={index} className="glass border-slate-200/50 hover-lift group">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -170,7 +241,7 @@ const Admin = () => {
                           {stat.trend} from last month
                         </p>
                       </div>
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                         <stat.icon className="w-6 h-6 text-white" />
                       </div>
                     </div>
@@ -238,38 +309,45 @@ const Admin = () => {
 
           {/* Content Management Tab */}
           <TabsContent value="content" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {contentSections.map((section) => (
-                <Card key={section.id} className="glass border-slate-200/50 hover-lift group cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <section.icon className="w-6 h-6 text-white" />
-                      </div>
-                      <Badge variant="secondary" className="bg-slate-100 dark:bg-slate-800">
-                        {section.count}
-                      </Badge>
-                    </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                      {section.title}
-                    </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                      {section.description}
-                    </p>
-                    <div className="flex space-x-2">
-                      <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-                        <Eye className="w-4 h-4 mr-1" />
-                        View
-                      </Button>
-                      <Button size="sm" variant="outline" className="border-slate-200">
-                        <Plus className="w-4 h-4 mr-1" />
-                        Add
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <Tabs defaultValue="pages" className="space-y-6">
+              <TabsList className="glass border border-slate-200/50 p-1 w-fit">
+                {contentSections.map((section) => (
+                  <TabsTrigger 
+                    key={section.id} 
+                    value={section.id}
+                    className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                  >
+                    <section.icon className="w-4 h-4 mr-2" />
+                    {section.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              {/* Content sections */}
+              <TabsContent value="pages">
+                <CMSContentManager contentType="pages" />
+              </TabsContent>
+              
+              <TabsContent value="services">
+                <CMSContentManager contentType="services" />
+              </TabsContent>
+              
+              <TabsContent value="blog">
+                <CMSContentManager contentType="blog" />
+              </TabsContent>
+              
+              <TabsContent value="careers">
+                <CMSContentManager contentType="careers" />
+              </TabsContent>
+              
+              <TabsContent value="testimonials">
+                <CMSContentManager contentType="testimonials" />
+              </TabsContent>
+              
+              <TabsContent value="team">
+                <CMSContentManager contentType="team" />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
           {/* Users Management Tab */}
@@ -342,24 +420,62 @@ const Admin = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="glass border-slate-200/50">
                 <CardHeader>
-                  <CardTitle className="text-slate-900 dark:text-white">Website Traffic</CardTitle>
-                  <CardDescription>Monthly visitor analytics</CardDescription>
+                  <CardTitle className="text-slate-900 dark:text-white flex items-center">
+                    <Activity className="w-5 h-5 mr-2 text-blue-600" />
+                    Real-time Analytics
+                  </CardTitle>
+                  <CardDescription>Current performance metrics</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
-                    <p className="text-slate-600 dark:text-slate-400">Chart placeholder - Integration ready</p>
+                  <div className="space-y-4">
+                    {analyticsData.slice(0, 5).map((metric, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                        <div>
+                          <p className="font-medium text-slate-900 dark:text-white capitalize">
+                            {metric.metric_name.replace('_', ' ')}
+                          </p>
+                          <p className="text-sm text-slate-600 dark:text-slate-400 capitalize">
+                            {metric.category}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-blue-600">
+                            {typeof metric.metric_value === 'number' 
+                              ? metric.metric_value.toLocaleString() 
+                              : metric.metric_value}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            {new Date(metric.metric_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="glass border-slate-200/50">
                 <CardHeader>
-                  <CardTitle className="text-slate-900 dark:text-white">Lead Generation</CardTitle>
-                  <CardDescription>Contact form submissions</CardDescription>
+                  <CardTitle className="text-slate-900 dark:text-white">Content Statistics</CardTitle>
+                  <CardDescription>CMS content overview</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-lg">
-                    <p className="text-slate-600 dark:text-slate-400">Chart placeholder - Integration ready</p>
+                  <div className="space-y-4">
+                    {contentSections.map((section, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                            <section.icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <p className="font-medium text-slate-900 dark:text-white">
+                            {section.title}
+                          </p>
+                        </div>
+                        <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
+                          {section.count}
+                        </Badge>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
