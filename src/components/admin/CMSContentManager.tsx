@@ -227,7 +227,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
     // For draft content, show preview modal
     let previewContent = '';
     
-    switch (contentType) {
+    switch (contentType as 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team') {
       case 'pages':
         previewContent = `
           <!DOCTYPE html>
