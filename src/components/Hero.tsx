@@ -89,24 +89,24 @@ const Hero = () => {
             <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-corporate/20 to-teal/20 rounded-3xl" />
               <div className="relative z-10 h-full flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-white mb-4">Real-Time Analytics</h3>
+                <h3 className="text-2xl font-bold text-black mb-4">Real-Time Analytics</h3>
                 <div className="space-y-4">
                   <div className="bg-white/10 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-white/80 text-sm">Active Calls</span>
+                      <span className="text-black/80 text-sm">Active Calls</span>
                       <span className="text-teal font-bold">1,247</span>
                     </div>
-                    <div className="w-full bg-white/20 rounded-full h-2">
-                      <div className="bg-teal h-2 rounded-full w-3/4" />
+                    <div className="w-full bg-black/20 rounded-full h-2">
+                      <div className="bg-black h-2 rounded-full w-3/4" />
                     </div>
                   </div>
                   <div className="bg-white/10 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-white/80 text-sm">Collection Rate</span>
+                      <span className="text-black/80 text-sm">Collection Rate</span>
                       <span className="text-blue-corporate font-bold">94.2%</span>
                     </div>
-                    <div className="w-full bg-white/20 rounded-full h-2">
-                      <div className="bg-blue-corporate h-2 rounded-full w-11/12" />
+                    <div className="w-full bg-black/20 rounded-full h-2">
+                      <div className="bg-black h-2 rounded-full w-11/12" />
                     </div>
                   </div>
                 </div>
