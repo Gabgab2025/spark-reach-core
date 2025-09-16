@@ -1,8 +1,15 @@
 import React from 'react';
 import { Phone, Users, TrendingUp, Shield, Zap, Globe, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const Services = () => {
+  const navigate = useNavigate();
+
+  const handleLearnMore = (serviceTitle: string) => {
+    // Navigate to services page with the specific service
+    navigate(`/services?service=${encodeURIComponent(serviceTitle.toLowerCase().replace(/\s+/g, '-'))}`);
+  };
   const services = [
     {
       icon: Phone,
@@ -78,7 +85,11 @@ const Services = () => {
                   ))}
                 </ul>
 
-                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                <Button 
+                  variant="outline" 
+                  className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
+                  onClick={() => handleLearnMore(service.title)}
+                >
                   Learn More
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
