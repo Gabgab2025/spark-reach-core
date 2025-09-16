@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { 
   Edit, Trash2, Plus, Eye, Calendar, Globe, Star, MapPin,
-  Users, Briefcase, MessageSquare, Building, Target, FileText, Layout, Mail
+  Users, Briefcase, MessageSquare, Building, Target, FileText, Layout, Mail, Settings
 } from 'lucide-react';
 import { useCMS, CMSPage, CMSService, CMSBlogPost, CMSJobListing, CMSTestimonial, CMSTeamMember } from '@/hooks/useCMS';
 import { format } from 'date-fns';
@@ -22,7 +22,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
 
 interface CMSContentManagerProps {
-  contentType: 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team';
+  contentType: 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team' | 'settings';
 }
 
 const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
@@ -46,6 +46,16 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       createFn: cms.createPage,
       updateFn: cms.updatePage,
       deleteFn: cms.deletePage
+    },
+    settings: {
+      title: 'Settings',
+      description: 'Configure website settings and API keys',
+      icon: Settings,
+      fields: ['google_maps_api_key'],
+      fetchFn: () => cms.getSettings(),
+      createFn: () => Promise.resolve(),
+      updateFn: (id: string, data: any) => cms.updateSettings(data),
+      deleteFn: () => Promise.resolve()
     },
     services: {
       title: 'Services',

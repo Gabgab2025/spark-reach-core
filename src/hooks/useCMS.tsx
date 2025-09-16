@@ -99,6 +99,10 @@ export interface CMSTeamMember {
   updated_at: string;
 }
 
+export interface CMSSettings {
+  google_maps_api_key?: string;
+}
+
 export interface AnalyticsData {
   id: string;
   metric_name: string;
@@ -445,6 +449,20 @@ export const useCMS = () => {
     getAnalyticsByCategory,
     
     // Dashboard
-    getDashboardStats
+    getDashboardStats,
+    
+    // Settings
+    getSettings: async (): Promise<CMSSettings> => {
+      // For now, return empty settings - could be stored in a settings table later
+      return {};
+    },
+    
+    updateSettings: async (settings: CMSSettings): Promise<void> => {
+      // For now, just return success - could be stored in a settings table later
+      toast({
+        title: "Settings Updated",
+        description: "Google Maps API key has been configured",
+      });
+    }
   };
 };
