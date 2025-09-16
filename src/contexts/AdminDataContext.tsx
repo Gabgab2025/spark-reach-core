@@ -22,14 +22,14 @@ export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
   // Cache dashboard stats and analytics data
   const { data: dashboardStats, isLoading: statsLoading } = useQuery({
     queryKey: ['cms', 'dashboard-stats'],
-    queryFn: cms.getDashboardStats,
+    queryFn: () => cms.getDashboardStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });
 
   const { data: analyticsData = [], isLoading: analyticsLoading } = useQuery({
     queryKey: ['cms', 'analytics'],
-    queryFn: cms.getAnalyticsData,
+    queryFn: () => cms.getAnalyticsData(),
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });
