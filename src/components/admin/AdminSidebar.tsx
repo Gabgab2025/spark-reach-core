@@ -6,7 +6,7 @@ import {
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar
 } from '@/components/ui/sidebar';
 import { 
-  BarChart3, FileText, Users, TrendingUp, Settings, Globe
+  BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -15,7 +15,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const collapsed = state === 'collapsed';
 
   const navigationItems = [
@@ -30,19 +30,35 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   return (
     <Sidebar className={collapsed ? "w-14" : "w-64"}>
       <SidebarContent>
-        {/* Header */}
+        {/* Header with Minimize Button */}
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-3">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-white" />
-              </div>
-              {!collapsed && (
-                <div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white">Admin CMS</h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">CallCenter Pro</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-white" />
                 </div>
-              )}
+                {!collapsed && (
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">Admin CMS</h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">CallCenter Pro</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Minimize/Expand Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleSidebar}
+                className="w-8 h-8 p-0 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+              >
+                {collapsed ? (
+                  <ChevronRight className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                ) : (
+                  <ChevronLeft className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                )}
+              </Button>
             </div>
           </SidebarGroupLabel>
         </SidebarGroup>
