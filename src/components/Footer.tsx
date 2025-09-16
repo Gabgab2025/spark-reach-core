@@ -149,15 +149,15 @@ const Footer = () => {
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-white/60 text-sm">
+            <p className="text-black/60 text-sm">
               © 2024 CallCenter Pro. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <span className="text-white/60 text-sm">Certified & Compliant</span>
+              <span className="text-black/60 text-sm">Certified & Compliant</span>
               <div className="flex space-x-3">
-                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium">SOC 2</div>
-                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium">HIPAA</div>
-                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium">PCI DSS</div>
+                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium text-black">SOC 2</div>
+                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium text-black">HIPAA</div>
+                <div className="px-3 py-1 bg-white/10 rounded text-xs font-medium text-black">PCI DSS</div>
               </div>
             </div>
           </div>
