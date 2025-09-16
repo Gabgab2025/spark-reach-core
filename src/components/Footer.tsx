@@ -61,10 +61,10 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gradient">CallCenter Pro</h3>
-                <p className="text-sm text-white/70">Excellence in Service</p>
+                <p className="text-sm text-black/70">Excellence in Service</p>
               </div>
             </div>
-            <p className="text-white/80 mb-6 leading-relaxed">
+            <p className="text-black/80 mb-6 leading-relaxed">
               Leading provider of call center services and bank collections solutions. 
               We combine advanced technology with expert teams to deliver exceptional 
               results for financial institutions worldwide.
@@ -84,11 +84,11 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-6 text-black">Quick Links</h4>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className="text-white/70 hover:text-white transition-colors">
+                  <a href={link.href} className="text-black/70 hover:text-black transition-colors">
                     {link.label}
                   </a>
                 </li>
@@ -98,11 +98,11 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Services</h4>
+            <h4 className="text-lg font-semibold mb-6 text-black">Services</h4>
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
-                  <a href={service.href} className="text-white/70 hover:text-white transition-colors">
+                  <a href={service.href} className="text-black/70 hover:text-black transition-colors">
                     {service.label}
                   </a>
                 </li>
@@ -112,30 +112,30 @@ const Footer = () => {
 
           {/* Contact & Legal */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Contact</h4>
+            <h4 className="text-lg font-semibold mb-6 text-black">Contact</h4>
             <div className="space-y-4 mb-6">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-teal" />
-                <span className="text-white/80">1-800-CALL-PRO</span>
+                <span className="text-black/80">1-800-CALL-PRO</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-teal" />
-                <span className="text-white/80">info@callcenterpro.com</span>
+                <span className="text-black/80">info@callcenterpro.com</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-teal mt-1" />
-                <span className="text-white/80">
+                <span className="text-black/80">
                   123 Business Center<br />
                   New York, NY 10001
                 </span>
               </div>
             </div>
             
-            <h5 className="font-semibold mb-3">Legal</h5>
+            <h5 className="font-semibold mb-3 text-black">Legal</h5>
             <ul className="space-y-2">
               {legal.map((item, index) => (
                 <li key={index}>
-                  <a href={item.href} className="text-white/70 hover:text-white transition-colors text-sm">
+                  <a href={item.href} className="text-black/70 hover:text-black transition-colors text-sm">
                     {item.label}
                   </a>
                 </li>
