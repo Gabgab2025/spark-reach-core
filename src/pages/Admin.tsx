@@ -6,6 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -33,8 +38,14 @@ interface UserWithRole {
 const AdminContent = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserFullName, setNewUserFullName] = useState('');
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
   const { isAdmin, getAllUsersWithRoles, updateUserRole, loading: rolesLoading } = useRoles();
   const { dashboardStats, analyticsData, isLoading: dataLoading } = useAdminData();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   // Cache users data with React Query
@@ -66,6 +77,61 @@ const AdminContent = () => {
       setUsers(usersData);
     } catch (error) {
       console.error('Error updating role:', error);
+    }
+  };
+
+  const handleCreateAdminUser = async () => {
+    if (!newUserEmail || !newUserPassword || !newUserFullName) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsCreatingUser(true);
+    try {
+      // Sign up the user
+      const { data, error: signUpError } = await supabase.auth.admin.createUser({
+        email: newUserEmail,
+        password: newUserPassword,
+        user_metadata: {
+          full_name: newUserFullName
+        },
+        email_confirm: true
+      });
+
+      if (signUpError) throw signUpError;
+
+      if (data.user) {
+        // Assign admin role
+        await updateUserRole(data.user.id, 'admin');
+        
+        // Refresh users list
+        const usersData = await getAllUsersWithRoles();
+        setUsers(usersData);
+        
+        toast({
+          title: "Success",
+          description: "Admin user created successfully"
+        });
+        
+        // Reset form and close dialog
+        setNewUserEmail('');
+        setNewUserPassword('');
+        setNewUserFullName('');
+        setIsAddUserDialogOpen(false);
+      }
+    } catch (error: any) {
+      console.error('Error creating admin user:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create admin user",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreatingUser(false);
     }
   };
 
@@ -342,10 +408,77 @@ const AdminContent = () => {
               <TabsContent value="users" className="space-y-8">
                 <Card className="glass border-slate-200/50">
                   <CardHeader>
-                    <CardTitle className="text-slate-900 dark:text-white">User Management</CardTitle>
-                    <CardDescription>
-                      Manage user accounts and permissions for your CallCenter Pro system.
-                    </CardDescription>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-slate-900 dark:text-white">User Management</CardTitle>
+                        <CardDescription>
+                          Manage user accounts and permissions for your CallCenter Pro system.
+                        </CardDescription>
+                      </div>
+                      <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
+                        <DialogTrigger asChild>
+                          <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Admin User
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Create New Admin User</DialogTitle>
+                            <DialogDescription>
+                              Add a new administrator account with full system access.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid gap-2">
+                              <Label htmlFor="fullName">Full Name</Label>
+                              <Input
+                                id="fullName"
+                                value={newUserFullName}
+                                onChange={(e) => setNewUserFullName(e.target.value)}
+                                placeholder="Enter full name"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label htmlFor="email">Email</Label>
+                              <Input
+                                id="email"
+                                type="email"
+                                value={newUserEmail}
+                                onChange={(e) => setNewUserEmail(e.target.value)}
+                                placeholder="Enter email address"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label htmlFor="password">Password</Label>
+                              <Input
+                                id="password"
+                                type="password"
+                                value={newUserPassword}
+                                onChange={(e) => setNewUserPassword(e.target.value)}
+                                placeholder="Enter secure password"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-end space-x-2">
+                            <Button 
+                              variant="outline" 
+                              onClick={() => setIsAddUserDialogOpen(false)}
+                              disabled={isCreatingUser}
+                            >
+                              Cancel
+                            </Button>
+                            <Button 
+                              onClick={handleCreateAdminUser}
+                              disabled={isCreatingUser}
+                              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                            >
+                              {isCreatingUser ? 'Creating...' : 'Create Admin'}
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     {usersLoading ? (
