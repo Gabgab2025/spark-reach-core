@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -81,9 +81,11 @@ const BlogDetail = () => {
           <div className="container mx-auto px-4 py-20 text-center">
             <h1 className="text-4xl font-bold mb-4">Blog Post Not Found</h1>
             <p className="text-muted-foreground mb-8">The blog post you're looking for doesn't exist.</p>
-            <Button onClick={() => navigate('/')}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
+            <Button asChild>
+              <Link to="/blog" className="flex items-center">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Blog
+              </Link>
             </Button>
           </div>
         </main>
@@ -99,13 +101,11 @@ const BlogDetail = () => {
       <main className="pt-20">
         <section className="py-8">
           <div className="container mx-auto px-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/')}
-              className="mb-4"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" className="mb-4">
+              <Link to="/blog" className="flex items-center">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Blog
+              </Link>
             </Button>
           </div>
         </section>
@@ -156,6 +156,16 @@ const BlogDetail = () => {
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
+              
+              {/* Back to Blog Link */}
+              <div className="mt-12 pt-8 border-t border-border">
+                <Button asChild variant="outline">
+                  <Link to="/blog" className="flex items-center">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back to All Articles
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
