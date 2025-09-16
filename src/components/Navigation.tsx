@@ -38,8 +38,8 @@ const Navigation = () => {
               <Phone className="w-6 h-6 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-gradient">CallCenter Pro</h1>
-              <p className="text-xs text-muted-foreground">Excellence in Service</p>
+              <h1 className="text-xl font-bold text-white">CallCenter Pro</h1>
+              <p className="text-xs text-white/80">Excellence in Service</p>
             </div>
           </Link>
 
@@ -51,8 +51,8 @@ const Navigation = () => {
                 to={item.href}
                 className={`transition-colors duration-200 font-medium ${
                   location.pathname === item.href 
-                    ? 'text-primary' 
-                    : 'text-foreground hover:text-primary'
+                    ? 'text-white' 
+                    : 'text-white/90 hover:text-white'
                 }`}
               >
                 {item.label}
@@ -62,7 +62,7 @@ const Navigation = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-white/80 hover:text-white transition-colors">
               <Phone className="w-4 h-4" />
               <span>1-800-CALL-PRO</span>
             </a>
@@ -102,8 +102,8 @@ const Navigation = () => {
                   to={item.href}
                   className={`transition-colors duration-200 font-medium py-2 ${
                     location.pathname === item.href 
-                      ? 'text-primary' 
-                      : 'text-foreground hover:text-primary'
+                      ? 'text-white' 
+                      : 'text-white/90 hover:text-white'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -111,13 +111,13 @@ const Navigation = () => {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border">
-                <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-muted-foreground mb-3">
+                <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-white/80 mb-3">
                   <Phone className="w-4 h-4" />
                   <span>1-800-CALL-PRO</span>
                 </a>
                 {user ? (
                   <div className="space-y-2">
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <div className="flex items-center space-x-2 text-sm text-white/80">
                       <User className="w-4 h-4" />
                       <span>{user.email}</span>
                     </div>
