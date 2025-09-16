@@ -69,7 +69,7 @@ const Navigation = () => {
               <Phone className="w-4 h-4" />
               <span>1-800-CALL-PRO</span>
             </a>
-            {user ? (
+            {user && (
               <div className="flex items-center space-x-2">
                 {isAdmin() && (
                   <Button asChild variant="outline" size="sm">
@@ -80,10 +80,6 @@ const Navigation = () => {
                   <LogOut className="w-4 h-4" />
                 </Button>
               </div>
-            ) : (
-              <Button asChild className="btn-hero px-6 py-2">
-                <Link to="/auth">Sign In</Link>
-              </Button>
             )}
           </div>
 
@@ -119,7 +115,7 @@ const Navigation = () => {
                   <Phone className="w-4 h-4" />
                   <span>1-800-CALL-PRO</span>
                 </a>
-                {user ? (
+                {user && (
                   <div className="space-y-2">
                     {isAdmin() && (
                       <Button asChild variant="outline" className="w-full mb-2">
@@ -135,10 +131,6 @@ const Navigation = () => {
                       Sign Out
                     </Button>
                   </div>
-                ) : (
-                  <Button asChild className="btn-hero w-full">
-                    <Link to="/auth">Sign In</Link>
-                  </Button>
                 )}
               </div>
             </div>
