@@ -543,17 +543,6 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             </SelectContent>
           </Select>
         );
-        return (
-          <Select value={formData[field]?.toString() || 'false'} onValueChange={(value) => setFormData({ ...formData, [field]: value === 'true' })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="true">Yes</SelectItem>
-              <SelectItem value="false">No</SelectItem>
-            </SelectContent>
-          </Select>
-        );
       
       default:
         return (
@@ -594,30 +583,27 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             </span>
           </div>
         ) : '-';
-        return Array.isArray(item[field]) ? item[field].join(', ') : item[field];
       case 'content':
       case 'description':
       case 'bio':
       case 'excerpt':
-      case 'content':
-      case 'description':
-      case 'bio':
-      case 'excerpt':
-        return (
-          <div className="space-y-2">
-            <CKEditor
-              editor={ClassicEditor}
-              data={formData[field] || ''}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setFormData({ ...formData, [field]: data });
-              }}
-              config={{
-                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo']
-              }}
-            />
+        return item[field] ? (
+          <div className="max-w-xs truncate" title={item[field]}>
+            {item[field]}
           </div>
-        );
+        ) : '-';
+      case 'email':
+        return item[field] ? (
+          <a href={`mailto:${item[field]}`} className="text-blue-600 hover:underline">
+            {item[field]}
+          </a>
+        ) : '-';
+      case 'phone':
+        return item[field] ? (
+          <a href={`tel:${item[field]}`} className="text-blue-600 hover:underline">
+            {item[field]}
+          </a>
+        ) : '-';
       default:
         return item[field] || '-';
     }
