@@ -29,6 +29,7 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
 
   return (
     <Sidebar collapsible="icon">
+      <SidebarRail />
       <SidebarContent>
         {/* Header with Minimize Button */}
         <SidebarGroup>
