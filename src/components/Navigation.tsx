@@ -3,10 +3,12 @@ import { Menu, X, Phone, Mail, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useRoles } from '@/hooks/useRoles';
 
 const Navigation = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useRoles();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -68,6 +70,11 @@ const Navigation = () => {
             </a>
             {user ? (
               <div className="flex items-center space-x-2">
+                {isAdmin() && (
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                )}
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
                   <User className="w-4 h-4" />
                   <span>{user.email}</span>
@@ -117,6 +124,11 @@ const Navigation = () => {
                 </a>
                 {user ? (
                   <div className="space-y-2">
+                    {isAdmin() && (
+                      <Button asChild variant="outline" className="w-full mb-2">
+                        <Link to="/admin">Admin Dashboard</Link>
+                      </Button>
+                    )}
                     <div className="flex items-center space-x-2 text-sm text-white/80">
                       <User className="w-4 h-4" />
                       <span>{user.email}</span>
