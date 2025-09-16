@@ -6,8 +6,9 @@ import {
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, useSidebar
 } from '@/components/ui/sidebar';
 import { 
-  BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight
+  BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight, LogOut, User
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -16,6 +17,7 @@ interface AdminSidebarProps {
 
 const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   const { state, toggleSidebar } = useSidebar();
+  const { user, signOut } = useAuth();
   const collapsed = state === 'collapsed';
 
   const navigationItems = [
@@ -66,7 +68,7 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
         </SidebarGroup>
 
         {/* Navigation */}
-        <SidebarGroup>
+        <SidebarGroup className="flex-1">
           {!collapsed && <SidebarGroupLabel>Navigation</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
@@ -90,28 +92,42 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Quick Actions - Only show when expanded */}
-        {!collapsed && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="w-full justify-start">
-                    <Settings className="w-4 h-4" />
-                    <span className="ml-3">Settings</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="w-full justify-start">
-                    <Globe className="w-4 h-4" />
-                    <span className="ml-3">View Site</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+        {/* Quick Actions - At bottom */}
+        <SidebarGroup className="mt-auto">
+          {!collapsed && <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>}
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} title={collapsed ? "User Profile" : undefined}>
+                  <User className="w-4 h-4" />
+                  {!collapsed && <span className="ml-3">User Profile</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} title={collapsed ? "Settings" : undefined}>
+                  <Settings className="w-4 h-4" />
+                  {!collapsed && <span className="ml-3">Settings</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} title={collapsed ? "View Site" : undefined}>
+                  <Globe className="w-4 h-4" />
+                  {!collapsed && <span className="ml-3">View Site</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  onClick={signOut}
+                  className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'} text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950`} 
+                  title={collapsed ? "Logout" : undefined}
+                >
+                  <LogOut className="w-4 h-4" />
+                  {!collapsed && <span className="ml-3">Logout</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
