@@ -100,7 +100,30 @@ export interface CMSTeamMember {
 }
 
 export interface CMSSettings {
+  // Maps
   google_maps_api_key?: string;
+  
+  // Security
+  email_otp_enabled?: boolean;
+  recaptcha_site_key?: string;
+  recaptcha_secret_key?: string;
+  logging_enabled?: boolean;
+  audit_logging_enabled?: boolean;
+  
+  // SEO
+  google_analytics_code?: string;
+  google_tag_manager_code?: string;
+  google_search_console_code?: string;
+  bing_webmaster_code?: string;
+  sitemap_enabled?: boolean;
+  robots_txt_content?: string;
+  meta_pixel_code?: string;
+  
+  // Code Embedding
+  chat_widget_code?: string;
+  custom_head_code?: string;
+  custom_body_code?: string;
+  third_party_integrations?: string;
 }
 
 export interface AnalyticsData {

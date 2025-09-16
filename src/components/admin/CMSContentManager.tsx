@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import SettingsManager from './SettingsManager';
 import { useNavigate } from 'react-router-dom';
 
 interface CMSContentManagerProps {
@@ -51,7 +52,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Settings',
       description: 'Configure website settings and API keys',
       icon: Settings,
-      fields: ['google_maps_api_key'],
+      fields: [],
       fetchFn: () => cms.getSettings(),
       createFn: () => Promise.resolve(),
       updateFn: (id: string, data: any) => cms.updateSettings(data),
@@ -120,6 +121,11 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   ];
 
   const config = contentConfig[contentType];
+
+  // Special handling for settings
+  if (contentType === 'settings') {
+    return <SettingsManager />;
+  }
 
   // Use React Query for data fetching with caching
   const { data = [], isLoading } = useQuery({
