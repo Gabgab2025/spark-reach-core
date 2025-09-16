@@ -219,8 +219,12 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
           targetUrl = '/';
       }
       
-      // Open the actual page
-      window.open(targetUrl, '_blank');
+      // Open the actual page in the same tab to avoid auth-bridge/new-tab blockers
+      try {
+        window.location.assign(targetUrl);
+      } catch {
+        window.open(targetUrl, '_self');
+      }
       return;
     }
     
