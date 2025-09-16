@@ -45,7 +45,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Services',
       description: 'Call center and collections services',
       icon: Target,
-      fields: ['title', 'slug', 'category', 'description', 'pricing_info', 'is_featured'],
+      fields: ['title', 'slug', 'category', 'description', 'features', 'pricing_info', 'icon', 'image_url', 'is_featured', 'sort_order'],
       fetchFn: cms.getServices,
       createFn: cms.createService,
       updateFn: cms.updateService,
@@ -207,9 +207,18 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             <h1>${item.title}</h1>
             <div style="color: #666; margin-bottom: 20px;">
               <strong>Category:</strong> ${item.category} ${item.is_featured ? '| <span style="color: #d97706;">★ Featured</span>' : ''}
+              ${item.sort_order ? `| <strong>Sort Order:</strong> ${item.sort_order}` : ''}
             </div>
             <div style="line-height: 1.6; margin-bottom: 20px;">${item.description || 'No description available'}</div>
-            ${item.pricing_info ? `<div style="background: #f3f4f6; padding: 15px; border-radius: 8px;"><strong>Pricing:</strong> ${item.pricing_info}</div>` : ''}
+            ${item.features && Array.isArray(item.features) && item.features.length > 0 ? 
+              `<div style="margin-bottom: 20px;">
+                <h3>Features:</h3>
+                <ul style="line-height: 1.6;">
+                  ${item.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+              </div>` : ''}
+            ${item.pricing_info ? `<div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 20px;"><strong>Pricing:</strong> ${item.pricing_info}</div>` : ''}
+            ${item.icon ? `<div style="color: #666;"><strong>Icon:</strong> ${item.icon}</div>` : ''}
           </div>
         `;
         break;
@@ -292,13 +301,14 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const renderFormField = (field: string) => {
     switch (field) {
       case 'tags':
+      case 'features':
         return (
           <Input
-            placeholder="Enter tags (comma separated)"
+            placeholder={field === 'features' ? "Enter features (comma separated)" : "Enter tags (comma separated)"}
             value={Array.isArray(formData[field]) ? formData[field].join(', ') : formData[field] || ''}
             onChange={(e) => {
-              const tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
-              setFormData({ ...formData, [field]: tags });
+              const items = e.target.value.split(',').map(item => item.trim()).filter(item => item);
+              setFormData({ ...formData, [field]: items });
             }}
           />
         );
@@ -382,23 +392,52 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
         );
       
       case 'rating':
+      case 'sort_order':
         return (
-          <Select value={formData[field]?.toString() || ''} onValueChange={(value) => setFormData({ ...formData, [field]: parseInt(value) })}>
+          <Input
+            type="number"
+            placeholder={field === 'rating' ? "Enter rating (1-5)" : "Enter sort order"}
+            min={field === 'rating' ? "1" : "0"}
+            max={field === 'rating' ? "5" : undefined}
+            value={formData[field] || ''}
+            onChange={(e) => setFormData({ ...formData, [field]: parseInt(e.target.value) || 0 })}
+          />
+        );
+      
+      case 'icon':
+        return (
+          <Input
+            placeholder="Enter icon name (e.g., phone, users, trending-up)"
+            value={formData[field] || ''}
+            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+          />
+        );
+      
+      case 'image_url':
+      case 'avatar_url':
+      case 'featured_image':
+        return (
+          <Input
+            type="url"
+            placeholder="Enter image URL"
+            value={formData[field] || ''}
+            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+          />
+        );
+       
+      case 'is_featured':
+      case 'is_leadership':
+        return (
+          <Select value={formData[field]?.toString() || 'false'} onValueChange={(value) => setFormData({ ...formData, [field]: value === 'true' })}>
             <SelectTrigger>
-              <SelectValue placeholder="Select rating" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[1, 2, 3, 4, 5].map(rating => (
-                <SelectItem key={rating} value={rating.toString()}>
-                  {rating} Star{rating > 1 ? 's' : ''}
-                </SelectItem>
-              ))}
+              <SelectItem value="true">Yes</SelectItem>
+              <SelectItem value="false">No</SelectItem>
             </SelectContent>
           </Select>
         );
-      
-      case 'is_featured':
-      case 'is_leadership':
         return (
           <Select value={formData[field]?.toString() || 'false'} onValueChange={(value) => setFormData({ ...formData, [field]: value === 'true' })}>
             <SelectTrigger>
@@ -433,7 +472,23 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
         return item[field] ? `${item[field]} ⭐` : 'No rating';
       case 'created_at':
         return format(new Date(item[field]), 'MMM dd, yyyy');
-      case 'tags':
+      case 'features':
+        return Array.isArray(item[field]) ? item[field].join(', ') : item[field];
+      case 'sort_order':
+        return item[field] || '0';
+      case 'icon':
+        return item[field] || '-';
+      case 'image_url':
+      case 'avatar_url':
+      case 'featured_image':
+        return item[field] ? (
+          <div className="flex items-center">
+            <img src={item[field]} alt="Preview" className="w-8 h-8 rounded object-cover mr-2" />
+            <span className="text-xs text-muted-foreground truncate max-w-[100px]">
+              {item[field].split('/').pop()}
+            </span>
+          </div>
+        ) : '-';
         return Array.isArray(item[field]) ? item[field].join(', ') : item[field];
       case 'content':
       case 'description':
