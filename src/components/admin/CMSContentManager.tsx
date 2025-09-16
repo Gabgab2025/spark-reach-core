@@ -33,7 +33,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Pages',
       description: 'Manage website pages and content',
       icon: FileText,
-      fields: ['title', 'slug', 'status', 'meta_title', 'content'],
+      fields: ['title', 'slug', 'status', 'meta_title', 'meta_description', 'content'],
       fetchFn: cms.getPages,
       createFn: cms.createPage,
       updateFn: cms.updatePage,
@@ -43,7 +43,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Services',
       description: 'Call center and collections services',
       icon: Target,
-      fields: ['title', 'category', 'description', 'is_featured'],
+      fields: ['title', 'slug', 'category', 'description', 'pricing_info', 'is_featured'],
       fetchFn: cms.getServices,
       createFn: cms.createService,
       updateFn: cms.updateService,
@@ -53,7 +53,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Blog Posts',
       description: 'News and industry insights',
       icon: MessageSquare,
-      fields: ['title', 'slug', 'excerpt', 'status', 'tags'],
+      fields: ['title', 'slug', 'excerpt', 'status', 'tags', 'content'],
       fetchFn: cms.getBlogPosts,
       createFn: cms.createBlogPost,
       updateFn: cms.updateBlogPost,
@@ -63,7 +63,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Job Listings',
       description: 'Open positions and hiring',
       icon: Building,
-      fields: ['title', 'department', 'location', 'employment_type', 'status'],
+      fields: ['title', 'department', 'location', 'employment_type', 'status', 'salary_range', 'description'],
       fetchFn: cms.getJobListings,
       createFn: cms.createJobListing,
       updateFn: cms.updateJobListing,
@@ -73,7 +73,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Testimonials',
       description: 'Client feedback and reviews',
       icon: Star,
-      fields: ['client_name', 'company_name', 'content', 'rating', 'is_featured'],
+      fields: ['client_name', 'company_name', 'client_title', 'content', 'rating', 'is_featured'],
       fetchFn: cms.getTestimonials,
       createFn: cms.createTestimonial,
       updateFn: cms.updateTestimonial,
@@ -83,7 +83,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Team Members',
       description: 'Leadership and staff profiles',
       icon: Users,
-      fields: ['name', 'role', 'title', 'bio', 'is_leadership'],
+      fields: ['name', 'title', 'role', 'bio', 'email', 'phone', 'is_leadership'],
       fetchFn: cms.getTeamMembers,
       createFn: cms.createTeamMember,
       updateFn: cms.updateTeamMember,
@@ -159,6 +159,18 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
 
   const renderFormField = (field: string) => {
     switch (field) {
+      case 'tags':
+        return (
+          <Input
+            placeholder="Enter tags (comma separated)"
+            value={Array.isArray(formData[field]) ? formData[field].join(', ') : formData[field] || ''}
+            onChange={(e) => {
+              const tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+              setFormData({ ...formData, [field]: tags });
+            }}
+          />
+        );
+        
       case 'content':
       case 'description':
       case 'bio':
@@ -291,6 +303,27 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
         return format(new Date(item[field]), 'MMM dd, yyyy');
       case 'tags':
         return Array.isArray(item[field]) ? item[field].join(', ') : item[field];
+      case 'content':
+      case 'description':
+      case 'bio':
+      case 'excerpt':
+        return item[field] ? (
+          <div className="max-w-xs truncate" title={item[field]}>
+            {item[field]}
+          </div>
+        ) : '-';
+      case 'email':
+        return item[field] ? (
+          <a href={`mailto:${item[field]}`} className="text-blue-600 hover:underline">
+            {item[field]}
+          </a>
+        ) : '-';
+      case 'phone':
+        return item[field] ? (
+          <a href={`tel:${item[field]}`} className="text-blue-600 hover:underline">
+            {item[field]}
+          </a>
+        ) : '-';
       default:
         return item[field] || '-';
     }
@@ -354,39 +387,57 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             <p className="mt-2 text-slate-600 dark:text-slate-400">Loading {config.title.toLowerCase()}...</p>
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {config.fields.map(field => (
-                  <TableHead key={field} className="capitalize">
-                    {field.replace('_', ' ')}
-                  </TableHead>
-                ))}
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((item) => (
-                <TableRow key={item.id}>
+          data.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <config.icon className="w-8 h-8 text-slate-400" />
+              </div>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                No {config.title.toLowerCase()} yet
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">
+                Get started by creating your first {config.title.toLowerCase().slice(0, -1)}
+              </p>
+              <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                Create {config.title.slice(0, -1)}
+              </Button>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
                   {config.fields.map(field => (
-                    <TableCell key={field}>
-                      {renderTableCell(item, field)}
-                    </TableCell>
+                    <TableHead key={field} className="capitalize">
+                      {field.replace('_', ' ')}
+                    </TableHead>
                   ))}
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      <Button size="sm" variant="outline" onClick={() => handleEdit(item)}>
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDelete(item.id)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data.map((item) => (
+                  <TableRow key={item.id}>
+                    {config.fields.map(field => (
+                      <TableCell key={field}>
+                        {renderTableCell(item, field)}
+                      </TableCell>
+                    ))}
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline" onClick={() => handleEdit(item)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => handleDelete(item.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )
         )}
       </CardContent>
     </Card>
