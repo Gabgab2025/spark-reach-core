@@ -104,7 +104,11 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} title={collapsed ? "Settings" : undefined}>
+                <SidebarMenuButton 
+                  onClick={() => onTabChange('settings')}
+                  className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} 
+                  title={collapsed ? "Settings" : undefined}
+                >
                   <Settings className="w-4 h-4" />
                   {!collapsed && <span className="ml-3">Settings</span>}
                 </SidebarMenuButton>
