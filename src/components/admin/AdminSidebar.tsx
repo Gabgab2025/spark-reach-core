@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { 
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, useSidebar
 } from '@/components/ui/sidebar';
 import { 
   BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight
@@ -28,7 +28,7 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   const isActive = (itemId: string) => activeTab === itemId;
 
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-64"}>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         {/* Header with Minimize Button */}
         <SidebarGroup>
