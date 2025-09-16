@@ -18,6 +18,7 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import CMSContentManager from '@/components/admin/CMSContentManager';
+import SettingsManager from '@/components/admin/SettingsManager';
 import PageEditor from '@/components/admin/PageEditor';
 import { 
   Shield, Users, UserCheck, Crown, BarChart3, FileText, Briefcase,
@@ -628,6 +629,11 @@ const AdminContent = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              {/* Settings Tab */}
+              <TabsContent value="settings" className="space-y-8">
+                <SettingsManager />
               </TabsContent>
             </Tabs>
           </div>
