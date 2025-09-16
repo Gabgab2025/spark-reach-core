@@ -24,10 +24,12 @@ const Admin = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const { isAdmin, getAllUsersWithRoles, updateUserRole } = useRoles();
+  const { isAdmin, getAllUsersWithRoles, updateUserRole, loading: rolesLoading } = useRoles();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (rolesLoading) return;
+
     if (!isAdmin()) {
       navigate('/');
       return;
@@ -46,7 +48,7 @@ const Admin = () => {
     };
 
     fetchUsers();
-  }, [isAdmin, getAllUsersWithRoles, navigate]);
+  }, [rolesLoading, isAdmin, getAllUsersWithRoles, navigate]);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
@@ -82,6 +84,14 @@ const Admin = () => {
     { id: 'testimonials', title: 'Testimonials', description: 'Client feedback and reviews', icon: Star, count: 12 },
     { id: 'team', title: 'Team Members', description: 'Leadership and staff profiles', icon: Users, count: 18 }
   ];
+
+  if (rolesLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   if (!isAdmin()) {
     return null;
