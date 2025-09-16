@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useNavigate } from 'react-router-dom';
 
 interface CMSContentManagerProps {
   contentType: 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team';
@@ -31,6 +32,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const [selectedBlocks, setSelectedBlocks] = useState<string[]>([]);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const cms = useCMS();
 
@@ -219,12 +221,9 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
           targetUrl = '/';
       }
       
-      // Open the actual page in the same tab to avoid auth-bridge/new-tab blockers
-      try {
-        window.location.assign(targetUrl);
-      } catch {
-        window.open(targetUrl, '_self');
-      }
+      // Navigate within the SPA to avoid full reload/auth-bridge
+      console.debug('[CMS] Preview navigating to:', targetUrl, 'for type:', contentType, 'item:', item?.slug || item?.id);
+      navigate(targetUrl);
       return;
     }
     
