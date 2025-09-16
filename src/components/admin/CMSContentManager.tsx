@@ -312,11 +312,13 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
     const variants: any = {
       published: 'default',
       draft: 'secondary',
+      archived: 'outline',
       open: 'default',
       closed: 'destructive',
-      archived: 'outline'
+      on_hold: 'secondary'
     };
-    return <Badge variant={variants[status] || 'secondary'}>{status}</Badge>;
+    const displayText = status === 'on_hold' ? 'On Hold' : status.charAt(0).toUpperCase() + status.slice(1);
+    return <Badge variant={variants[status] || 'secondary'}>{displayText}</Badge>;
   };
 
   const renderFormField = (field: string) => {
@@ -432,6 +434,8 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             onChange={(e) => setFormData({ ...formData, [field]: e.target.value ? new Date(e.target.value).toISOString() : null })}
           />
         );
+      
+      case 'status':
         const statusOptions = contentType === 'careers' 
           ? ['open', 'closed', 'on_hold']
           : ['draft', 'published', 'archived'];
@@ -443,7 +447,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
             <SelectContent>
               {statusOptions.map(option => (
                 <SelectItem key={option} value={option}>
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                  {option === 'on_hold' ? 'On Hold' : option.charAt(0).toUpperCase() + option.slice(1)}
                 </SelectItem>
               ))}
             </SelectContent>
