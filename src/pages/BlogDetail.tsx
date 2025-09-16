@@ -160,9 +160,9 @@ const BlogDetail = () => {
               {/* Back to Blog Link */}
               <div className="mt-12 pt-8 border-t border-border">
                 <Button asChild variant="outline">
-                  <Link to="/blog" className="flex items-center">
+                  <Link to="/" className="flex items-center">
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to All Articles
+                    Back to Home
                   </Link>
                 </Button>
               </div>
