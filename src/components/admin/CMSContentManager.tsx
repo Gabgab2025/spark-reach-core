@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,17 +15,18 @@ import {
 } from 'lucide-react';
 import { useCMS, CMSPage, CMSService, CMSBlogPost, CMSJobListing, CMSTestimonial, CMSTeamMember } from '@/hooks/useCMS';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 
 interface CMSContentManagerProps {
   contentType: 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team';
 }
 
 const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
   
   const cms = useCMS();
 
@@ -93,21 +95,56 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
 
   const config = contentConfig[contentType];
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const result = await config.fetchFn();
-      setData(result);
-    } catch (error) {
-      console.error(`Error fetching ${contentType}:`, error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Use React Query for data fetching with caching
+  const { data = [], isLoading } = useQuery({
+    queryKey: ['cms', contentType],
+    queryFn: config.fetchFn as () => Promise<any[]>,
+    staleTime: 30 * 1000, // 30 seconds
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, [contentType]);
+  // Mutation for creating items
+  const createMutation = useMutation({
+    mutationFn: (data: any) => config.createFn(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cms', contentType] });
+      queryClient.invalidateQueries({ queryKey: ['cms', 'dashboard-stats'] });
+      setDialogOpen(false);
+      toast({ title: "Success", description: `${config.title.slice(0, -1)} created successfully` });
+    },
+    onError: (error) => {
+      console.error('Error creating:', error);
+      toast({ title: "Error", description: "Failed to create item", variant: "destructive" });
+    }
+  });
+
+  // Mutation for updating items
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => config.updateFn(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cms', contentType] });
+      setDialogOpen(false);
+      toast({ title: "Success", description: `${config.title.slice(0, -1)} updated successfully` });
+    },
+    onError: (error) => {
+      console.error('Error updating:', error);
+      toast({ title: "Error", description: "Failed to update item", variant: "destructive" });
+    }
+  });
+
+  // Mutation for deleting items
+  const deleteMutation = useMutation({
+    mutationFn: config.deleteFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cms', contentType] });
+      queryClient.invalidateQueries({ queryKey: ['cms', 'dashboard-stats'] });
+      toast({ title: "Success", description: `${config.title.slice(0, -1)} deleted successfully` });
+    },
+    onError: (error) => {
+      console.error('Error deleting:', error);
+      toast({ title: "Error", description: "Failed to delete item", variant: "destructive" });
+    }
+  });
 
   const handleCreate = () => {
     setEditingItem(null);
@@ -122,27 +159,16 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   };
 
   const handleSave = async () => {
-    try {
-      if (editingItem) {
-        await config.updateFn(editingItem.id, formData);
-      } else {
-        await config.createFn(formData);
-      }
-      setDialogOpen(false);
-      fetchData();
-    } catch (error) {
-      console.error('Error saving:', error);
+    if (editingItem) {
+      updateMutation.mutate({ id: editingItem.id, data: formData });
+    } else {
+      createMutation.mutate(formData);
     }
   };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
-      try {
-        await config.deleteFn(id);
-        fetchData();
-      } catch (error) {
-        console.error('Error deleting:', error);
-      }
+      deleteMutation.mutate(id);
     }
   };
 
@@ -372,8 +398,19 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white">
-                  {editingItem ? 'Update' : 'Create'}
+                <Button 
+                  onClick={handleSave} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                >
+                  {createMutation.isPending || updateMutation.isPending ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      {editingItem ? 'Updating...' : 'Creating...'}
+                    </div>
+                  ) : (
+                    editingItem ? 'Update' : 'Create'
+                  )}
                 </Button>
               </div>
             </DialogContent>
@@ -381,13 +418,13 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
         </div>
       </CardHeader>
       <CardContent>
-        {loading ? (
+        {isLoading ? (
           <div className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <p className="mt-2 text-slate-600 dark:text-slate-400">Loading {config.title.toLowerCase()}...</p>
           </div>
         ) : (
-          data.length === 0 ? (
+          (data as any[]).length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <config.icon className="w-8 h-8 text-slate-400" />
@@ -416,7 +453,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((item) => (
+                {(data as any[]).map((item: any) => (
                   <TableRow key={item.id}>
                     {config.fields.map(field => (
                       <TableCell key={field}>

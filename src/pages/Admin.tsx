@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import { useNavigate } from 'react-router-dom';
+import { AdminDataProvider, useAdminData } from '@/contexts/AdminDataContext';
+import { useQuery } from '@tanstack/react-query';
 
 interface UserWithRole {
   id: string;
@@ -28,49 +30,38 @@ interface UserWithRole {
   role?: UserRole;
 }
 
-const Admin = () => {
+const AdminContent = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [dashboardStats, setDashboardStats] = useState<any>(null);
-  const [analyticsData, setAnalyticsData] = useState<any[]>([]);
   const { isAdmin, getAllUsersWithRoles, updateUserRole, loading: rolesLoading } = useRoles();
-  const cms = useCMS();
+  const { dashboardStats, analyticsData, isLoading: dataLoading } = useAdminData();
   const navigate = useNavigate();
+
+  // Cache users data with React Query
+  const { data: usersData = [], isLoading: usersLoading } = useQuery({
+    queryKey: ['admin', 'users'],
+    queryFn: getAllUsersWithRoles,
+    enabled: !!isAdmin(),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    setUsers(usersData);
+  }, [usersData]);
 
   useEffect(() => {
     if (rolesLoading) return;
-
     if (!isAdmin()) {
       navigate('/');
       return;
     }
-
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [usersData, stats, analytics] = await Promise.all([
-          getAllUsersWithRoles(),
-          cms.getDashboardStats(),
-          cms.getAnalyticsData()
-        ]);
-        
-        setUsers(usersData);
-        setDashboardStats(stats);
-        setAnalyticsData(analytics);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [rolesLoading, isAdmin, getAllUsersWithRoles, navigate]);
+  }, [rolesLoading, isAdmin, navigate]);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
       await updateUserRole(userId, newRole);
+      // Refresh users data
       const usersData = await getAllUsersWithRoles();
       setUsers(usersData);
     } catch (error) {
@@ -357,7 +348,7 @@ const Admin = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {loading ? (
+                    {usersLoading ? (
                       <div className="text-center py-8">
                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                         <p className="mt-2 text-slate-600 dark:text-slate-400">Loading users...</p>
@@ -509,6 +500,14 @@ const Admin = () => {
         </div>
       </div>
     </SidebarProvider>
+  );
+};
+
+const Admin = () => {
+  return (
+    <AdminDataProvider>
+      <AdminContent />
+    </AdminDataProvider>
   );
 };
 
