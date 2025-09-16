@@ -9,13 +9,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { 
   Edit, Trash2, Plus, Eye, Calendar, Globe, Star, MapPin,
-  Users, Briefcase, MessageSquare, Building, Target, FileText
+  Users, Briefcase, MessageSquare, Building, Target, FileText, Layout, Mail
 } from 'lucide-react';
 import { useCMS, CMSPage, CMSService, CMSBlogPost, CMSJobListing, CMSTestimonial, CMSTeamMember } from '@/hooks/useCMS';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 interface CMSContentManagerProps {
   contentType: 'pages' | 'services' | 'blog' | 'careers' | 'testimonials' | 'team';
@@ -25,6 +28,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
+  const [selectedBlocks, setSelectedBlocks] = useState<string[]>([]);
   const queryClient = useQueryClient();
   const { toast } = useToast();
   
@@ -33,9 +37,9 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const contentConfig = {
     pages: {
       title: 'Pages',
-      description: 'Manage website pages and content',
-      icon: FileText,
-      fields: ['title', 'slug', 'status', 'meta_title', 'meta_description', 'content'],
+      description: 'Manage website pages and content blocks',
+      icon: Layout,
+      fields: ['title', 'slug', 'status', 'meta_title', 'meta_description', 'page_blocks', 'content'],
       fetchFn: cms.getPages,
       createFn: cms.createPage,
       updateFn: cms.updatePage,
@@ -55,7 +59,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Blog Posts',
       description: 'News and industry insights',
       icon: MessageSquare,
-      fields: ['title', 'slug', 'excerpt', 'status', 'tags', 'content'],
+      fields: ['title', 'slug', 'excerpt', 'status', 'tags', 'featured_image', 'meta_title', 'meta_description', 'content'],
       fetchFn: cms.getBlogPosts,
       createFn: cms.createBlogPost,
       updateFn: cms.updateBlogPost,
@@ -65,7 +69,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Job Listings',
       description: 'Open positions and hiring',
       icon: Building,
-      fields: ['title', 'department', 'location', 'employment_type', 'status', 'salary_range', 'description'],
+      fields: ['title', 'department', 'location', 'employment_type', 'status', 'salary_range', 'requirements', 'benefits', 'expires_at', 'description'],
       fetchFn: cms.getJobListings,
       createFn: cms.createJobListing,
       updateFn: cms.updateJobListing,
@@ -75,7 +79,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Testimonials',
       description: 'Client feedback and reviews',
       icon: Star,
-      fields: ['client_name', 'company_name', 'client_title', 'content', 'rating', 'is_featured'],
+      fields: ['client_name', 'company_name', 'client_title', 'content', 'rating', 'avatar_url', 'is_featured', 'sort_order'],
       fetchFn: cms.getTestimonials,
       createFn: cms.createTestimonial,
       updateFn: cms.updateTestimonial,
@@ -85,13 +89,23 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Team Members',
       description: 'Leadership and staff profiles',
       icon: Users,
-      fields: ['name', 'title', 'role', 'bio', 'email', 'phone', 'is_leadership'],
+      fields: ['name', 'title', 'role', 'bio', 'email', 'phone', 'avatar_url', 'linkedin_url', 'is_leadership', 'sort_order'],
       fetchFn: cms.getTeamMembers,
       createFn: cms.createTeamMember,
       updateFn: cms.updateTeamMember,
       deleteFn: cms.deleteTeamMember
     }
   };
+
+  const pageBlocks = [
+    { id: 'header', name: 'Header', description: 'Site navigation and branding' },
+    { id: 'hero', name: 'Hero Section', description: 'Main banner with call-to-action' },
+    { id: 'services', name: 'Featured Services', description: 'Showcase key services' },
+    { id: 'testimonials', name: 'Testimonials', description: 'Client reviews and feedback' },
+    { id: 'team', name: 'Team Section', description: 'Leadership and staff profiles' },
+    { id: 'contact', name: 'Contact Form', description: 'Contact information and form' },
+    { id: 'footer', name: 'Footer', description: 'Site links and information' }
+  ];
 
   const config = contentConfig[contentType];
 
@@ -149,20 +163,27 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const handleCreate = () => {
     setEditingItem(null);
     setFormData({});
+    setSelectedBlocks([]);
     setDialogOpen(true);
   };
 
   const handleEdit = (item: any) => {
     setEditingItem(item);
     setFormData(item);
+    setSelectedBlocks(item.page_blocks || []);
     setDialogOpen(true);
   };
 
   const handleSave = async () => {
+    const dataToSave = { 
+      ...formData, 
+      ...(contentType === 'pages' && { page_blocks: selectedBlocks })
+    };
+    
     if (editingItem) {
-      updateMutation.mutate({ id: editingItem.id, data: formData });
+      updateMutation.mutate({ id: editingItem.id, data: dataToSave });
     } else {
-      createMutation.mutate(formData);
+      createMutation.mutate(dataToSave);
     }
   };
 
@@ -302,6 +323,28 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
     switch (field) {
       case 'tags':
       case 'features':
+      case 'requirements':
+      case 'benefits':
+        return (
+          <Input
+            placeholder={`Enter ${field} (comma separated)`}
+            value={Array.isArray(formData[field]) ? formData[field].join(', ') : formData[field] || ''}
+            onChange={(e) => {
+              const items = e.target.value.split(',').map(item => item.trim()).filter(item => item);
+              setFormData({ ...formData, [field]: items });
+            }}
+          />
+        );
+      
+      case 'expires_at':
+        return (
+          <Input
+            type="datetime-local"
+            value={formData[field] ? new Date(formData[field]).toISOString().slice(0, 16) : ''}
+            onChange={(e) => setFormData({ ...formData, [field]: e.target.value ? new Date(e.target.value).toISOString() : null })}
+          />
+        );
+      case 'features':
         return (
           <Input
             placeholder={field === 'features' ? "Enter features (comma separated)" : "Enter tags (comma separated)"}
@@ -318,15 +361,77 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       case 'bio':
       case 'excerpt':
         return (
-          <Textarea
-            placeholder={`Enter ${field}`}
-            value={formData[field] || ''}
-            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-            rows={4}
-          />
+          <div className="space-y-2">
+            <CKEditor
+              editor={ClassicEditor}
+              data={formData[field] || ''}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setFormData({ ...formData, [field]: data });
+              }}
+              config={{
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo']
+              }}
+            />
+          </div>
         );
       
-      case 'status':
+      case 'page_blocks':
+        return (
+          <div className="space-y-4">
+            <Label>Page Blocks</Label>
+            <div className="grid grid-cols-2 gap-3">
+              {pageBlocks.map((block) => (
+                <div key={block.id} className="flex items-start space-x-2">
+                  <Checkbox
+                    id={block.id}
+                    checked={selectedBlocks.includes(block.id)}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedBlocks([...selectedBlocks, block.id]);
+                      } else {
+                        setSelectedBlocks(selectedBlocks.filter(id => id !== block.id));
+                      }
+                    }}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor={block.id} className="text-sm font-medium cursor-pointer">
+                      {block.name}
+                    </Label>
+                    <p className="text-xs text-muted-foreground">{block.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      
+      case 'requirements':
+      case 'benefits':
+        return (
+          <div className="space-y-2">
+            <Input
+              placeholder={`Enter ${field} (comma separated)`}
+              value={Array.isArray(formData[field]) ? formData[field].join(', ') : formData[field] || ''}
+              onChange={(e) => {
+                const items = e.target.value.split(',').map(item => item.trim()).filter(item => item);
+                setFormData({ ...formData, [field]: items });
+              }}
+            />
+            <p className="text-xs text-muted-foreground">
+              Separate multiple {field} with commas
+            </p>
+          </div>
+        );
+      
+      case 'expires_at':
+        return (
+          <Input
+            type="datetime-local"
+            value={formData[field] ? new Date(formData[field]).toISOString().slice(0, 16) : ''}
+            onChange={(e) => setFormData({ ...formData, [field]: e.target.value ? new Date(e.target.value).toISOString() : null })}
+          />
+        );
         const statusOptions = contentType === 'careers' 
           ? ['open', 'closed', 'on_hold']
           : ['draft', 'published', 'archived'];
@@ -494,23 +599,25 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       case 'description':
       case 'bio':
       case 'excerpt':
-        return item[field] ? (
-          <div className="max-w-xs truncate" title={item[field]}>
-            {item[field]}
+      case 'content':
+      case 'description':
+      case 'bio':
+      case 'excerpt':
+        return (
+          <div className="space-y-2">
+            <CKEditor
+              editor={ClassicEditor}
+              data={formData[field] || ''}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setFormData({ ...formData, [field]: data });
+              }}
+              config={{
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo']
+              }}
+            />
           </div>
-        ) : '-';
-      case 'email':
-        return item[field] ? (
-          <a href={`mailto:${item[field]}`} className="text-blue-600 hover:underline">
-            {item[field]}
-          </a>
-        ) : '-';
-      case 'phone':
-        return item[field] ? (
-          <a href={`tel:${item[field]}`} className="text-blue-600 hover:underline">
-            {item[field]}
-          </a>
-        ) : '-';
+        );
       default:
         return item[field] || '-';
     }
@@ -536,7 +643,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
                 Add New
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   {editingItem ? `Edit ${config.title.slice(0, -1)}` : `Add New ${config.title.slice(0, -1)}`}
