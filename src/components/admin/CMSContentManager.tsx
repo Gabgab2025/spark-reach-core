@@ -194,98 +194,262 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   };
 
   const handlePreview = (item: any) => {
-    // Create a modal or new tab to preview the content
+    // For published content, redirect to actual page
+    if (item.status === 'published' || item.status === 'open' || contentType === 'services') {
+      let targetUrl = '';
+      
+      switch (contentType) {
+        case 'pages':
+          targetUrl = `/${item.slug}`;
+          break;
+        case 'blog':
+          targetUrl = `/blog/${item.slug}`;
+          break;
+        case 'services':
+          targetUrl = `/service/${item.slug}`;
+          break;
+        case 'careers':
+          targetUrl = `/careers`;
+          break;
+        case 'testimonials':
+        case 'team':
+          targetUrl = `/about`;
+          break;
+        default:
+          targetUrl = '/';
+      }
+      
+      // Open the actual page
+      window.open(targetUrl, '_blank');
+      return;
+    }
+    
+    // For draft content, show preview modal
     let previewContent = '';
     
     switch (contentType) {
       case 'pages':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
-            <h1>${item.title}</h1>
-            <div style="color: #666; margin-bottom: 20px;">
-              <strong>Slug:</strong> /${item.slug} | <strong>Status:</strong> ${item.status}
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: ${item.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+              h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+              .meta { color: #666; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 5px; }
+              .content { background: white; padding: 20px; border: 1px solid #dee2e6; border-radius: 5px; }
+              .draft-notice { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+            </style>
+          </head>
+          <body>
+            <div class="draft-notice">
+              <strong>⚠️ Draft Preview</strong> - This content is not published yet.
             </div>
-            ${item.meta_description ? `<p style="font-style: italic; color: #555;">${item.meta_description}</p>` : ''}
-            <div style="line-height: 1.6;">${item.content || 'No content available'}</div>
-          </div>
+            <h1>${item.title}</h1>
+            <div class="meta">
+              <strong>Slug:</strong> /${item.slug} | <strong>Status:</strong> ${item.status}
+              ${item.meta_description ? `<br><strong>Meta Description:</strong> ${item.meta_description}` : ''}
+            </div>
+            <div class="content">${item.content || 'No content available'}</div>
+          </body>
+          </html>
         `;
         break;
       case 'blog':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: ${item.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+              h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+              .meta { color: #666; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 5px; }
+              .excerpt { font-size: 18px; color: #555; font-style: italic; background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+              .content { background: white; padding: 20px; border: 1px solid #dee2e6; border-radius: 5px; }
+              .draft-notice { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+            </style>
+          </head>
+          <body>
+            <div class="draft-notice">
+              <strong>⚠️ Draft Preview</strong> - This blog post is not published yet.
+            </div>
             <h1>${item.title}</h1>
-            <div style="color: #666; margin-bottom: 20px;">
+            <div class="meta">
               <strong>Status:</strong> ${item.status} | <strong>Tags:</strong> ${Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || 'None'}
             </div>
-            ${item.excerpt ? `<p style="font-size: 18px; color: #555; font-style: italic;">${item.excerpt}</p>` : ''}
-            <div style="line-height: 1.6;">${item.content || 'No content available'}</div>
-          </div>
+            ${item.excerpt ? `<div class="excerpt">${item.excerpt}</div>` : ''}
+            <div class="content">${item.content || 'No content available'}</div>
+          </body>
+          </html>
         `;
         break;
       case 'services':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: ${item.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+              h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+              .meta { color: #666; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 5px; }
+              .features { background: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }
+              .features ul { margin: 10px 0; padding-left: 20px; }
+              .pricing { background: #d4edda; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #28a745; }
+            </style>
+          </head>
+          <body>
             <h1>${item.title}</h1>
-            <div style="color: #666; margin-bottom: 20px;">
-              <strong>Category:</strong> ${item.category} ${item.is_featured ? '| <span style="color: #d97706;">★ Featured</span>' : ''}
+            <div class="meta">
+              <strong>Category:</strong> ${item.category} ${item.is_featured ? '| ⭐ Featured' : ''}
               ${item.sort_order ? `| <strong>Sort Order:</strong> ${item.sort_order}` : ''}
             </div>
-            <div style="line-height: 1.6; margin-bottom: 20px;">${item.description || 'No description available'}</div>
+            <div>${item.description || 'No description available'}</div>
             ${item.features && Array.isArray(item.features) && item.features.length > 0 ? 
-              `<div style="margin-bottom: 20px;">
+              `<div class="features">
                 <h3>Features:</h3>
-                <ul style="line-height: 1.6;">
+                <ul>
                   ${item.features.map(feature => `<li>${feature}</li>`).join('')}
                 </ul>
               </div>` : ''}
-            ${item.pricing_info ? `<div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 20px;"><strong>Pricing:</strong> ${item.pricing_info}</div>` : ''}
-            ${item.icon ? `<div style="color: #666;"><strong>Icon:</strong> ${item.icon}</div>` : ''}
-          </div>
+            ${item.pricing_info ? `<div class="pricing"><strong>Pricing:</strong> ${item.pricing_info}</div>` : ''}
+            ${item.icon ? `<div style="color: #666; margin-top: 15px;"><strong>Icon:</strong> ${item.icon}</div>` : ''}
+          </body>
+          </html>
         `;
         break;
       case 'careers':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: ${item.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+              h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+              .meta { color: #666; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 5px; }
+              .salary { font-size: 18px; color: #28a745; margin: 20px 0; font-weight: bold; }
+              .section { background: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }
+              .section ul { margin: 10px 0; padding-left: 20px; }
+              .closed-notice { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+            </style>
+          </head>
+          <body>
+            ${item.status === 'closed' ? '<div class="closed-notice"><strong>🚫 Position Closed</strong> - This job listing is no longer accepting applications.</div>' : ''}
             <h1>${item.title}</h1>
-            <div style="color: #666; margin-bottom: 20px;">
+            <div class="meta">
               <strong>Department:</strong> ${item.department || 'N/A'} | 
               <strong>Location:</strong> ${item.location || 'N/A'} | 
-              <strong>Type:</strong> ${item.employment_type || 'N/A'}
+              <strong>Type:</strong> ${item.employment_type || 'N/A'} |
+              <strong>Status:</strong> ${item.status || 'N/A'}
             </div>
-            ${item.salary_range ? `<div style="font-size: 18px; color: #059669; margin-bottom: 20px;"><strong>Salary:</strong> ${item.salary_range}</div>` : ''}
-            <div style="line-height: 1.6;">${item.description || 'No description available'}</div>
-          </div>
+            ${item.salary_range ? `<div class="salary">Salary: ${item.salary_range}</div>` : ''}
+            <div>${item.description || 'No description available'}</div>
+            ${item.requirements && Array.isArray(item.requirements) && item.requirements.length > 0 ? 
+              `<div class="section">
+                <h3>Requirements:</h3>
+                <ul>
+                  ${item.requirements.map(req => `<li>${req}</li>`).join('')}
+                </ul>
+              </div>` : ''}
+            ${item.benefits && Array.isArray(item.benefits) && item.benefits.length > 0 ? 
+              `<div class="section">
+                <h3>Benefits:</h3>
+                <ul>
+                  ${item.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                </ul>
+              </div>` : ''}
+          </body>
+          </html>
         `;
         break;
       case 'testimonials':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
-            <div style="font-size: 24px; color: #374151; margin-bottom: 20px; line-height: 1.5;">"${item.content}"</div>
-            <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
-              <h3 style="margin: 0; color: #1f2937;">${item.client_name}</h3>
-              ${item.client_title ? `<p style="margin: 5px 0 0 0; color: #6b7280;">${item.client_title}</p>` : ''}
-              ${item.company_name ? `<p style="margin: 5px 0 0 0; color: #6b7280; font-weight: 600;">${item.company_name}</p>` : ''}
-              ${item.rating ? `<div style="margin-top: 10px; color: #fbbf24;">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</div>` : ''}
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: Testimonial from ${item.client_name}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; line-height: 1.6; }
+              .testimonial { font-size: 24px; color: #374151; margin: 40px 0; line-height: 1.5; font-style: italic; }
+              .author { border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 30px; }
+              .name { margin: 0; color: #1f2937; font-size: 20px; font-weight: bold; }
+              .title { margin: 5px 0 0 0; color: #6b7280; }
+              .company { margin: 5px 0 0 0; color: #6b7280; font-weight: 600; }
+              .rating { margin-top: 10px; color: #fbbf24; font-size: 18px; }
+            </style>
+          </head>
+          <body>
+            <div class="testimonial">"${item.content}"</div>
+            <div class="author">
+              <h3 class="name">${item.client_name}</h3>
+              ${item.client_title ? `<p class="title">${item.client_title}</p>` : ''}
+              ${item.company_name ? `<p class="company">${item.company_name}</p>` : ''}
+              ${item.rating ? `<div class="rating">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</div>` : ''}
             </div>
-          </div>
+          </body>
+          </html>
         `;
         break;
       case 'team':
         previewContent = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview: ${item.name}</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; line-height: 1.6; }
+              h1 { color: #333; margin-bottom: 5px; }
+              .role { color: #28a745; font-weight: 600; margin: 10px 0 20px 0; text-transform: uppercase; }
+              .title { color: #6b7280; margin: 0 0 20px 0; font-size: 18px; }
+              .bio { text-align: left; margin: 20px 0; background: #f8f9fa; padding: 20px; border-radius: 5px; }
+              .contact { border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 20px; }
+              .contact a { color: #007bff; text-decoration: none; margin: 0 10px; }
+            </style>
+          </head>
+          <body>
             <h1>${item.name}</h1>
-            ${item.title ? `<h2 style="color: #6b7280; margin-top: 0;">${item.title}</h2>` : ''}
-            <div style="color: #059669; font-weight: 600; margin-bottom: 20px;">${item.role.toUpperCase()}</div>
-            ${item.bio ? `<div style="line-height: 1.6; text-align: left; margin-bottom: 20px;">${item.bio}</div>` : ''}
-            <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
-              ${item.email ? `<div><a href="mailto:${item.email}" style="color: #3b82f6;">${item.email}</a></div>` : ''}
-              ${item.phone ? `<div style="margin-top: 5px;"><a href="tel:${item.phone}" style="color: #3b82f6;">${item.phone}</a></div>` : ''}
+            ${item.title ? `<p class="title">${item.title}</p>` : ''}
+            <div class="role">${item.role}</div>
+            ${item.bio ? `<div class="bio">${item.bio}</div>` : ''}
+            <div class="contact">
+              ${item.email ? `<a href="mailto:${item.email}">Email</a>` : ''}
+              ${item.phone ? `<a href="tel:${item.phone}">Phone</a>` : ''}
+              ${item.linkedin_url ? `<a href="${item.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
             </div>
-          </div>
+          </body>
+          </html>
         `;
         break;
       default:
-        previewContent = '<div style="padding: 20px; text-align: center;">Preview not available for this content type</div>';
+        previewContent = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview</title>
+          </head>
+          <body>
+            <h1>No preview available</h1>
+            <p>Preview is not available for this content type.</p>
+          </body>
+          </html>
+        `;
     }
 
     // Open preview in a new tab with better error handling
