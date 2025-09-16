@@ -7,12 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger,
+  useSidebar
+} from '@/components/ui/sidebar';
 import CMSContentManager from '@/components/admin/CMSContentManager';
 import { 
   Shield, Users, UserCheck, Crown, BarChart3, FileText, Briefcase,
   MessageSquare, Settings, Globe, TrendingUp, Calendar, Phone,
   Edit, Trash2, Plus, Eye, Upload, Star, Target, Building, Activity
 } from 'lucide-react';
+import AdminSidebar from '@/components/admin/AdminSidebar';
 import { useNavigate } from 'react-router-dom';
 
 interface UserWithRole {
@@ -169,347 +175,340 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
-      {/* Header */}
-      <div className="border-b border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 sticky top-0 z-40">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
-                <Shield className="w-6 h-6 text-white" />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
+        {/* Sidebar */}
+        <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Header */}
+          <div className="border-b border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 sticky top-0 z-40">
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <SidebarTrigger className="lg:hidden" />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        Admin Dashboard
+                      </h1>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm">
+                        Content Management System
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Button variant="outline" size="sm" className="glass border-slate-200/50">
+                    <Globe className="w-4 h-4 mr-2" />
+                    View Site
+                  </Button>
+                  <Button variant="outline" size="sm" className="glass border-slate-200/50">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </Button>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  Admin Dashboard
-                </h1>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Content Management System
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm" className="glass border-slate-200/50">
-                <Globe className="w-4 h-4 mr-2" />
-                View Site
-              </Button>
-              <Button variant="outline" size="sm" className="glass border-slate-200/50">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="container mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="glass border border-slate-200/50 p-1 w-fit">
-            <TabsTrigger value="dashboard" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="content" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <FileText className="w-4 h-4 mr-2" />
-              Content
-            </TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <Users className="w-4 h-4 mr-2" />
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+          {/* Content Area */}
+          <div className="flex-1 p-6 overflow-auto">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+              {/* Dashboard Tab */}
+              <TabsContent value="dashboard" className="space-y-8">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {realDashboardStats.map((stat, index) => (
+                    <Card key={index} className="glass border-slate-200/50 hover-lift group">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                              {stat.title}
+                            </p>
+                            <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                              {stat.value}
+                            </p>
+                            <p className="text-sm text-emerald-600 font-medium">
+                              {stat.trend} from last month
+                            </p>
+                          </div>
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                            <stat.icon className="w-6 h-6 text-white" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
 
-          {/* Dashboard Tab */}
-          <TabsContent value="dashboard" className="space-y-8">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {realDashboardStats.map((stat, index) => (
-                <Card key={index} className="glass border-slate-200/50 hover-lift group">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                          {stat.title}
-                        </p>
-                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
-                          {stat.value}
-                        </p>
-                        <p className="text-sm text-emerald-600 font-medium">
-                          {stat.trend} from last month
-                        </p>
-                      </div>
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <stat.icon className="w-6 h-6 text-white" />
-                      </div>
+                {/* Quick Actions */}
+                <Card className="glass border-slate-200/50">
+                  <CardHeader>
+                    <CardTitle className="text-slate-900 dark:text-white">Quick Actions</CardTitle>
+                    <CardDescription>Common CMS tasks and shortcuts</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Button className="h-16 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Add New Page
+                      </Button>
+                      <Button className="h-16 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white">
+                        <FileText className="w-5 h-5 mr-2" />
+                        Create Blog Post
+                      </Button>
+                      <Button className="h-16 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+                        <Upload className="w-5 h-5 mr-2" />
+                        Media Library
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
 
-            {/* Quick Actions */}
-            <Card className="glass border-slate-200/50">
-              <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-white">Quick Actions</CardTitle>
-                <CardDescription>Common CMS tasks and shortcuts</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button className="h-16 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
-                    <Plus className="w-5 h-5 mr-2" />
-                    Add New Page
-                  </Button>
-                  <Button className="h-16 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white">
-                    <FileText className="w-5 h-5 mr-2" />
-                    Create Blog Post
-                  </Button>
-                  <Button className="h-16 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
-                    <Upload className="w-5 h-5 mr-2" />
-                    Media Library
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Activity */}
-            <Card className="glass border-slate-200/50">
-              <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-white">Recent Activity</CardTitle>
-                <CardDescription>Latest changes and updates</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { action: 'Updated "About Us" page', user: 'Admin', time: '2 hours ago', icon: Edit },
-                    { action: 'Published new blog post', user: 'Editor', time: '4 hours ago', icon: FileText },
-                    { action: 'Added new team member', user: 'Admin', time: '1 day ago', icon: Users },
-                    { action: 'Updated service pricing', user: 'Manager', time: '2 days ago', icon: Target }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                        <activity.icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-900 dark:text-white">
-                          {activity.action}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          by {activity.user} • {activity.time}
-                        </p>
-                      </div>
+                {/* Recent Activity */}
+                <Card className="glass border-slate-200/50">
+                  <CardHeader>
+                    <CardTitle className="text-slate-900 dark:text-white">Recent Activity</CardTitle>
+                    <CardDescription>Latest changes and updates</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[
+                        { action: 'Updated "About Us" page', user: 'Admin', time: '2 hours ago', icon: Edit },
+                        { action: 'Published new blog post', user: 'Editor', time: '4 hours ago', icon: FileText },
+                        { action: 'Added new team member', user: 'Admin', time: '1 day ago', icon: Users },
+                        { action: 'Updated service pricing', user: 'Manager', time: '2 days ago', icon: Target }
+                      ].map((activity, index) => (
+                        <div key={index} className="flex items-center space-x-4 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                          <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                            <activity.icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-slate-900 dark:text-white">
+                              {activity.action}
+                            </p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                              by {activity.user} • {activity.time}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Content Management Tab */}
+              <TabsContent value="content" className="space-y-8">
+                <Tabs defaultValue="pages" className="space-y-6">
+                  <TabsList className="glass border border-slate-200/50 p-1 w-fit">
+                    {contentSections.map((section) => (
+                      <TabsTrigger 
+                        key={section.id} 
+                        value={section.id}
+                        className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                      >
+                        <section.icon className="w-4 h-4 mr-2" />
+                        {section.title}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {/* Content sections */}
+                  <TabsContent value="pages">
+                    <CMSContentManager contentType="pages" />
+                  </TabsContent>
+                  
+                  <TabsContent value="services">
+                    <CMSContentManager contentType="services" />
+                  </TabsContent>
+                  
+                  <TabsContent value="blog">
+                    <CMSContentManager contentType="blog" />
+                  </TabsContent>
+                  
+                  <TabsContent value="careers">
+                    <CMSContentManager contentType="careers" />
+                  </TabsContent>
+                  
+                  <TabsContent value="testimonials">
+                    <CMSContentManager contentType="testimonials" />
+                  </TabsContent>
+                  
+                  <TabsContent value="team">
+                    <CMSContentManager contentType="team" />
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+
+              {/* Users Management Tab */}
+              <TabsContent value="users" className="space-y-8">
+                <Card className="glass border-slate-200/50">
+                  <CardHeader>
+                    <CardTitle className="text-slate-900 dark:text-white">User Management</CardTitle>
+                    <CardDescription>
+                      Manage user accounts and permissions for your CallCenter Pro system.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {loading ? (
+                      <div className="text-center py-8">
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <p className="mt-2 text-slate-600 dark:text-slate-400">Loading users...</p>
+                      </div>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>User</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Current Role</TableHead>
+                            <TableHead>Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {users.map((user) => (
+                            <TableRow key={user.id}>
+                              <TableCell>
+                                <div className="font-medium text-slate-900 dark:text-white">
+                                  {user.full_name || 'No name'}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-slate-600 dark:text-slate-400">
+                                {user.email}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={getRoleBadgeVariant(user.role || 'user')} className="flex items-center space-x-1 w-fit">
+                                  {getRoleIcon(user.role || 'user')}
+                                  <span className="capitalize">{user.role || 'user'}</span>
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Select
+                                  value={user.role || 'user'}
+                                  onValueChange={(newRole: UserRole) => handleRoleChange(user.id, newRole)}
+                                >
+                                  <SelectTrigger className="w-32">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="user">User</SelectItem>
+                                    <SelectItem value="admin">Admin</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Analytics Tab */}
+              <TabsContent value="analytics" className="space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Card className="glass border-slate-200/50">
+                    <CardHeader>
+                      <CardTitle className="text-slate-900 dark:text-white flex items-center">
+                        <Activity className="w-5 h-5 mr-2 text-blue-600" />
+                        Real-time Analytics
+                      </CardTitle>
+                      <CardDescription>Current performance metrics</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {analyticsData.slice(0, 5).map((metric, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                            <div>
+                              <p className="font-medium text-slate-900 dark:text-white capitalize">
+                                {metric.metric_name.replace('_', ' ')}
+                              </p>
+                              <p className="text-sm text-slate-600 dark:text-slate-400 capitalize">
+                                {metric.category}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-2xl font-bold text-blue-600">
+                                {typeof metric.metric_value === 'number' 
+                                  ? metric.metric_value.toLocaleString() 
+                                  : metric.metric_value}
+                              </p>
+                              <p className="text-xs text-slate-500">
+                                {new Date(metric.metric_date).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="glass border-slate-200/50">
+                    <CardHeader>
+                      <CardTitle className="text-slate-900 dark:text-white">Content Statistics</CardTitle>
+                      <CardDescription>CMS content overview</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {contentSections.map((section, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                <section.icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                              </div>
+                              <p className="font-medium text-slate-900 dark:text-white">
+                                {section.title}
+                              </p>
+                            </div>
+                            <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
+                              {section.count}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
-          {/* Content Management Tab */}
-          <TabsContent value="content" className="space-y-8">
-            <Tabs defaultValue="pages" className="space-y-6">
-              <TabsList className="glass border border-slate-200/50 p-1 w-fit">
-                {contentSections.map((section) => (
-                  <TabsTrigger 
-                    key={section.id} 
-                    value={section.id}
-                    className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                  >
-                    <section.icon className="w-4 h-4 mr-2" />
-                    {section.title}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {/* Content sections */}
-              <TabsContent value="pages">
-                <CMSContentManager contentType="pages" />
-              </TabsContent>
-              
-              <TabsContent value="services">
-                <CMSContentManager contentType="services" />
-              </TabsContent>
-              
-              <TabsContent value="blog">
-                <CMSContentManager contentType="blog" />
-              </TabsContent>
-              
-              <TabsContent value="careers">
-                <CMSContentManager contentType="careers" />
-              </TabsContent>
-              
-              <TabsContent value="testimonials">
-                <CMSContentManager contentType="testimonials" />
-              </TabsContent>
-              
-              <TabsContent value="team">
-                <CMSContentManager contentType="team" />
+                <Card className="glass border-slate-200/50">
+                  <CardHeader>
+                    <CardTitle className="text-slate-900 dark:text-white">Performance Metrics</CardTitle>
+                    <CardDescription>Key performance indicators for your call center operations</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      {[
+                        { label: 'Avg Response Time', value: '< 2 min', color: 'from-green-500 to-emerald-500' },
+                        { label: 'Resolution Rate', value: '94.2%', color: 'from-blue-500 to-indigo-500' },
+                        { label: 'Client Retention', value: '98.7%', color: 'from-purple-500 to-pink-500' },
+                        { label: 'Revenue Growth', value: '+23%', color: 'from-orange-500 to-red-500' }
+                      ].map((metric, index) => (
+                        <div key={index} className="text-center p-4 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+                          <div className={`text-2xl font-bold bg-gradient-to-r ${metric.color} bg-clip-text text-transparent`}>
+                            {metric.value}
+                          </div>
+                          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                            {metric.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
-          </TabsContent>
-
-          {/* Users Management Tab */}
-          <TabsContent value="users" className="space-y-8">
-            <Card className="glass border-slate-200/50">
-              <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-white">User Management</CardTitle>
-                <CardDescription>
-                  Manage user accounts and permissions for your CallCenter Pro system.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <div className="text-center py-8">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <p className="mt-2 text-slate-600 dark:text-slate-400">Loading users...</p>
-                  </div>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Current Role</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {users.map((user) => (
-                        <TableRow key={user.id}>
-                          <TableCell>
-                            <div className="font-medium text-slate-900 dark:text-white">
-                              {user.full_name || 'No name'}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-slate-600 dark:text-slate-400">
-                            {user.email}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={getRoleBadgeVariant(user.role || 'user')} className="flex items-center space-x-1 w-fit">
-                              {getRoleIcon(user.role || 'user')}
-                              <span className="capitalize">{user.role || 'user'}</span>
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Select
-                              value={user.role || 'user'}
-                              onValueChange={(newRole: UserRole) => handleRoleChange(user.id, newRole)}
-                            >
-                              <SelectTrigger className="w-32">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="user">User</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="glass border-slate-200/50">
-                <CardHeader>
-                  <CardTitle className="text-slate-900 dark:text-white flex items-center">
-                    <Activity className="w-5 h-5 mr-2 text-blue-600" />
-                    Real-time Analytics
-                  </CardTitle>
-                  <CardDescription>Current performance metrics</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {analyticsData.slice(0, 5).map((metric, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
-                        <div>
-                          <p className="font-medium text-slate-900 dark:text-white capitalize">
-                            {metric.metric_name.replace('_', ' ')}
-                          </p>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 capitalize">
-                            {metric.category}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-blue-600">
-                            {typeof metric.metric_value === 'number' 
-                              ? metric.metric_value.toLocaleString() 
-                              : metric.metric_value}
-                          </p>
-                          <p className="text-xs text-slate-500">
-                            {new Date(metric.metric_date).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass border-slate-200/50">
-                <CardHeader>
-                  <CardTitle className="text-slate-900 dark:text-white">Content Statistics</CardTitle>
-                  <CardDescription>CMS content overview</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {contentSections.map((section, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                            <section.icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                          </div>
-                          <p className="font-medium text-slate-900 dark:text-white">
-                            {section.title}
-                          </p>
-                        </div>
-                        <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
-                          {section.count}
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="glass border-slate-200/50">
-              <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-white">Performance Metrics</CardTitle>
-                <CardDescription>Key performance indicators for your call center operations</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {[
-                    { label: 'Avg Response Time', value: '< 2 min', color: 'from-green-500 to-emerald-500' },
-                    { label: 'Resolution Rate', value: '94.2%', color: 'from-blue-500 to-indigo-500' },
-                    { label: 'Client Retention', value: '98.7%', color: 'from-purple-500 to-pink-500' },
-                    { label: 'Revenue Growth', value: '+23%', color: 'from-orange-500 to-red-500' }
-                  ].map((metric, index) => (
-                    <div key={index} className="text-center p-4 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
-                      <div className={`text-2xl font-bold bg-gradient-to-r ${metric.color} bg-clip-text text-transparent`}>
-                        {metric.value}
-                      </div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                        {metric.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
