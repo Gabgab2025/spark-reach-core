@@ -191,12 +191,13 @@ export type Database = {
       pages: {
         Row: {
           author_id: string | null
-          content: string | null
+          content: Json | null
           created_at: string
           featured_image: string | null
           id: string
           meta_description: string | null
           meta_title: string | null
+          page_type: string | null
           published_at: string | null
           slug: string
           status: Database["public"]["Enums"]["page_status"]
@@ -205,12 +206,13 @@ export type Database = {
         }
         Insert: {
           author_id?: string | null
-          content?: string | null
+          content?: Json | null
           created_at?: string
           featured_image?: string | null
           id?: string
           meta_description?: string | null
           meta_title?: string | null
+          page_type?: string | null
           published_at?: string | null
           slug: string
           status?: Database["public"]["Enums"]["page_status"]
@@ -219,12 +221,13 @@ export type Database = {
         }
         Update: {
           author_id?: string | null
-          content?: string | null
+          content?: Json | null
           created_at?: string
           featured_image?: string | null
           id?: string
           meta_description?: string | null
           meta_title?: string | null
+          page_type?: string | null
           published_at?: string | null
           slug?: string
           status?: Database["public"]["Enums"]["page_status"]

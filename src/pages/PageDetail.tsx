@@ -10,10 +10,11 @@ interface Page {
   id: string;
   title: string;
   slug: string;
-  content: string;
+  content: any; // Changed to any to support JSONB content
   meta_title?: string;
   meta_description?: string;
   status: string;
+  page_type?: string;
 }
 
 const PageDetail = () => {

@@ -18,6 +18,7 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import CMSContentManager from '@/components/admin/CMSContentManager';
+import PageEditor from '@/components/admin/PageEditor';
 import { 
   Shield, Users, UserCheck, Crown, BarChart3, FileText, Briefcase,
   MessageSquare, Settings, Globe, TrendingUp, Calendar, Phone,
@@ -379,7 +380,7 @@ const AdminContent = () => {
 
                   {/* Content sections */}
                   <TabsContent value="pages">
-                    <CMSContentManager contentType="pages" />
+                    <PageEditor />
                   </TabsContent>
                   
                   <TabsContent value="services">

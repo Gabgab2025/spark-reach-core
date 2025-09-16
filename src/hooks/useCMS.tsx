@@ -6,12 +6,13 @@ export interface CMSPage {
   id: string;
   title: string;
   slug: string;
-  content?: string;
+  content?: any; // Changed to any to support JSONB content
   meta_title?: string;
   meta_description?: string;
   featured_image?: string;
   status: 'draft' | 'published' | 'archived';
   author_id?: string;
+  page_type?: string; // Added page_type field
   created_at: string;
   updated_at: string;
   published_at?: string;
