@@ -42,7 +42,7 @@ const Footer = () => {
                 Start Your Project
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold text-white border-white/30">
+              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold text-black border-white/30">
                 Schedule Consultation
               </Button>
             </div>
