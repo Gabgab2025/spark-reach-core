@@ -172,6 +172,112 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
     }
   };
 
+  const handlePreview = (item: any) => {
+    // Create a modal or new tab to preview the content
+    let previewContent = '';
+    
+    switch (contentType) {
+      case 'pages':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <h1>${item.title}</h1>
+            <div style="color: #666; margin-bottom: 20px;">
+              <strong>Slug:</strong> /${item.slug} | <strong>Status:</strong> ${item.status}
+            </div>
+            ${item.meta_description ? `<p style="font-style: italic; color: #555;">${item.meta_description}</p>` : ''}
+            <div style="line-height: 1.6;">${item.content || 'No content available'}</div>
+          </div>
+        `;
+        break;
+      case 'blog':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <h1>${item.title}</h1>
+            <div style="color: #666; margin-bottom: 20px;">
+              <strong>Status:</strong> ${item.status} | <strong>Tags:</strong> ${Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || 'None'}
+            </div>
+            ${item.excerpt ? `<p style="font-size: 18px; color: #555; font-style: italic;">${item.excerpt}</p>` : ''}
+            <div style="line-height: 1.6;">${item.content || 'No content available'}</div>
+          </div>
+        `;
+        break;
+      case 'services':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <h1>${item.title}</h1>
+            <div style="color: #666; margin-bottom: 20px;">
+              <strong>Category:</strong> ${item.category} ${item.is_featured ? '| <span style="color: #d97706;">★ Featured</span>' : ''}
+            </div>
+            <div style="line-height: 1.6; margin-bottom: 20px;">${item.description || 'No description available'}</div>
+            ${item.pricing_info ? `<div style="background: #f3f4f6; padding: 15px; border-radius: 8px;"><strong>Pricing:</strong> ${item.pricing_info}</div>` : ''}
+          </div>
+        `;
+        break;
+      case 'careers':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <h1>${item.title}</h1>
+            <div style="color: #666; margin-bottom: 20px;">
+              <strong>Department:</strong> ${item.department || 'N/A'} | 
+              <strong>Location:</strong> ${item.location || 'N/A'} | 
+              <strong>Type:</strong> ${item.employment_type || 'N/A'}
+            </div>
+            ${item.salary_range ? `<div style="font-size: 18px; color: #059669; margin-bottom: 20px;"><strong>Salary:</strong> ${item.salary_range}</div>` : ''}
+            <div style="line-height: 1.6;">${item.description || 'No description available'}</div>
+          </div>
+        `;
+        break;
+      case 'testimonials':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+            <div style="font-size: 24px; color: #374151; margin-bottom: 20px; line-height: 1.5;">"${item.content}"</div>
+            <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
+              <h3 style="margin: 0; color: #1f2937;">${item.client_name}</h3>
+              ${item.client_title ? `<p style="margin: 5px 0 0 0; color: #6b7280;">${item.client_title}</p>` : ''}
+              ${item.company_name ? `<p style="margin: 5px 0 0 0; color: #6b7280; font-weight: 600;">${item.company_name}</p>` : ''}
+              ${item.rating ? `<div style="margin-top: 10px; color: #fbbf24;">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</div>` : ''}
+            </div>
+          </div>
+        `;
+        break;
+      case 'team':
+        previewContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+            <h1>${item.name}</h1>
+            ${item.title ? `<h2 style="color: #6b7280; margin-top: 0;">${item.title}</h2>` : ''}
+            <div style="color: #059669; font-weight: 600; margin-bottom: 20px;">${item.role.toUpperCase()}</div>
+            ${item.bio ? `<div style="line-height: 1.6; text-align: left; margin-bottom: 20px;">${item.bio}</div>` : ''}
+            <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
+              ${item.email ? `<div><a href="mailto:${item.email}" style="color: #3b82f6;">${item.email}</a></div>` : ''}
+              ${item.phone ? `<div style="margin-top: 5px;"><a href="tel:${item.phone}" style="color: #3b82f6;">${item.phone}</a></div>` : ''}
+            </div>
+          </div>
+        `;
+        break;
+      default:
+        previewContent = '<div style="padding: 20px; text-align: center;">Preview not available for this content type</div>';
+    }
+
+    // Open preview in a new tab
+    const previewWindow = window.open('', '_blank');
+    if (previewWindow) {
+      previewWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Preview: ${item.title || item.name || item.client_name}</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body style="margin: 0; background: #f9fafb;">
+          ${previewContent}
+        </body>
+        </html>
+      `);
+      previewWindow.document.close();
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const variants: any = {
       published: 'default',
@@ -460,16 +566,30 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
                         {renderTableCell(item, field)}
                       </TableCell>
                     ))}
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => handleEdit(item)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleDelete(item.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+                     <TableCell>
+                       <div className="flex space-x-2">
+                         {/* Preview button for public/published content */}
+                         {(item.status === 'published' || item.status === 'open' || item.is_featured || 
+                           (contentType === 'testimonials' && item.is_featured) ||
+                           (contentType === 'team' && item.is_leadership) ||
+                           contentType === 'services') && (
+                           <Button 
+                             size="sm" 
+                             variant="outline" 
+                             onClick={() => handlePreview(item)}
+                             title="Preview"
+                           >
+                             <Eye className="w-4 h-4" />
+                           </Button>
+                         )}
+                         <Button size="sm" variant="outline" onClick={() => handleEdit(item)}>
+                           <Edit className="w-4 h-4" />
+                         </Button>
+                         <Button size="sm" variant="outline" onClick={() => handleDelete(item.id)}>
+                           <Trash2 className="w-4 h-4" />
+                         </Button>
+                       </div>
+                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
