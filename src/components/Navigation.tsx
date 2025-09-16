@@ -38,8 +38,8 @@ const Navigation = () => {
               <Phone className="w-6 h-6 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white">CallCenter Pro</h1>
-              <p className="text-xs text-white/80">Excellence in Service</p>
+              <h1 className={`text-xl font-bold ${isScrolled ? 'text-black' : 'text-white'}`}>CallCenter Pro</h1>
+              <p className={`text-xs ${isScrolled ? 'text-black/80' : 'text-white/80'}`}>Excellence in Service</p>
             </div>
           </Link>
 
@@ -51,8 +51,8 @@ const Navigation = () => {
                 to={item.href}
                 className={`transition-colors duration-200 font-medium ${
                   location.pathname === item.href 
-                    ? 'text-white' 
-                    : 'text-white/90 hover:text-white'
+                    ? (isScrolled ? 'text-black' : 'text-white')
+                    : (isScrolled ? 'text-black/90 hover:text-black' : 'text-white/90 hover:text-white')
                 }`}
               >
                 {item.label}
@@ -62,7 +62,7 @@ const Navigation = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-white/80 hover:text-white transition-colors">
+            <a href="tel:+1-800-CALL-PRO" className={`flex items-center space-x-2 text-sm transition-colors ${isScrolled ? 'text-black/80 hover:text-black' : 'text-white/80 hover:text-white'}`}>
               <Phone className="w-4 h-4" />
               <span>1-800-CALL-PRO</span>
             </a>
