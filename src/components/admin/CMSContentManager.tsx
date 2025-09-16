@@ -211,7 +211,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
           targetUrl = `/service/${item.slug}`;
           break;
         case 'careers':
-          targetUrl = `/careers`;
+          targetUrl = `/job/${item.id}`;
           break;
         case 'testimonials':
         case 'team':
