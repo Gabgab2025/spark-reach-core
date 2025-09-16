@@ -9,18 +9,7 @@ const AdminRedirect = ({ children }: { children: React.ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: rolesLoading } = useRoles();
 
-  useEffect(() => {
-    // Wait for both auth and roles to load
-    if (authLoading || rolesLoading) return;
-
-    // If user is logged in and is admin, redirect to admin dashboard
-    if (user && isAdmin()) {
-      // Only redirect if not already on admin routes
-      if (!location.pathname.startsWith('/admin')) {
-        navigate('/admin', { replace: true });
-      }
-    }
-  }, [user, isAdmin, authLoading, rolesLoading, navigate, location.pathname]);
+  // Removed automatic admin redirect to allow admins to access public pages
 
   // Don't render children while checking admin status
   if (authLoading || rolesLoading) {
