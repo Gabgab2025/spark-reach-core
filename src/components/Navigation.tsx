@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, LogOut, User } from 'lucide-react';
+import { Menu, X, Phone, Mail, LogOut, User, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoles } from '@/hooks/useRoles';
+import { useTheme } from 'next-themes';
 
 const Navigation = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
   const { isAdmin } = useRoles();
+  const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -31,18 +33,22 @@ const Navigation = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'glass shadow-medium' : 'bg-black/20 backdrop-blur-sm'
+      isScrolled ? 'glass shadow-medium' : 'bg-black/20 dark:bg-background/20 backdrop-blur-sm'
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-corporate to-teal flex items-center justify-center">
-              <Phone className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+              <Phone className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="hidden sm:block">
-              <h1 className={`text-xl font-bold ${isScrolled ? 'text-black' : 'text-white'}`}>CallCenter Pro</h1>
-              <p className={`text-xs ${isScrolled ? 'text-black/80' : 'text-white/80'}`}>Excellence in Service</p>
+              <h1 className={`text-xl font-bold transition-colors ${
+                isScrolled ? 'text-foreground' : 'text-white dark:text-foreground'
+              }`}>CallCenter Pro</h1>
+              <p className={`text-xs transition-colors ${
+                isScrolled ? 'text-muted-foreground' : 'text-white/80 dark:text-muted-foreground'
+              }`}>Excellence in Service</p>
             </div>
           </Link>
 
@@ -54,8 +60,8 @@ const Navigation = () => {
                 to={item.href}
                 className={`transition-colors duration-200 font-medium ${
                   location.pathname === item.href 
-                    ? (isScrolled ? 'text-black' : 'text-white')
-                    : (isScrolled ? 'text-black/90 hover:text-black' : 'text-white/90 hover:text-white')
+                    ? (isScrolled ? 'text-foreground' : 'text-white dark:text-foreground')
+                    : (isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/90 hover:text-white dark:text-muted-foreground dark:hover:text-foreground')
                 }`}
               >
                 {item.label}
@@ -65,10 +71,25 @@ const Navigation = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="tel:+1-800-CALL-PRO" className={`flex items-center space-x-2 text-sm transition-colors ${isScrolled ? 'text-black/80 hover:text-black' : 'text-white/80 hover:text-white'}`}>
+            <a href="tel:+1-800-CALL-PRO" className={`flex items-center space-x-2 text-sm transition-colors ${
+              isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground'
+            }`}>
               <Phone className="w-4 h-4" />
               <span>1-800-CALL-PRO</span>
             </a>
+            
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`p-2 ${
+                isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10 dark:text-foreground dark:hover:bg-muted'
+              }`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+            
             {user && (
               <div className="flex items-center space-x-2">
                 {isAdmin() && (
@@ -86,7 +107,9 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            className={`lg:hidden p-2 rounded-lg hover:bg-muted transition-colors ${
+              isScrolled ? 'text-foreground' : 'text-white dark:text-foreground'
+            }`}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -102,8 +125,8 @@ const Navigation = () => {
                   to={item.href}
                   className={`transition-colors duration-200 font-medium py-2 ${
                     location.pathname === item.href 
-                      ? 'text-white' 
-                      : 'text-white/90 hover:text-white'
+                      ? 'text-foreground' 
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -111,7 +134,7 @@ const Navigation = () => {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border">
-                <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-white/80 mb-3">
+                <a href="tel:+1-800-CALL-PRO" className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3">
                   <Phone className="w-4 h-4" />
                   <span>1-800-CALL-PRO</span>
                 </a>
@@ -122,7 +145,7 @@ const Navigation = () => {
                         <Link to="/admin">Admin Dashboard</Link>
                       </Button>
                     )}
-                    <div className="flex items-center space-x-2 text-sm text-white/80">
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                       <User className="w-4 h-4" />
                       <span>{user.email}</span>
                     </div>

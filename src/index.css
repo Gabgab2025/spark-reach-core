@@ -87,41 +87,79 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Primary Dark Backgrounds - WCAG AA+ Compliant */
+    --background: 214 100% 3.9%;          /* #0A0A0C - Very dark primary */
+    --foreground: 0 0% 96%;               /* #F5F5F7 - Primary body text */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 214 11% 11.8%;                /* #1E1E1E - Secondary surfaces */
+    --card-foreground: 0 0% 88%;          /* #E0E0E0 - Card text */
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 214 11% 16.5%;             /* #2A2A2A - Elevated surfaces */
+    --popover-foreground: 0 0% 96%;       /* #F5F5F7 - Popover text */
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Interactive Elements */
+    --primary: 48 100% 60%;               /* Brighter golden for dark mode */
+    --primary-foreground: 214 100% 3.9%; /* Dark text on bright elements */
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 214 11% 16.5%;           /* #2A2A2A - Secondary buttons */
+    --secondary-foreground: 0 0% 96%;     /* #F5F5F7 - Light text */
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 214 11% 11.8%;               /* #1E1E1E - Muted backgrounds */
+    --muted-foreground: 0 0% 69%;         /* #B0B0B0 - Sub-text, metadata */
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 33 100% 70%;                /* Brighter orange for contrast */
+    --accent-foreground: 214 100% 3.9%;  /* Dark text on accent */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 65%;             /* Lighter red for visibility */
+    --destructive-foreground: 0 0% 100%;  /* White text */
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Borders & Inputs */
+    --border: 214 11% 20%;                /* #333333 - Visible borders */
+    --input: 214 11% 16.5%;               /* #2A2A2A - Input backgrounds */
+    --ring: 48 100% 60%;                  /* Golden focus rings */
+
+    /* Corporate Brand Colors - Dark Mode Adjusted */
+    --charcoal: 214 100% 3.9%;            /* Primary dark background */
+    --charcoal-light: 214 11% 11.8%;      /* Secondary dark surfaces */
+    --golden: 48 100% 60%;                /* Brighter golden for visibility */
+    --golden-light: 48 100% 70%;          /* Even brighter for hover states */
+    --orange: 33 100% 70%;                /* Adjusted orange for contrast */
+    --orange-light: 33 100% 80%;          /* Lighter orange for accents */
+    --silver: 0 0% 69%;                   /* #B0B0B0 - Subtle text */
+    --silver-dark: 0 0% 45%;              /* #737373 - Very subtle elements */
+    
+    /* Gradients - Dark Mode Optimized */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--orange)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--charcoal)) 0%, hsl(var(--charcoal-light)) 50%, hsl(var(--golden) / 0.2) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(var(--golden) / 0.3), hsl(var(--orange) / 0.3));
+    
+    /* Glass Effects - Dark Mode */
+    --glass-bg: hsl(var(--card) / 0.8);
+    --glass-border: hsl(var(--border) / 0.3);
+    --glass-shadow: 0 8px 32px hsl(var(--charcoal) / 0.5);
+    
+    /* Shadows - Enhanced for Dark Mode */
+    --shadow-soft: 0 4px 20px hsl(var(--charcoal) / 0.3);
+    --shadow-medium: 0 8px 30px hsl(var(--charcoal) / 0.4);
+    --shadow-strong: 0 20px 60px hsl(var(--charcoal) / 0.6);
+    --shadow-glow: 0 0 40px hsl(var(--golden) / 0.4);
+
+    /* Sidebar - Dark Mode */
+    --sidebar-background: 214 11% 8.6%;   /* #161616 - Sidebar background */
+    --sidebar-foreground: 0 0% 96%;       /* #F5F5F7 - Sidebar text */
+    --sidebar-primary: 48 100% 60%;       /* Golden primary */
+    --sidebar-primary-foreground: 214 100% 3.9%; /* Dark text */
+    --sidebar-accent: 214 11% 16.5%;      /* #2A2A2A - Accent background */
+    --sidebar-accent-foreground: 0 0% 96%; /* Light text */
+    --sidebar-border: 214 11% 20%;        /* Visible borders */
+    --sidebar-ring: 48 100% 60%;          /* Golden focus */
+
+    /* Navigation & Interactive States */
+    --nav-bg: hsl(var(--charcoal) / 0.9);
+    --nav-text: hsl(var(--foreground));
+    --nav-text-muted: hsl(var(--muted-foreground));
+    --nav-hover: hsl(var(--golden));
   }
 }
 
