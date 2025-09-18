@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useCMS, CMSSettings } from '@/hooks/useCMS';
 import { useToast } from '@/hooks/use-toast';
+import SettingsPreview from './SettingsPreview';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState<CMSSettings>({});
@@ -66,6 +67,9 @@ const SettingsManager = () => {
           {isLoading ? "Saving..." : "Save All Settings"}
         </Button>
       </div>
+
+      {/* Settings Preview */}
+      <SettingsPreview />
 
       {/* Maps Configuration */}
       <Card>

@@ -1,23 +1,45 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useCMS } from '@/hooks/useCMS';
 
 const SettingsRenderer = () => {
   const cms = useCMS();
+  const location = useLocation();
+  
+  // Don't run on admin pages
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   useEffect(() => {
+    // Don't load settings on admin pages
+    if (isAdminPage) return;
+    
+    let hasAppliedSettings = false;
+    
     const loadAndApplySettings = async () => {
+      // Prevent multiple executions
+      if (hasAppliedSettings) return;
+      hasAppliedSettings = true;
+      
       try {
+        console.log('Loading and applying website settings...');
         const settings = await cms.getSettings();
+        
+        // Remove any previously added settings elements
+        const existingElements = document.querySelectorAll('[data-settings-applied]');
+        existingElements.forEach(el => el.remove());
         
         // Apply chat widget code
         if (settings.chat_widget_code) {
+          console.log('Applying chat widget code');
           const chatWidgetContainer = document.createElement('div');
+          chatWidgetContainer.setAttribute('data-settings-applied', 'chat-widget');
           chatWidgetContainer.innerHTML = settings.chat_widget_code;
           document.body.appendChild(chatWidgetContainer);
         }
         
         // Apply custom head code
         if (settings.custom_head_code) {
+          console.log('Applying custom head code');
           const headContainer = document.createElement('div');
           headContainer.innerHTML = settings.custom_head_code;
           const scripts = headContainer.querySelectorAll('script');
@@ -28,6 +50,7 @@ const SettingsRenderer = () => {
           scripts.forEach(script => {
             const scriptEl = script as HTMLScriptElement;
             const newScript = document.createElement('script');
+            newScript.setAttribute('data-settings-applied', 'custom-head');
             if (scriptEl.src) {
               newScript.src = scriptEl.src;
             } else {
@@ -44,6 +67,7 @@ const SettingsRenderer = () => {
             if (style.tagName === 'LINK') {
               const linkEl = style as HTMLLinkElement;
               const newLink = document.createElement('link');
+              newLink.setAttribute('data-settings-applied', 'custom-head');
               Array.from(linkEl.attributes).forEach(attr => {
                 newLink.setAttribute(attr.name, attr.value);
               });
@@ -51,6 +75,7 @@ const SettingsRenderer = () => {
             } else {
               const styleEl = style as HTMLStyleElement;
               const newStyle = document.createElement('style');
+              newStyle.setAttribute('data-settings-applied', 'custom-head');
               newStyle.innerHTML = styleEl.innerHTML;
               if (styleEl.type) newStyle.type = styleEl.type;
               document.head.appendChild(newStyle);
@@ -60,6 +85,7 @@ const SettingsRenderer = () => {
           // Add meta tags to head
           metas.forEach(meta => {
             const newMeta = document.createElement('meta');
+            newMeta.setAttribute('data-settings-applied', 'custom-head');
             Array.from(meta.attributes).forEach(attr => {
               newMeta.setAttribute(attr.name, attr.value);
             });
@@ -69,21 +95,26 @@ const SettingsRenderer = () => {
         
         // Apply custom body code
         if (settings.custom_body_code) {
+          console.log('Applying custom body code');
           const bodyContainer = document.createElement('div');
+          bodyContainer.setAttribute('data-settings-applied', 'custom-body');
           bodyContainer.innerHTML = settings.custom_body_code;
           document.body.appendChild(bodyContainer);
         }
         
         // Apply Google Analytics
         if (settings.google_analytics_code) {
+          console.log('Applying Google Analytics');
           // Google Analytics 4
           if (settings.google_analytics_code.startsWith('G-')) {
             const script1 = document.createElement('script');
+            script1.setAttribute('data-settings-applied', 'google-analytics');
             script1.async = true;
             script1.src = `https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics_code}`;
             document.head.appendChild(script1);
             
             const script2 = document.createElement('script');
+            script2.setAttribute('data-settings-applied', 'google-analytics');
             script2.innerHTML = `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
@@ -95,6 +126,7 @@ const SettingsRenderer = () => {
           // Universal Analytics
           else if (settings.google_analytics_code.startsWith('UA-')) {
             const script = document.createElement('script');
+            script.setAttribute('data-settings-applied', 'google-analytics');
             script.innerHTML = `
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -109,8 +141,10 @@ const SettingsRenderer = () => {
         
         // Apply Google Tag Manager
         if (settings.google_tag_manager_code) {
+          console.log('Applying Google Tag Manager');
           // GTM Head Script
           const gtmHeadScript = document.createElement('script');
+          gtmHeadScript.setAttribute('data-settings-applied', 'google-tag-manager');
           gtmHeadScript.innerHTML = `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -122,6 +156,7 @@ const SettingsRenderer = () => {
           
           // GTM Body NoScript
           const gtmBodyNoScript = document.createElement('noscript');
+          gtmBodyNoScript.setAttribute('data-settings-applied', 'google-tag-manager');
           gtmBodyNoScript.innerHTML = `
             <iframe src="https://www.googletagmanager.com/ns.html?id=${settings.google_tag_manager_code}"
             height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -131,7 +166,9 @@ const SettingsRenderer = () => {
         
         // Apply Meta Pixel
         if (settings.meta_pixel_code) {
+          console.log('Applying Meta Pixel');
           const fbScript = document.createElement('script');
+          fbScript.setAttribute('data-settings-applied', 'meta-pixel');
           fbScript.innerHTML = `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -147,6 +184,7 @@ const SettingsRenderer = () => {
           document.head.appendChild(fbScript);
           
           const fbNoscript = document.createElement('noscript');
+          fbNoscript.setAttribute('data-settings-applied', 'meta-pixel');
           fbNoscript.innerHTML = `
             <img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=${settings.meta_pixel_code}&ev=PageView&noscript=1"/>
@@ -156,18 +194,24 @@ const SettingsRenderer = () => {
         
         // Apply verification meta tags
         if (settings.google_search_console_code) {
+          console.log('Applying Google Search Console verification');
           const googleMeta = document.createElement('meta');
+          googleMeta.setAttribute('data-settings-applied', 'google-verification');
           googleMeta.name = 'google-site-verification';
           googleMeta.content = settings.google_search_console_code;
           document.head.appendChild(googleMeta);
         }
         
         if (settings.bing_webmaster_code) {
+          console.log('Applying Bing Webmaster verification');
           const bingMeta = document.createElement('meta');
+          bingMeta.setAttribute('data-settings-applied', 'bing-verification');
           bingMeta.name = 'msvalidate.01';
           bingMeta.content = settings.bing_webmaster_code;
           document.head.appendChild(bingMeta);
         }
+        
+        console.log('Settings applied successfully');
         
       } catch (error) {
         console.error('Error loading settings:', error);
@@ -175,7 +219,13 @@ const SettingsRenderer = () => {
     };
     
     loadAndApplySettings();
-  }, [cms]);
+    
+    // Cleanup function
+    return () => {
+      const settingsElements = document.querySelectorAll('[data-settings-applied]');
+      settingsElements.forEach(el => el.remove());
+    };
+  }, [cms, isAdminPage, location.pathname]);
   
   return null; // This component doesn't render anything visible
 };
