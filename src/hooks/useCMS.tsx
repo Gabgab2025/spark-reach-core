@@ -476,16 +476,72 @@ export const useCMS = () => {
     
     // Settings
     getSettings: async (): Promise<CMSSettings> => {
-      // For now, return empty settings - could be stored in a settings table later
-      return {};
+      try {
+        const { data, error } = await supabase
+          .from('settings')
+          .select('*');
+        
+        if (error) throw error;
+        
+        // Convert array of key-value pairs to object
+        const settingsObject: any = {};
+        data?.forEach(setting => {
+          if (setting.key && setting.value) {
+            try {
+              // Try to parse JSON values
+              settingsObject[setting.key] = JSON.parse(setting.value);
+            } catch {
+              // If not JSON, store as string
+              settingsObject[setting.key] = setting.value;
+            }
+          }
+        });
+        
+        return settingsObject;
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+        return {};
+      }
     },
     
     updateSettings: async (settings: CMSSettings): Promise<void> => {
-      // For now, just return success - could be stored in a settings table later
-      toast({
-        title: "Settings Updated",
-        description: "Google Maps API key has been configured",
-      });
+      try {
+        // Convert settings object to key-value pairs for database storage
+        const settingsArray = Object.entries(settings).map(([key, value]) => ({
+          key,
+          value: typeof value === 'object' ? JSON.stringify(value) : String(value || '')
+        }));
+        
+        // Delete existing settings and insert new ones
+        const { error: deleteError } = await supabase
+          .from('settings')
+          .delete()
+          .gte('created_at', '1900-01-01'); // Delete all existing settings
+        
+        if (deleteError) throw deleteError;
+        
+        // Insert new settings
+        if (settingsArray.length > 0) {
+          const { error: insertError } = await supabase
+            .from('settings')
+            .insert(settingsArray);
+          
+          if (insertError) throw insertError;
+        }
+        
+        toast({
+          title: "Settings Updated",
+          description: "All settings have been saved successfully",
+        });
+      } catch (error) {
+        console.error('Error updating settings:', error);
+        toast({
+          title: "Error",
+          description: "Failed to update settings",
+          variant: "destructive",
+        });
+        throw error;
+      }
     }
   };
 };
