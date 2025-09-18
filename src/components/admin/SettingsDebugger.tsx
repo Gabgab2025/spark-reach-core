@@ -133,6 +133,21 @@ const SettingsDebugger = () => {
             <ExternalLink className="mr-2 h-4 w-4" />
             Test on Homepage
           </Button>
+          <Button variant="outline" onClick={() => {
+            // Test chat widget injection manually
+            const testWidget = '<iframe src="https://example.com" width="300" height="400" style="position:fixed;bottom:20px;right:20px;z-index:9999;border:1px solid #ccc;"></iframe>';
+            console.log('Testing widget injection:', testWidget);
+            const container = document.createElement('div');
+            container.innerHTML = testWidget;
+            container.setAttribute('data-test-widget', 'true');
+            document.body.appendChild(container);
+            setTimeout(() => {
+              const testEl = document.querySelector('[data-test-widget]');
+              if (testEl) testEl.remove();
+            }, 5000);
+          }}>
+            Test Widget Injection
+          </Button>
         </div>
 
         {debugInfo && (

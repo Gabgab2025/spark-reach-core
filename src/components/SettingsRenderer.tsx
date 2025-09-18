@@ -33,11 +33,55 @@ const SettingsRenderer = () => {
         
         // Apply chat widget code
         if (settings.chat_widget_code) {
-          console.log('Applying chat widget code');
-          const chatWidgetContainer = document.createElement('div');
-          chatWidgetContainer.setAttribute('data-settings-applied', 'chat-widget');
-          chatWidgetContainer.innerHTML = settings.chat_widget_code;
-          document.body.appendChild(chatWidgetContainer);
+          console.log('Applying chat widget code:', settings.chat_widget_code.substring(0, 100));
+          
+          // Create a temporary container to parse the HTML
+          const tempContainer = document.createElement('div');
+          tempContainer.innerHTML = settings.chat_widget_code;
+          
+          // Process each element in the widget code
+          Array.from(tempContainer.children).forEach((element) => {
+            const clonedElement = element.cloneNode(true) as HTMLElement;
+            clonedElement.setAttribute('data-settings-applied', 'chat-widget');
+            
+            // If it's a script tag, we need to create a new script element for proper execution
+            if (element.tagName === 'SCRIPT') {
+              const scriptEl = element as HTMLScriptElement;
+              const newScript = document.createElement('script');
+              newScript.setAttribute('data-settings-applied', 'chat-widget');
+              
+              if (scriptEl.src) {
+                newScript.src = scriptEl.src;
+              } else {
+                newScript.text = scriptEl.text;
+              }
+              
+              if (scriptEl.type) newScript.type = scriptEl.type;
+              if (scriptEl.async) newScript.async = scriptEl.async;
+              if (scriptEl.defer) newScript.defer = scriptEl.defer;
+              
+              // Copy all other attributes
+              Array.from(scriptEl.attributes).forEach(attr => {
+                if (!['src', 'type', 'async', 'defer'].includes(attr.name)) {
+                  newScript.setAttribute(attr.name, attr.value);
+                }
+              });
+              
+              document.body.appendChild(newScript);
+            } else {
+              // For non-script elements (like iframes), append directly
+              document.body.appendChild(clonedElement);
+            }
+          });
+          
+          // Also handle any loose text or inline scripts
+          if (tempContainer.innerHTML.includes('<script') && !tempContainer.children.length) {
+            // Handle inline script tags that might not be parsed as elements
+            const scriptContainer = document.createElement('div');
+            scriptContainer.setAttribute('data-settings-applied', 'chat-widget');
+            scriptContainer.innerHTML = settings.chat_widget_code;
+            document.body.appendChild(scriptContainer);
+          }
         }
         
         // Apply custom head code
