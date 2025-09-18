@@ -3,12 +3,32 @@ import { useCMS } from '@/hooks/useCMS';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, CheckCircle, ExternalLink, Loader2, RefreshCw } from 'lucide-react';
+import { AlertCircle, CheckCircle, ExternalLink, Loader2, RefreshCw, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const SettingsDebugger = () => {
   const [debugInfo, setDebugInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const cms = useCMS();
+  const { signOut } = useAuth();
+
+  const fixAuthIssues = async () => {
+    try {
+      // Clear any problematic tokens
+      localStorage.removeItem('supabase.auth.token');
+      localStorage.clear();
+      
+      // Sign out to clear session
+      await signOut();
+      
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      console.error('Error fixing auth issues:', error);
+      // Force reload anyway
+      window.location.reload();
+    }
+  };
 
   const runDebug = async () => {
     setIsLoading(true);
@@ -62,6 +82,16 @@ const SettingsDebugger = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-800 mb-2">
+            <strong>🚨 Auth Error Detected:</strong> Invalid refresh token is preventing settings from working properly.
+          </p>
+          <Button variant="destructive" size="sm" onClick={fixAuthIssues}>
+            <LogOut className="mr-2 h-3 w-3" />
+            Fix Auth Issues (Sign Out & Clear Cache)
+          </Button>
+        </div>
+        
         <div className="flex gap-2">
           <Button onClick={runDebug} disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

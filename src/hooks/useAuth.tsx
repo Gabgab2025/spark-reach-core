@@ -20,25 +20,67 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  const handleAuthError = (error: any) => {
+    console.error('Auth error:', error);
+    
+    // If it's a refresh token error, clear the session
+    if (error?.message?.includes('Invalid Refresh Token') || 
+        error?.message?.includes('Refresh Token Not Found')) {
+      console.log('Clearing invalid session due to refresh token error');
+      localStorage.removeItem('supabase.auth.token');
+      setUser(null);
+      setSession(null);
+      toast({
+        title: "Session Expired",
+        description: "Please sign in again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+        console.log('Auth state change:', event, session?.user?.email);
+        
+        if (event === 'SIGNED_OUT' || !session) {
+          setUser(null);
+          setSession(null);
+        } else {
+          setUser(session.user);
+          setSession(session);
+        }
+        
         setLoading(false);
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    // THEN check for existing session with error handling
+    const getInitialSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          handleAuthError(error);
+          return;
+        }
+        
+        if (session) {
+          setUser(session.user);
+          setSession(session);
+        }
+      } catch (error) {
+        handleAuthError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getInitialSession();
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [toast]);
 
   const signUp = async (email: string, password: string, fullName: string) => {
     const redirectUrl = `${window.location.origin}/`;
@@ -88,11 +130,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Signed Out",
-      description: "You have been successfully signed out."
-    });
+    try {
+      // Clear localStorage first to prevent errors
+      localStorage.removeItem('supabase.auth.token');
+      
+      // Sign out from Supabase
+      await supabase.auth.signOut();
+      
+      // Clear state
+      setUser(null);
+      setSession(null);
+      
+      toast({
+        title: "Signed Out",
+        description: "You have been successfully signed out."
+      });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Even if signOut fails, clear local state
+      setUser(null);
+      setSession(null);
+    }
   };
 
   return (
