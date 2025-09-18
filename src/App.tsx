@@ -28,8 +28,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <SettingsRenderer />
         <BrowserRouter>
+          <SettingsRenderer />
           <AdminRedirect>
             <Routes>
             <Route path="/" element={<Index />} />
