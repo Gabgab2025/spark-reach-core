@@ -110,10 +110,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact & Legal */}
+          {/* Contact */}
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white dark:text-foreground">Contact</h4>
-            <div className="space-y-4 mb-6">
+            <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-yellow-500" />
                 <span className="text-white/90 dark:text-card-foreground">1-800-CALL-PRO</span>
@@ -130,12 +130,15 @@ const Footer = () => {
                 </span>
               </div>
             </div>
-            
-            <h5 className="font-semibold mb-3 text-white dark:text-foreground">Legal</h5>
-            <ul className="space-y-2">
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-lg font-semibold mb-6 text-white dark:text-foreground">Legal</h4>
+            <ul className="space-y-3">
               {legal.map((item, index) => (
                 <li key={index}>
-                  <a href={item.href} className="text-white/70 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors text-sm">
+                  <a href={item.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
                     {item.label}
                   </a>
                 </li>
