@@ -11,7 +11,10 @@ const SettingsRenderer = () => {
 
   useEffect(() => {
     // Don't load settings on admin pages
-    if (isAdminPage) return;
+    if (isAdminPage) {
+      console.log('SettingsRenderer: Skipping settings load - on admin page');
+      return;
+    }
     
     let hasAppliedSettings = false;
     

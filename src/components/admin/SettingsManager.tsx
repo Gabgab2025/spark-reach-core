@@ -13,6 +13,7 @@ import {
 import { useCMS, CMSSettings } from '@/hooks/useCMS';
 import { useToast } from '@/hooks/use-toast';
 import SettingsPreview from './SettingsPreview';
+import SettingsDebugger from './SettingsDebugger';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState<CMSSettings>({});
@@ -70,6 +71,9 @@ const SettingsManager = () => {
 
       {/* Settings Preview */}
       <SettingsPreview />
+
+      {/* Settings Debugger */}
+      <SettingsDebugger />
 
       {/* Maps Configuration */}
       <Card>
