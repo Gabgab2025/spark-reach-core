@@ -29,6 +29,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import { useNavigate } from 'react-router-dom';
 import { AdminDataProvider, useAdminData } from '@/contexts/AdminDataContext';
 import { useQuery } from '@tanstack/react-query';
+import { AdminThemeProvider } from '@/providers/AdminThemeProvider';
 
 interface UserWithRole {
   id: string;
@@ -645,9 +646,13 @@ const AdminContent = () => {
 
 const Admin = () => {
   return (
-    <AdminDataProvider>
-      <AdminContent />
-    </AdminDataProvider>
+    <AdminThemeProvider>
+      <div data-admin-theme-scope className="min-h-screen">
+        <AdminDataProvider>
+          <AdminContent />
+        </AdminDataProvider>
+      </div>
+    </AdminThemeProvider>
   );
 };
 

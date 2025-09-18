@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import SettingsRenderer from "@/components/SettingsRenderer";
 import AdminRedirect from "@/components/auth/AdminRedirect";
+import { PublicThemeProvider } from "@/providers/PublicThemeProvider";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -25,13 +26,14 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SettingsRenderer />
-          <AdminRedirect>
-            <Routes>
+      <PublicThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SettingsRenderer />
+            <AdminRedirect>
+              <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
@@ -46,10 +48,11 @@ const App = () => (
               <Route path="/:slug" element={<PageDetail />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AdminRedirect>
-        </BrowserRouter>
-      </TooltipProvider>
+              </Routes>
+            </AdminRedirect>
+          </BrowserRouter>
+        </TooltipProvider>
+      </PublicThemeProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

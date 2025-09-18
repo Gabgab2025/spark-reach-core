@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoles } from '@/hooks/useRoles';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Navigation = () => {
   const location = useLocation();
@@ -69,6 +70,7 @@ const Navigation = () => {
               <Phone className="w-4 h-4" />
               <span>1-800-CALL-PRO</span>
             </a>
+            <ThemeToggle />
             {user && (
               <div className="flex items-center space-x-2">
                 {isAdmin() && (
@@ -115,6 +117,9 @@ const Navigation = () => {
                   <Phone className="w-4 h-4" />
                   <span>1-800-CALL-PRO</span>
                 </a>
+                <div className="mb-3">
+                  <ThemeToggle />
+                </div>
                 {user && (
                   <div className="space-y-2">
                     {isAdmin() && (
