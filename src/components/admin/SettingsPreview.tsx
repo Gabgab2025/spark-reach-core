@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useCMS } from '@/hooks/useCMS';
 import { useState } from 'react';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, ExternalLink } from 'lucide-react';
 
 const SettingsPreview = () => {
   const [testResults, setTestResults] = useState<any>(null);
@@ -151,6 +151,21 @@ const SettingsPreview = () => {
               <p className="text-sm text-blue-800">
                 <strong>✅ Integration is working!</strong> Any configured settings above will automatically be applied to your public pages (not admin pages).
               </p>
+            </div>
+            
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+              <p className="text-sm text-yellow-800 mb-2">
+                <strong>💡 Important:</strong> Chat widgets only show on public pages, not in the admin area.
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => window.open('/', '_blank')}
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Test on Home Page
+              </Button>
             </div>
           </div>
         )}
