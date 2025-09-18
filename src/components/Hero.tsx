@@ -1,105 +1,125 @@
 import React from 'react';
-import { ArrowRight, Play, Check } from 'lucide-react';
+import { ArrowRight, Play, Phone, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import heroImage from '@/assets/hero-bg.jpg';
 
 const Hero = () => {
   return (
-    <section className="relative bg-gradient-to-br from-background via-secondary/30 to-background py-24 lg:py-32">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            
-            {/* Left Content */}
-            <div className="space-y-8">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium">
-                <Check className="h-4 w-4" />
-                Trusted by 500+ Companies
-              </div>
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 hero-gradient">
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${heroImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        
+      </div>
 
-              {/* Main Heading */}
-              <h1 className="text-4xl lg:text-6xl font-bold leading-tight text-foreground">
-                Transform Your{' '}
-                <span className="text-primary">
-                  Customer Operations
-                </span>
-              </h1>
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-teal/20 animate-float" />
+        <div className="absolute top-40 right-20 w-32 h-32 rounded-full bg-blue-corporate/20 animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-20 left-20 w-16 h-16 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '4s' }} />
+      </div>
 
-              {/* Subheading */}
-              <p className="text-lg text-muted-foreground max-w-lg">
-                Professional call center solutions and compliant bank collections services 
-                powered by cutting-edge technology and expert teams.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="btn-primary text-base px-8 py-6 rounded-lg">
-                  Get Started Today
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="btn-secondary text-base px-8 py-6 rounded-lg"
-                >
-                  <Play className="mr-2 h-5 w-5" />
-                  View Services
-                </Button>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-green-600" />
-                  <span>FDCPA Compliant</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-blue-600" />
-                  <span>SOC 2 Certified</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>Industry Leader</span>
-                </div>
-              </div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Content */}
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
+              <div className="w-2 h-2 bg-teal rounded-full animate-pulse" />
+              <span className="text-white text-sm font-medium">Trusted by 500+ Financial Institutions</span>
             </div>
 
-            {/* Right Content - Image */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&h=600&q=80"
-                  alt="Modern call center workspace" 
-                  className="w-full h-full object-cover"
-                />
-                {/* Live Support Badge */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-full text-sm font-medium">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  Live Support Available
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              Next-Gen
+              <span className="block text-gradient">Call Center</span>
+              <span className="block">& Collections</span>
+            </h1>
+
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Revolutionizing customer service and debt recovery with AI-powered solutions, 
+              cutting-edge technology, and industry-leading expertise.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+              <Button className="btn-hero px-8 py-4 text-lg font-semibold group">
+                Start Your Project
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold text-white border-white/30 hover:bg-white/10">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6">
+              <div className="text-center lg:text-left">
+                <div className="flex items-center justify-center lg:justify-start mb-2">
+                  <Users className="w-6 h-6 text-teal mr-2" />
+                  <span className="text-2xl font-bold text-white">500+</span>
                 </div>
+                <p className="text-white/70 text-sm">Active Clients</p>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="flex items-center justify-center lg:justify-start mb-2">
+                  <Phone className="w-6 h-6 text-teal mr-2" />
+                  <span className="text-2xl font-bold text-white">10M+</span>
+                </div>
+                <p className="text-white/70 text-sm">Calls Handled</p>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="flex items-center justify-center lg:justify-start mb-2">
+                  <TrendingUp className="w-6 h-6 text-teal mr-2" />
+                  <span className="text-2xl font-bold text-white">95%</span>
+                </div>
+                <p className="text-white/70 text-sm">Success Rate</p>
               </div>
             </div>
           </div>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
-            <div className="stat-card">
-              <div className="stat-number">10M+</div>
-              <div className="stat-label">Calls Handled</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Client Satisfaction</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">Availability</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">Happy Clients</div>
+          {/* Visual Element */}
+          <div className="hidden lg:block relative">
+            <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-corporate/20 to-teal/20 rounded-3xl" />
+              <div className="relative z-10 h-full flex flex-col justify-center">
+                <h3 className="text-2xl font-bold text-black mb-4">Real-Time Analytics</h3>
+                <div className="space-y-4">
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-black/80 text-sm">Active Calls</span>
+                      <span className="text-teal font-bold">1,247</span>
+                    </div>
+                    <div className="w-full bg-black/20 rounded-full h-2">
+                      <div className="bg-black h-2 rounded-full w-3/4" />
+                    </div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-black/80 text-sm">Collection Rate</span>
+                      <span className="text-blue-corporate font-bold">94.2%</span>
+                    </div>
+                    <div className="w-full bg-black/20 rounded-full h-2">
+                      <div className="bg-black h-2 rounded-full w-11/12" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse" />
         </div>
       </div>
     </section>

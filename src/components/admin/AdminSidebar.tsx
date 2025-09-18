@@ -9,7 +9,6 @@ import {
   BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight, LogOut, User
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { AdminThemeToggle } from '@/components/admin/AdminThemeToggle';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -98,13 +97,6 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
           {!collapsed && <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Theme Toggle */}
-              <SidebarMenuItem>
-                <div className={`p-2 ${collapsed ? 'flex justify-center' : 'flex justify-start'}`}>
-                  <AdminThemeToggle />
-                  {!collapsed && <span className="ml-3 text-sm text-muted-foreground">Theme</span>}
-                </div>
-              </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton className={`w-full ${collapsed ? 'justify-center px-2' : 'justify-start'}`} title={collapsed ? "User Profile" : undefined}>
                   <User className="w-4 h-4" />
