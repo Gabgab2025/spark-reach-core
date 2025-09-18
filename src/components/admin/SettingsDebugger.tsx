@@ -39,6 +39,17 @@ const SettingsDebugger = () => {
       const chatWidgetElements = document.querySelectorAll('[data-settings-applied="chat-widget"]');
       const customHeadElements = document.querySelectorAll('[data-settings-applied="custom-head"]');
       const customBodyElements = document.querySelectorAll('[data-settings-applied="custom-body"]');
+      const googleAnalyticsElements = document.querySelectorAll('[data-settings-applied="google-analytics"]');
+      const googleTagManagerElements = document.querySelectorAll('[data-settings-applied="google-tag-manager"]');
+      const metaPixelElements = document.querySelectorAll('[data-settings-applied="meta-pixel"]');
+      const googleVerificationElements = document.querySelectorAll('[data-settings-applied="google-verification"]');
+      const bingVerificationElements = document.querySelectorAll('[data-settings-applied="bing-verification"]');
+      
+      // Check for meta tags in head
+      const existingGoogleMeta = document.querySelector('meta[name="google-site-verification"]');
+      const existingBingMeta = document.querySelector('meta[name="msvalidate.01"]');
+      const gtmScripts = document.querySelectorAll('script[src*="googletagmanager.com"]');
+      const gaScripts = document.querySelectorAll('script[src*="google-analytics.com"], script[src*="googletagmanager.com/gtag"]');
       
       setDebugInfo({
         settings,
@@ -46,13 +57,30 @@ const SettingsDebugger = () => {
           chatWidgetCount: chatWidgetElements.length,
           customHeadCount: customHeadElements.length,
           customBodyCount: customBodyElements.length,
-          totalSettingsElements: document.querySelectorAll('[data-settings-applied]').length
+          googleAnalyticsCount: googleAnalyticsElements.length,
+          googleTagManagerCount: googleTagManagerElements.length,
+          metaPixelCount: metaPixelElements.length,
+          googleVerificationCount: googleVerificationElements.length,
+          bingVerificationCount: bingVerificationElements.length,
+          totalSettingsElements: document.querySelectorAll('[data-settings-applied]').length,
+          // Check actual scripts/meta tags in DOM
+          existingGoogleMeta: existingGoogleMeta?.getAttribute('content') || 'Not found',
+          existingBingMeta: existingBingMeta?.getAttribute('content') || 'Not found',
+          gtmScriptsCount: gtmScripts.length,
+          gaScriptsCount: gaScripts.length
         },
         currentPath: window.location.pathname,
         isPublicPage: !window.location.pathname.startsWith('/admin'),
         settingsKeys: Object.keys(settings),
         hasAnySettings: Object.keys(settings).length > 0,
-        chatWidgetPreview: settings.chat_widget_code ? settings.chat_widget_code.substring(0, 100) + '...' : 'No chat widget code'
+        chatWidgetPreview: settings.chat_widget_code ? settings.chat_widget_code.substring(0, 100) + '...' : 'No chat widget code',
+        seoConfigured: {
+          googleAnalytics: !!settings.google_analytics_code,
+          googleTagManager: !!settings.google_tag_manager_code,
+          metaPixel: !!settings.meta_pixel_code,
+          googleVerification: !!settings.google_search_console_code,
+          bingVerification: !!settings.bing_webmaster_code
+        }
       });
     } catch (error) {
       console.error('Debug error:', error);
@@ -133,11 +161,12 @@ const SettingsDebugger = () => {
                   </div>
                   
                   <div className="p-3 border rounded">
-                    <div className="text-sm font-medium">DOM Elements</div>
+                    <div className="text-sm font-medium">DOM Elements Applied</div>
                     <div className="text-xs text-muted-foreground">
-                      Chat: {debugInfo.domElements.chatWidgetCount}, 
-                      Head: {debugInfo.domElements.customHeadCount}, 
-                      Body: {debugInfo.domElements.customBodyCount}
+                      Total: {debugInfo.domElements.totalSettingsElements} elements
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      GA: {debugInfo.domElements.googleAnalyticsCount}, GTM: {debugInfo.domElements.googleTagManagerCount}
                     </div>
                     <Badge variant={debugInfo.domElements.totalSettingsElements > 0 ? "default" : "secondary"}>
                       {debugInfo.domElements.totalSettingsElements} Applied
@@ -145,13 +174,58 @@ const SettingsDebugger = () => {
                   </div>
                   
                   <div className="p-3 border rounded">
-                    <div className="text-sm font-medium">Chat Widget</div>
-                    <div className="text-xs text-muted-foreground break-all">
-                      {debugInfo.chatWidgetPreview}
+                    <div className="text-sm font-medium">SEO Scripts in DOM</div>
+                    <div className="text-xs text-muted-foreground">
+                      GA Scripts: {debugInfo.domElements.gaScriptsCount}
                     </div>
-                    <Badge variant={debugInfo.settings.chat_widget_code ? "default" : "secondary"}>
-                      {debugInfo.settings.chat_widget_code ? "Configured" : "Not Set"}
+                    <div className="text-xs text-muted-foreground">
+                      GTM Scripts: {debugInfo.domElements.gtmScriptsCount}
+                    </div>
+                    <Badge variant={(debugInfo.domElements.gaScriptsCount + debugInfo.domElements.gtmScriptsCount) > 0 ? "default" : "secondary"}>
+                      {debugInfo.domElements.gaScriptsCount + debugInfo.domElements.gtmScriptsCount} Scripts
                     </Badge>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">SEO Configuration Status:</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Analytics</span>
+                      <Badge variant={debugInfo.seoConfigured.googleAnalytics ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleAnalytics ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Tag Manager</span>
+                      <Badge variant={debugInfo.seoConfigured.googleTagManager ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleTagManager ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Meta Pixel</span>
+                      <Badge variant={debugInfo.seoConfigured.metaPixel ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.metaPixel ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Search Console</span>
+                      <Badge variant={debugInfo.seoConfigured.googleVerification ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleVerification ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Meta Tags in DOM:</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    <div className="p-2 border rounded text-xs">
+                      <strong>Google Verification:</strong> {debugInfo.domElements.existingGoogleMeta}
+                    </div>
+                    <div className="p-2 border rounded text-xs">
+                      <strong>Bing Verification:</strong> {debugInfo.domElements.existingBingMeta}
+                    </div>
                   </div>
                 </div>
 
