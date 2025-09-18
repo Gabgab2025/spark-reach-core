@@ -93,7 +93,7 @@ const Contact = () => {
       <main>
         {/* Hero Section */}
         <section className="relative py-32 hero-gradient">
-          <div className="absolute inset-0 bg-navy/80" />
+          <div className="absolute inset-0 bg-navy/60" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center text-white">
               <h1 className="text-5xl md:text-6xl font-bold mb-6">
