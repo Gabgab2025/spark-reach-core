@@ -16,21 +16,21 @@ const Services = () => {
       title: 'Call Center Solutions',
       description: 'Comprehensive inbound and outbound call center services with advanced technology and skilled agents.',
       features: ['24/7 Customer Support', 'Multi-language Support', 'CRM Integration', 'Real-time Analytics'],
-      color: 'blue-corporate'
+      iconBg: 'bg-gradient-to-br from-blue-600 to-blue-500'
     },
     {
       icon: TrendingUp,
       title: 'Bank Collections',
       description: 'Professional debt recovery services for financial institutions with proven track record and compliance.',
       features: ['Regulatory Compliance', 'Advanced Negotiation', 'Payment Processing', 'Detailed Reporting'],
-      color: 'teal'
+      iconBg: 'bg-gradient-to-br from-yellow-500 to-orange-500'
     },
     {
       icon: Users,
       title: 'Customer Experience',
       description: 'Enhance customer satisfaction with our premium customer experience management solutions.',
       features: ['Quality Assurance', 'Agent Training', 'Performance Monitoring', 'Customer Insights'],
-      color: 'accent'
+      iconBg: 'bg-gradient-to-br from-orange-500 to-red-500'
     }
   ];
 
@@ -64,7 +64,7 @@ const Services = () => {
           {services.map((service, index) => (
             <div key={index} className="group">
               <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-${service.color} to-${service.color}-light flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
+                <div className={`w-16 h-16 rounded-2xl ${service.iconBg} flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
                 
@@ -108,7 +108,7 @@ const Services = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {capabilities.map((item, index) => (
               <div key={index} className="text-center group">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:shadow-glow transition-all duration-300">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center group-hover:shadow-glow transition-all duration-300">
                   <item.icon className="w-10 h-10 text-white" />
                 </div>
                 <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
