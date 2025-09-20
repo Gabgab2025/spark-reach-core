@@ -1,9 +1,34 @@
 import React from 'react';
 import { ArrowRight, Play, Phone, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import heroImage from '@/assets/hero-bg.jpg';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleStartProject = () => {
+    // First try to scroll to services section
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+      // After a short delay, navigate to contact page
+      setTimeout(() => {
+        navigate('/contact');
+      }, 1500);
+    } else {
+      // If services section doesn't exist, go directly to contact
+      navigate('/contact');
+    }
+  };
+
+  const handleWatchDemo = () => {
+    // Scroll to services section to show capabilities
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -48,11 +73,18 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <Button className="btn-hero px-8 py-4 text-lg font-semibold group">
+              <Button 
+                className="btn-hero px-8 py-4 text-lg font-semibold group"
+                onClick={handleStartProject}
+              >
                 Start Your Project
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white">
+              <Button 
+                variant="outline" 
+                className="btn-glass px-8 py-4 text-lg font-semibold bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white"
+                onClick={handleWatchDemo}
+              >
                 <Play className="w-5 h-5 mr-2" />
                 Watch Demo
               </Button>
