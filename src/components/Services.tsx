@@ -64,8 +64,8 @@ const Services = () => {
           {services.map((service, index) => (
             <div key={index} className="group">
               <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
-                <div className={`w-16 h-16 rounded-2xl ${service.iconBg} flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
-                  <service.icon className="w-8 h-8 text-yellow-400" />
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
+                  <service.icon className="w-8 h-8 text-white" />
                 </div>
                 
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
