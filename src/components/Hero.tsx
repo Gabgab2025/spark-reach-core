@@ -52,7 +52,7 @@ const Hero = () => {
                 Start Your Project
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold text-white dark:text-foreground border-white/30 dark:border-border hover:bg-white/10 dark:hover:bg-card/20">
+              <Button variant="outline" className="btn-glass px-8 py-4 text-lg font-semibold text-white dark:text-white border-white/30 dark:border-white/30 hover:bg-white/10 dark:hover:bg-white/10 hover:text-white dark:hover:text-white">
                 <Play className="w-5 h-5 mr-2" />
                 Watch Demo
               </Button>
