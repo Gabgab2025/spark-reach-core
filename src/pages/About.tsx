@@ -45,16 +45,19 @@ const About = () => {
       <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="relative py-32 hero-gradient">
-          <div className="absolute inset-0 bg-navy/80" />
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center text-white">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6">
-                About
-                <span className="block text-gradient">CallCenter Pro</span>
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 mb-6">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="text-primary text-sm font-medium">About Us</span>
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                Transforming Customer
+                <span className="block text-gradient">Service Excellence</span>
               </h1>
-              <p className="text-xl text-white/90 max-w-3xl mx-auto">
-                Since 2010, we've been transforming customer service and collections 
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Since 2010, we've been revolutionizing customer service and collections 
                 for financial institutions with innovative technology and exceptional expertise.
               </p>
             </div>
