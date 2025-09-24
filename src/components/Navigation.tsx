@@ -3,6 +3,7 @@ import { Menu, X, Phone, Mail, LogOut, User, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import jdgkLogo from '@/assets/jdgk-logo.png';
 import { useRoles } from '@/hooks/useRoles';
 import { useTheme } from 'next-themes';
 
@@ -39,9 +40,11 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Phone className="w-6 h-6 text-primary-foreground" />
-            </div>
+            <img 
+              src={jdgkLogo} 
+              alt="JDGK Business Solutions Inc." 
+              className="h-10 w-auto"
+            />
             <div className="hidden sm:block">
               <h1 className={`text-xl font-bold transition-colors ${
                 isScrolled ? 'text-foreground' : 'text-white dark:text-foreground'
