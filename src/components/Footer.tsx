@@ -34,8 +34,8 @@ const Footer = () => {
               Ready to Transform Your Operations?
             </h2>
             <p className="text-white/80 dark:text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Join 500+ financial institutions who trust CallCenter Pro for their 
-              customer service and collections needs.
+              Join 500+ businesses who trust JDGK Business Solutions Inc. for their 
+              professional business solutions and client-focused services.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="btn-hero px-8 py-4 text-lg font-semibold">
@@ -60,8 +60,8 @@ const Footer = () => {
                 <Phone className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gradient">CallCenter Pro</h3>
-                <p className="text-sm text-white/70 dark:text-muted-foreground">Excellence in Service</p>
+                <h3 className="text-xl font-bold text-gradient">JDGK BUSINESS SOLUTIONS INC.</h3>
+                <p className="text-sm text-white/70 dark:text-muted-foreground">RESULTS DRIVEN, CLIENT FOCUSED</p>
               </div>
             </div>
             <p className="text-white/90 dark:text-card-foreground mb-6 leading-relaxed">
@@ -120,7 +120,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-yellow-500" />
-                <span className="text-white/90 dark:text-card-foreground">info@callcenterpro.com</span>
+                <span className="text-white/90 dark:text-card-foreground">info@jdgkbusiness.com</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-yellow-500 mt-1" />
@@ -153,7 +153,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-white/70 dark:text-muted-foreground text-sm">
-              © 2024 CallCenter Pro. All rights reserved.
+              © 2024 JDGK Business Solutions Inc. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <span className="text-white/70 dark:text-muted-foreground text-sm">Certified & Compliant</span>

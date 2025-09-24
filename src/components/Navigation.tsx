@@ -45,10 +45,10 @@ const Navigation = () => {
             <div className="hidden sm:block">
               <h1 className={`text-xl font-bold transition-colors ${
                 isScrolled ? 'text-foreground' : 'text-white dark:text-foreground'
-              }`}>CallCenter Pro</h1>
+              }`}>JDGK BUSINESS SOLUTIONS INC.</h1>
               <p className={`text-xs transition-colors ${
                 isScrolled ? 'text-muted-foreground' : 'text-white/80 dark:text-muted-foreground'
-              }`}>Excellence in Service</p>
+              }`}>RESULTS DRIVEN, CLIENT FOCUSED</p>
             </div>
           </Link>
 

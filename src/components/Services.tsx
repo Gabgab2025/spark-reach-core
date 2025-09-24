@@ -101,7 +101,7 @@ const Services = () => {
         {/* Capabilities */}
         <div className="glass rounded-3xl p-8 lg:p-12">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Why Choose CallCenter Pro?</h3>
+            <h3 className="text-3xl font-bold mb-4">Why Choose JDGK Business Solutions Inc.?</h3>
             <p className="text-muted-foreground text-lg">Industry-leading capabilities that set us apart</p>
           </div>
 

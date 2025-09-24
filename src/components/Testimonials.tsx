@@ -7,7 +7,7 @@ const Testimonials = () => {
       name: 'Sarah Johnson',
       position: 'VP of Operations',
       company: 'First National Bank',
-      content: 'CallCenter Pro transformed our customer service operations. Their AI-powered solutions increased our efficiency by 40% while maintaining exceptional quality.',
+      content: 'JDGK Business Solutions Inc. transformed our business operations. Their results-driven solutions increased our efficiency by 40% while maintaining exceptional quality.',
       rating: 5,
       avatar: 'SJ'
     },
