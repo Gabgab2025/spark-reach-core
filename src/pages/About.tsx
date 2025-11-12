@@ -123,18 +123,18 @@ const About = () => {
               <h2 className="text-4xl font-bold mb-6 text-center">Company Overview</h2>
               <div className="glass rounded-3xl p-8 mb-8">
                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  JDGK Business Solutions Inc. is a corporation duly organized and existing under the laws of the Republic of the Philippines, registered with the Securities and Exchange Commission on March 3, 2025.
+                  JDGK BUSINESS SOLUTIONS INC. is a corporation duly organized and existing under the laws of the Republic of the Philippines, registered with the Securities and Exchange Commission on March 3, 2025. Its principal office is located at Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines.
                 </p>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  The company's principal office is located at Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines.
-                </p>
-                <p className="text-muted-foreground text-lg leading-relaxed">
-                  As a dynamic business solutions provider, JDGK is committed to delivering comprehensive and effective strategies tailored to client needs — including but not limited to credit collection recovery, repossession, skip tracing, credit investigation, tele sales, and virtual assistance.
+                  As a dynamic business solutions provider, the corporation is committed to equipping its clients with comprehensive and effective strategies tailored to their needs which includes but not limited to credit collection recovery, repossession, skip tracing, credit investigation and virtual assistance, among others.
                 </p>
               </div>
 
               <div className="glass rounded-3xl p-8">
-                <h3 className="text-2xl font-bold mb-6">Founders</h3>
+                <h3 className="text-2xl font-bold mb-6">Established by Five Filipino Professionals</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  The company was established by five (5) Filipino professionals, each possessing extensive expertise and a proven track record in their respective fields:
+                </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   {['Donna Bucad Dealca', 'Kristofferson Doctor Dealca', 'Joan Bucad-Landeza', 'Jaime Jr. Doblado Bucad', 'Geraldine Bucad Barro'].map((founder, idx) => (
                     <div key={idx} className="flex items-center space-x-3">
