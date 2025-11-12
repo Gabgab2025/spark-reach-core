@@ -30,6 +30,12 @@ const Gallery = () => {
     { src: '/gallery/equipment-1.jpg', alt: 'Telecommunications Equipment' },
     { src: '/gallery/equipment-2.jpg', alt: 'Telecommunications Equipment' },
     { src: '/gallery/equipment-3.jpg', alt: 'Telecommunications Equipment' },
+    { src: '/gallery/sms-blast-system.jpg', alt: 'SMS Blast System Interface' },
+    { src: '/gallery/vici-phone.jpg', alt: 'VICIphone Web Phone Interface' },
+    { src: '/gallery/vici-admin.jpg', alt: 'VICIdial Administration Dashboard' },
+    { src: '/gallery/easyphone-dashboard.jpg', alt: 'EasyPhone GoIP32 System' },
+    { src: '/gallery/vici-script.jpg', alt: 'VICIdial Script Interface' },
+    { src: '/gallery/vici-login.jpg', alt: 'VICIdial Campaign Login' },
   ];
 
   return (
