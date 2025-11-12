@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { 
   Shield, Search, Code, MapPin, Eye, Settings, 
-  Globe, BarChart3, Lock, Mail, Monitor
+  Globe, BarChart3, Lock, Mail, Monitor, Building
 } from 'lucide-react';
 import { useCMS, CMSSettings } from '@/hooks/useCMS';
 import { useToast } from '@/hooks/use-toast';
@@ -58,6 +58,23 @@ const SettingsManager = () => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const handleFounderChange = (index: number, value: string) => {
+    const founders = [...(settings.company_founders || [])];
+    founders[index] = value;
+    updateSetting('company_founders', founders);
+  };
+
+  const addFounder = () => {
+    const founders = [...(settings.company_founders || []), ''];
+    updateSetting('company_founders', founders);
+  };
+
+  const removeFounder = (index: number) => {
+    const founders = [...(settings.company_founders || [])];
+    founders.splice(index, 1);
+    updateSetting('company_founders', founders);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -78,6 +95,84 @@ const SettingsManager = () => {
 
       {/* Page Inspector */}
       <PageInspector />
+
+      {/* Company Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Building className="h-5 w-5" />
+            Company Information
+          </CardTitle>
+          <CardDescription>
+            Manage company overview and founders information displayed on About page
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <Label htmlFor="company_overview_paragraph1">Company Overview - First Paragraph</Label>
+            <Textarea
+              id="company_overview_paragraph1"
+              value={settings.company_overview_paragraph1 || ''}
+              onChange={(e) => updateSetting('company_overview_paragraph1', e.target.value)}
+              placeholder="Enter the first paragraph about your company..."
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="company_overview_paragraph2">Company Overview - Second Paragraph</Label>
+            <Textarea
+              id="company_overview_paragraph2"
+              value={settings.company_overview_paragraph2 || ''}
+              onChange={(e) => updateSetting('company_overview_paragraph2', e.target.value)}
+              placeholder="Enter the second paragraph about your company..."
+              rows={3}
+            />
+          </div>
+
+          <Separator />
+
+          <div>
+            <Label htmlFor="company_founders_intro">Founders Introduction Text</Label>
+            <Textarea
+              id="company_founders_intro"
+              value={settings.company_founders_intro || ''}
+              onChange={(e) => updateSetting('company_founders_intro', e.target.value)}
+              placeholder="The company was established by five (5) Filipino professionals..."
+              rows={2}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label>Founders List</Label>
+              <Button type="button" variant="outline" size="sm" onClick={addFounder}>
+                Add Founder
+              </Button>
+            </div>
+            {(settings.company_founders || []).map((founder, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  value={founder}
+                  onChange={(e) => handleFounderChange(index, e.target.value)}
+                  placeholder="Founder name"
+                />
+                <Button 
+                  type="button" 
+                  variant="destructive" 
+                  size="icon"
+                  onClick={() => removeFounder(index)}
+                >
+                  ×
+                </Button>
+              </div>
+            ))}
+            {(!settings.company_founders || settings.company_founders.length === 0) && (
+              <p className="text-sm text-muted-foreground">No founders added yet. Click "Add Founder" to add one.</p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Maps Configuration */}
       <Card>

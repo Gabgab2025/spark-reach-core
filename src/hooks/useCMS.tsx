@@ -100,6 +100,12 @@ export interface CMSTeamMember {
 }
 
 export interface CMSSettings {
+  // Company Information
+  company_overview_paragraph1?: string;
+  company_overview_paragraph2?: string;
+  company_founders_intro?: string;
+  company_founders?: string[]; // Array of founder names
+  
   // Maps
   google_maps_api_key?: string;
   

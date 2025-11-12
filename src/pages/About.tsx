@@ -3,9 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Users, Target, Eye, Award, TrendingUp, Shield } from 'lucide-react';
+import { useCMS } from '@/hooks/useCMS';
+import { useQuery } from '@tanstack/react-query';
 
 const About = () => {
   const navigate = useNavigate();
+  const cms = useCMS();
+  
+  const { data: settings } = useQuery({
+    queryKey: ['cms', 'settings'],
+    queryFn: () => cms.getSettings(),
+    staleTime: 5 * 60 * 1000,
+  });
   
   const timeline = [
     { year: '2025', event: 'Company Registration', desc: 'JDGK Business Solutions Inc. registered with SEC on March 3, 2025' },
@@ -122,21 +131,45 @@ const About = () => {
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl font-bold mb-6 text-center">Company Overview</h2>
               <div className="glass rounded-3xl p-8 mb-8">
-                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  JDGK BUSINESS SOLUTIONS INC. is a corporation duly organized and existing under the laws of the Republic of the Philippines, registered with the Securities and Exchange Commission on March 3, 2025. Its principal office is located at Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines.
-                </p>
-                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  As a dynamic business solutions provider, the corporation is committed to equipping its clients with comprehensive and effective strategies tailored to their needs which includes but not limited to credit collection recovery, repossession, skip tracing, credit investigation and virtual assistance, among others.
-                </p>
+                {settings?.company_overview_paragraph1 && (
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    {settings.company_overview_paragraph1}
+                  </p>
+                )}
+                {settings?.company_overview_paragraph2 && (
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    {settings.company_overview_paragraph2}
+                  </p>
+                )}
+                {!settings?.company_overview_paragraph1 && !settings?.company_overview_paragraph2 && (
+                  <>
+                    <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                      JDGK BUSINESS SOLUTIONS INC. is a corporation duly organized and existing under the laws of the Republic of the Philippines, registered with the Securities and Exchange Commission on March 3, 2025. Its principal office is located at Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines.
+                    </p>
+                    <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                      As a dynamic business solutions provider, the corporation is committed to equipping its clients with comprehensive and effective strategies tailored to their needs which includes but not limited to credit collection recovery, repossession, skip tracing, credit investigation and virtual assistance, among others.
+                    </p>
+                  </>
+                )}
               </div>
 
               <div className="glass rounded-3xl p-8">
                 <h3 className="text-2xl font-bold mb-6">Established by Five Filipino Professionals</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  The company was established by five (5) Filipino professionals, each possessing extensive expertise and a proven track record in their respective fields:
-                </p>
+                {settings?.company_founders_intro && (
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    {settings.company_founders_intro}
+                  </p>
+                )}
+                {!settings?.company_founders_intro && (
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    The company was established by five (5) Filipino professionals, each possessing extensive expertise and a proven track record in their respective fields:
+                  </p>
+                )}
                 <div className="grid md:grid-cols-2 gap-4">
-                  {['Donna Bucad Dealca', 'Kristofferson Doctor Dealca', 'Joan Bucad-Landeza', 'Jaime Jr. Doblado Bucad', 'Geraldine Bucad Barro'].map((founder, idx) => (
+                  {(settings?.company_founders && settings.company_founders.length > 0 
+                    ? settings.company_founders 
+                    : ['Donna Bucad Dealca', 'Kristofferson Doctor Dealca', 'Joan Bucad-Landeza', 'Jaime Jr. Doblado Bucad', 'Geraldine Bucad Barro']
+                  ).map((founder, idx) => (
                     <div key={idx} className="flex items-center space-x-3">
                       <div className="w-2 h-2 bg-primary rounded-full" />
                       <span className="text-muted-foreground">{founder}</span>
