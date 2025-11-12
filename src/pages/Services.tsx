@@ -113,7 +113,7 @@ const Services = () => {
                 const IconComponent = service.icon;
                 return (
                   <div key={index} className="group">
-                    <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
+                    <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300 flex flex-col">
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
                         <IconComponent className="w-8 h-8 text-white" />
                       </div>
@@ -132,7 +132,7 @@ const Services = () => {
                         {service.description}
                       </p>
                       
-                      <ul className="space-y-2 mb-6">
+                      <ul className="space-y-2 mb-6 flex-grow">
                         {service.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start text-sm">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 mr-2 flex-shrink-0" />
