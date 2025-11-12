@@ -15,6 +15,16 @@ const Gallery = () => {
     { src: '/gallery/A7C05833.jpg', alt: 'Gallery Image 5' },
     { src: '/gallery/A7C05836.jpg', alt: 'Gallery Image 6' },
     { src: '/gallery/A7C05840.jpg', alt: 'Gallery Image 7' },
+    { src: '/gallery/A7C05998.jpg', alt: 'Gallery Image 8' },
+    { src: '/gallery/A7C06098.jpg', alt: 'Gallery Image 9' },
+    { src: '/gallery/A7C06104.jpg', alt: 'Gallery Image 10' },
+    { src: '/gallery/A7C06105.jpg', alt: 'Gallery Image 11' },
+    { src: '/gallery/A7C05868.jpg', alt: 'Gallery Image 12' },
+    { src: '/gallery/A7C05923.jpg', alt: 'Gallery Image 13' },
+    { src: '/gallery/A7C05934.jpg', alt: 'Gallery Image 14' },
+    { src: '/gallery/A7C05963.jpg', alt: 'Gallery Image 15' },
+    { src: '/gallery/A7C05992.jpg', alt: 'Gallery Image 16' },
+    { src: '/gallery/A7C05994.jpg', alt: 'Gallery Image 17' },
   ];
 
   return (
