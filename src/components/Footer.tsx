@@ -1,27 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Linkedin, Twitter, Facebook, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   const quickLinks = [
-    { label: 'About Us', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Careers', href: '#careers' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', href: '/' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Services', href: '/services' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   const services = [
-    { label: 'Call Center Solutions', href: '#services' },
-    { label: 'Bank Collections', href: '#services' },
-    { label: 'Customer Experience', href: '#services' },
-    { label: 'Technology Integration', href: '#services' },
-  ];
-
-  const legal = [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'Compliance', href: '/compliance' },
-    { label: 'Security', href: '/security' },
+    { label: 'Credit Collection Recovery', href: '/services' },
+    { label: 'Repossession', href: '/services' },
+    { label: 'Skip Tracing', href: '/services' },
+    { label: 'Credit Investigation', href: '/services' },
+    { label: 'Tele Sales', href: '/services' },
+    { label: 'Virtual Assistance', href: '/services' },
   ];
 
   return (
@@ -34,16 +31,20 @@ const Footer = () => {
               Ready to Transform Your Operations?
             </h2>
             <p className="text-white/80 dark:text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Join 500+ businesses who trust JDGK Business Solutions Inc. for their 
-              professional business solutions and client-focused services.
+              Partner with us for comprehensive business solutions including credit recovery, 
+              asset management, and professional virtual assistance services.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="btn-hero px-8 py-4 text-lg font-semibold">
-                Start Your Project
-                <ArrowRight className="w-5 h-5 ml-2" />
+              <Button asChild className="btn-hero px-8 py-4 text-lg font-semibold">
+                <Link to="/contact">
+                  Let's Work Together
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Link>
               </Button>
-              <Button variant="outline" className="px-8 py-4 text-lg font-semibold border-white/30 text-white hover:bg-white/10 dark:border-border dark:text-foreground dark:hover:bg-muted">
-                Schedule Consultation
+              <Button asChild variant="outline" className="px-8 py-4 text-lg font-semibold border-white/30 text-white hover:bg-white/10 dark:border-border dark:text-foreground dark:hover:bg-muted">
+                <Link to="/services">
+                  View Our Services
+                </Link>
               </Button>
             </div>
           </div>
@@ -52,7 +53,7 @@ const Footer = () => {
 
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
@@ -65,9 +66,9 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-white/90 dark:text-card-foreground mb-6 leading-relaxed">
-              Leading provider of call center services and bank collections solutions. 
-              We combine advanced technology with expert teams to deliver exceptional 
-              results for financial institutions worldwide.
+              Empowering businesses through efficient and innovative solutions. We provide 
+              comprehensive business strategies including credit collection recovery, asset 
+              management, and virtual assistance services.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 dark:bg-muted dark:hover:bg-muted/80 flex items-center justify-center transition-colors">
@@ -88,9 +89,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
+                  <Link to={link.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -102,9 +103,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
-                  <a href={service.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
+                  <Link to={service.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
                     {service.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -116,34 +117,33 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-yellow-500" />
-                <span className="text-white/90 dark:text-card-foreground">1-800-CALL-PRO</span>
+                <a href="tel:+639177712282" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                  +63 917 771 2282
+                </a>
               </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-yellow-500" />
-                <span className="text-white/90 dark:text-card-foreground">info@jdgkbusiness.com</span>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-yellow-500" />
+                  <a href="mailto:dbdealca@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    dbdealca@jdgkbsi.ph
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-yellow-500 opacity-0" />
+                  <a href="mailto:help@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    help@jdgkbsi.ph
+                  </a>
+                </div>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-yellow-500 mt-1" />
                 <span className="text-white/90 dark:text-card-foreground">
-                  123 Business Center<br />
-                  New York, NY 10001
+                  Phase 1-B4 L1 Ridge Point Subdivision<br />
+                  Prinza 1880, Teresa, Rizal<br />
+                  Philippines
                 </span>
               </div>
             </div>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6 text-white dark:text-foreground">Legal</h4>
-            <ul className="space-y-3">
-              {legal.map((item, index) => (
-                <li key={index}>
-                  <a href={item.href} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
@@ -153,14 +153,12 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-white/70 dark:text-muted-foreground text-sm">
-              © 2024 JDGK Business Solutions Inc. All rights reserved.
+              © 2025 JDGK Business Solutions Inc. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <span className="text-white/70 dark:text-muted-foreground text-sm">Certified & Compliant</span>
-              <div className="flex space-x-3">
-                <div className="px-3 py-1 bg-white/10 dark:bg-muted rounded text-xs font-medium text-white dark:text-foreground">SOC 2</div>
-                <div className="px-3 py-1 bg-white/10 dark:bg-muted rounded text-xs font-medium text-white dark:text-foreground">HIPAA</div>
-                <div className="px-3 py-1 bg-white/10 dark:bg-muted rounded text-xs font-medium text-white dark:text-foreground">PCI DSS</div>
+              <span className="text-white/70 dark:text-muted-foreground text-sm">Registered with SEC</span>
+              <div className="px-3 py-1 bg-white/10 dark:bg-muted rounded text-xs font-medium text-white dark:text-foreground">
+                March 3, 2025
               </div>
             </div>
           </div>
