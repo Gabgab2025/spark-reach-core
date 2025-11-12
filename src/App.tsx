@@ -12,6 +12,7 @@ import Services from "./pages/Services";
 import Blog from "./pages/Blog";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import ServiceDetail from "./pages/ServiceDetail";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/auth-proadmin2025" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/service/:slug" element={<ServiceDetail />} />
