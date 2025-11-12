@@ -25,6 +25,11 @@ const Gallery = () => {
     { src: '/gallery/A7C05963.jpg', alt: 'Gallery Image 15' },
     { src: '/gallery/A7C05992.jpg', alt: 'Gallery Image 16' },
     { src: '/gallery/A7C05994.jpg', alt: 'Gallery Image 17' },
+    { src: '/gallery/call-center-agent.jpg', alt: 'Call Center Agent' },
+    { src: '/gallery/A7C06108.jpg', alt: 'Modern Office Space' },
+    { src: '/gallery/equipment-1.jpg', alt: 'Telecommunications Equipment' },
+    { src: '/gallery/equipment-2.jpg', alt: 'Telecommunications Equipment' },
+    { src: '/gallery/equipment-3.jpg', alt: 'Telecommunications Equipment' },
   ];
 
   return (
