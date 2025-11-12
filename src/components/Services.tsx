@@ -12,25 +12,46 @@ const Services = () => {
   };
   const services = [
     {
-      icon: Phone,
-      title: 'Call Center Solutions',
-      description: 'Comprehensive inbound and outbound call center services with advanced technology and skilled agents.',
-      features: ['24/7 Customer Support', 'Multi-language Support', 'CRM Integration', 'Real-time Analytics'],
+      icon: TrendingUp,
+      title: 'Credit Collection Recovery',
+      description: 'Comprehensive credit recovery services designed to optimize cash flow and minimize bad debts using proven, ethical strategies.',
+      features: ['Debt Collection & Negotiation', 'Account Reconciliation', 'Skip Tracing', 'Legal Referrals'],
       iconBg: 'bg-gradient-to-br from-blue-600 to-blue-500'
     },
     {
-      icon: TrendingUp,
-      title: 'Bank Collections',
-      description: 'Professional debt recovery services for financial institutions with proven track record and compliance.',
-      features: ['Regulatory Compliance', 'Advanced Negotiation', 'Payment Processing', 'Detailed Reporting'],
+      icon: Shield,
+      title: 'Repossession',
+      description: 'Professional and discreet asset recovery operations that ensure compliance and protect client interests.',
+      features: ['Asset Tracing & Retrieval', 'Secure Asset Storage', 'Detailed Condition Reporting', 'Legal Compliance'],
       iconBg: 'bg-gradient-to-br from-yellow-500 to-orange-500'
     },
     {
-      icon: Users,
-      title: 'Customer Experience',
-      description: 'Enhance customer satisfaction with our premium customer experience management solutions.',
-      features: ['Quality Assurance', 'Agent Training', 'Performance Monitoring', 'Customer Insights'],
+      icon: Globe,
+      title: 'Skip Tracing',
+      description: 'Specialized investigative service for locating individuals or assets with precision and discretion.',
+      features: ['Individual Location', 'Asset Discovery', 'Database Research', 'Confidential Investigation'],
       iconBg: 'bg-gradient-to-br from-orange-500 to-red-500'
+    },
+    {
+      icon: Zap,
+      title: 'Credit Investigation',
+      description: 'Verification of credit and financial background for loan applications, collections, or client vetting.',
+      features: ['Credit History Verification', 'Financial Background Checks', 'Risk Assessment', 'Detailed Reports'],
+      iconBg: 'bg-gradient-to-br from-purple-500 to-pink-500'
+    },
+    {
+      icon: Phone,
+      title: 'Tele Sales',
+      description: 'Outbound and inbound calling solutions for lead generation, follow-ups, and debt recovery support.',
+      features: ['Lead Generation', 'Follow-up Calls', 'Sales Support', 'Customer Outreach'],
+      iconBg: 'bg-gradient-to-br from-green-500 to-teal-500'
+    },
+    {
+      icon: Users,
+      title: 'Virtual Assistance',
+      description: 'Reliable administrative and operational support to help clients focus on core business priorities.',
+      features: ['Administrative Support', 'Customer Service', 'Data Entry', 'Scheduling & Bookkeeping'],
+      iconBg: 'bg-gradient-to-br from-indigo-500 to-blue-500'
     }
   ];
 

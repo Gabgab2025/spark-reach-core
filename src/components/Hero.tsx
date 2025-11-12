@@ -58,36 +58,40 @@ const Hero = () => {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center space-x-2 bg-white/10 dark:bg-card/20 backdrop-blur-sm border border-white/20 dark:border-border/50 rounded-full px-4 py-2 mb-6">
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="text-white dark:text-foreground text-sm font-medium">Trusted by 500+ Financial Institutions</span>
+              <span className="text-white dark:text-foreground text-sm font-medium">JDGK BUSINESS SOLUTIONS INC.</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white dark:text-foreground mb-6 leading-tight">
-              Next-Gen
-              <span className="block text-gradient">Call Center</span>
-              <span className="block">& Collections</span>
+              Results Driven,
+              <span className="block text-gradient">Client Focused</span>
             </h1>
 
             <p className="text-xl text-white/90 dark:text-card-foreground mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Revolutionizing customer service and debt recovery with AI-powered solutions, 
-              cutting-edge technology, and industry-leading expertise.
+              Empowering businesses through efficient and innovative solutions.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <Button 
-                className="btn-hero px-8 py-4 text-lg font-semibold group"
-                onClick={handleStartProject}
-              >
-                Start Your Project
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button 
-                variant="outline" 
-                className="btn-glass px-8 py-4 text-lg font-semibold bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white"
-                onClick={handleWatchDemo}
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Watch Demo
-              </Button>
+            <div className="mb-12">
+              <p className="text-white/90 dark:text-card-foreground text-lg leading-relaxed mb-8 max-w-3xl mx-auto lg:mx-0">
+                We are focused on fostering strong, results-driven partnerships with our clients. With our dedicated team, we live up to our mission to provide exceptional business solutions that help clients achieve their goals, optimize operational efficiency, and maximize profitability.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button 
+                  className="btn-hero px-8 py-4 text-lg font-semibold group"
+                  onClick={handleStartProject}
+                >
+                  Let's Work Together
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="btn-glass px-8 py-4 text-lg font-semibold bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white"
+                  onClick={handleWatchDemo}
+                >
+                  Connect With Us
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
             </div>
 
             {/* Stats */}
@@ -95,23 +99,23 @@ const Hero = () => {
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
                   <Users className="w-6 h-6 text-primary mr-2" />
-                  <span className="text-2xl font-bold text-white dark:text-foreground">500+</span>
+                  <span className="text-2xl font-bold text-white dark:text-foreground">8+</span>
                 </div>
-                <p className="text-white/70 dark:text-muted-foreground text-sm">Active Clients</p>
+                <p className="text-white/70 dark:text-muted-foreground text-sm">Major Clients</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
                   <Phone className="w-6 h-6 text-primary mr-2" />
-                  <span className="text-2xl font-bold text-white dark:text-foreground">10M+</span>
+                  <span className="text-2xl font-bold text-white dark:text-foreground">Expert</span>
                 </div>
-                <p className="text-white/70 dark:text-muted-foreground text-sm">Calls Handled</p>
+                <p className="text-white/70 dark:text-muted-foreground text-sm">Solutions</p>
               </div>
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
                   <TrendingUp className="w-6 h-6 text-primary mr-2" />
-                  <span className="text-2xl font-bold text-white dark:text-foreground">95%</span>
+                  <span className="text-2xl font-bold text-white dark:text-foreground">2025</span>
                 </div>
-                <p className="text-white/70 dark:text-muted-foreground text-sm">Success Rate</p>
+                <p className="text-white/70 dark:text-muted-foreground text-sm">Established</p>
               </div>
             </div>
           </div>
@@ -121,24 +125,30 @@ const Hero = () => {
             <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl" />
               <div className="relative z-10 h-full flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Real-Time Analytics</h3>
-                <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-foreground mb-4">Our Core Services</h3>
+                <div className="space-y-3">
                   <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-muted-foreground text-sm">Active Calls</span>
-                      <span className="text-primary font-bold">1,247</span>
-                    </div>
-                    <div className="w-full bg-muted/30 rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full w-3/4" />
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                      <span className="text-foreground font-medium">Credit Collection Recovery</span>
                     </div>
                   </div>
                   <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-muted-foreground text-sm">Collection Rate</span>
-                      <span className="text-accent font-bold">94.2%</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                      <span className="text-foreground font-medium">Repossession Services</span>
                     </div>
-                    <div className="w-full bg-muted/30 rounded-full h-2">
-                      <div className="bg-accent h-2 rounded-full w-11/12" />
+                  </div>
+                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                      <span className="text-foreground font-medium">Skip Tracing</span>
+                    </div>
+                  </div>
+                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                      <span className="text-foreground font-medium">Virtual Assistance</span>
                     </div>
                   </div>
                 </div>

@@ -5,11 +5,9 @@ import { Users, Target, Eye, Award, TrendingUp, Shield } from 'lucide-react';
 
 const About = () => {
   const timeline = [
-    { year: '2010', event: 'Company Founded', desc: 'Started with a vision to revolutionize call center services' },
-    { year: '2015', event: 'National Expansion', desc: 'Expanded operations across the United States' },
-    { year: '2018', event: 'AI Integration', desc: 'Pioneered AI-powered customer service solutions' },
-    { year: '2021', event: 'Global Reach', desc: 'Established international presence in 15 countries' },
-    { year: '2024', event: 'Industry Leader', desc: 'Serving 500+ financial institutions worldwide' }
+    { year: '2025', event: 'Company Registration', desc: 'JDGK Business Solutions Inc. registered with SEC on March 3, 2025' },
+    { year: '2025', event: 'Operations Launch', desc: 'Commenced comprehensive business solutions services' },
+    { year: '2025', event: 'Client Partnerships', desc: 'Established partnerships with major financial institutions' }
   ];
 
   const values = [
@@ -21,22 +19,64 @@ const About = () => {
 
   const leadership = [
     {
-      name: 'David Richardson',
-      position: 'Chief Executive Officer',
-      bio: '20+ years in financial services and call center operations',
-      avatar: 'DR'
+      name: 'Donna Bucad Dealca',
+      position: 'Chief Executive Officer / President',
+      bio: 'Visionary leader driving strategic direction and business growth with integrity and innovation',
+      avatar: 'DD'
     },
     {
-      name: 'Sarah Martinez',
-      position: 'Chief Technology Officer',
-      bio: 'Former tech lead at Fortune 500 companies, AI and automation expert',
-      avatar: 'SM'
+      name: 'Kristofferson Doctor Dealca',
+      position: 'Vice President',
+      bio: 'Dynamic leader focused on operational excellence and business expansion',
+      avatar: 'KD'
     },
     {
-      name: 'Michael Thompson',
-      position: 'VP of Operations',
-      bio: 'Specialized in large-scale call center management and optimization',
-      avatar: 'MT'
+      name: 'Jaime Doblado Bucad Jr.',
+      position: 'Board of Directors',
+      bio: 'Expertise in business management and sustainable growth opportunities',
+      avatar: 'JB'
+    },
+    {
+      name: 'Joan Bucad Landeza',
+      position: 'Board of Directors',
+      bio: 'Supports corporate initiatives and business planning',
+      avatar: 'JL'
+    },
+    {
+      name: 'Erwin Landeza',
+      position: 'Board of Directors',
+      bio: 'Strengthens governance framework and promotes business sustainability',
+      avatar: 'EL'
+    },
+    {
+      name: 'Randy Magauay Rodriguez',
+      position: 'Board of Directors',
+      bio: 'Provides insights in corporate governance and strategic decision-making',
+      avatar: 'RR'
+    },
+    {
+      name: 'Von Jaime Horlador Barro',
+      position: 'Board of Directors',
+      bio: 'Shapes company policies and strategies aligned with JDGK mission',
+      avatar: 'VB'
+    },
+    {
+      name: 'Geraldine Bucad Barro',
+      position: 'Corporate Secretary',
+      bio: 'Oversees corporate compliance, documentation, and governance',
+      avatar: 'GB'
+    },
+    {
+      name: 'Zandy Lyn Jesalva Laid',
+      position: 'Admin Head',
+      bio: 'Manages administrative operations and daily business functions',
+      avatar: 'ZL'
+    },
+    {
+      name: 'Joshell Tuliao Rodriguez',
+      position: 'Auditor',
+      bio: 'Ensures financial transparency, compliance, and accountability',
+      avatar: 'JR'
     }
   ];
 
@@ -53,31 +93,94 @@ const About = () => {
                 <span className="text-primary text-sm font-medium">About Us</span>
               </div>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Transforming Customer
-                <span className="block text-gradient">Service Excellence</span>
+                About
+                <span className="block text-gradient">JDGK Business Solutions Inc.</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Since 2010, we've been revolutionizing customer service and collections 
-                for financial institutions with innovative technology and exceptional expertise.
+                A dynamic business solutions provider committed to delivering comprehensive and effective strategies tailored to client needs.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Mission & Vision */}
+        {/* Company Overview */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl font-bold mb-6 text-center">Company Overview</h2>
+              <div className="glass rounded-3xl p-8 mb-8">
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  JDGK Business Solutions Inc. is a corporation duly organized and existing under the laws of the Republic of the Philippines, registered with the Securities and Exchange Commission on March 3, 2025.
+                </p>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  The company's principal office is located at Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines.
+                </p>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  As a dynamic business solutions provider, JDGK is committed to delivering comprehensive and effective strategies tailored to client needs — including but not limited to credit collection recovery, repossession, skip tracing, credit investigation, tele sales, and virtual assistance.
+                </p>
+              </div>
+
+              <div className="glass rounded-3xl p-8">
+                <h3 className="text-2xl font-bold mb-6">Founders</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {['Donna Bucad Dealca', 'Kristofferson Doctor Dealca', 'Joan Bucad-Landeza', 'Jaime Jr. Doblado Bucad', 'Geraldine Bucad Barro'].map((founder, idx) => (
+                    <div key={idx} className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                      <span className="text-muted-foreground">{founder}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CEO Message */}
         <section className="py-20">
           <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl font-bold mb-6">CEO Message</h2>
+              </div>
+              <div className="glass rounded-3xl p-8 lg:p-12">
+                <div className="flex flex-col items-center mb-8">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-2xl font-bold mb-4">
+                    DD
+                  </div>
+                  <h3 className="text-2xl font-bold">Donna Bucad Dealca</h3>
+                  <p className="text-primary font-semibold">CEO/President</p>
+                </div>
+                <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
+                  <p>
+                    "As the Chief Executive Officer, I am honored to lead a team of dedicated professionals committed to delivering innovative business solutions that empower our clients to achieve their goals."
+                  </p>
+                  <p>
+                    "Our mission is to provide exceptional business solutions—particularly in asset and credit recovery and virtual assistance—enabling our clients to achieve their strategic goals, optimize operational efficiency, and maximize profitability."
+                  </p>
+                  <p>
+                    "We tailor solutions to the unique challenges of each client, leveraging technology and best practices. Our passion for continuous improvement and deep sense of responsibility drive us to serve our clients, employees, and communities with excellence."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mission & Vision */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-6">Mission and Vision</h2>
+            </div>
             <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-              <div>
+              <div className="glass rounded-3xl p-8 hover-lift">
                 <div className="flex items-center space-x-2 mb-6">
                   <Target className="w-6 h-6 text-primary" />
                   <span className="text-primary font-semibold">Our Mission</span>
                 </div>
-                <h2 className="text-4xl font-bold mb-6">Empowering Financial Success</h2>
+                <h3 className="text-2xl font-bold mb-4">Sustainable Excellence</h3>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  To empower financial institutions with world-class call center and collections 
-                  services that enhance customer relationships while maximizing recovery rates 
-                  through innovative technology and expert human touch.
+                  To provide sustainable and exceptional business solutions that enable our clients to achieve their strategic goals, optimize operational efficiency, and maximize profitability.
                 </p>
               </div>
               <div className="glass rounded-3xl p-8 hover-lift">
@@ -85,11 +188,9 @@ const About = () => {
                   <Eye className="w-6 h-6 text-accent" />
                   <span className="text-accent font-semibold">Our Vision</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Leading the Future</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  To be the global leader in AI-powered customer service and collections 
-                  solutions, setting industry standards for efficiency, compliance, and 
-                  customer satisfaction.
+                <h3 className="text-2xl font-bold mb-4">Leading Provider</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  To become a leading provider of comprehensive business solutions, recognized for excellence, innovation, and client success.
                 </p>
               </div>
             </div>
@@ -160,13 +261,13 @@ const About = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {leadership.map((leader, index) => (
                 <div key={index} className="text-center group">
-                  <div className="glass rounded-3xl p-8 hover-lift hover-scale transition-all duration-300">
-                    <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-2xl font-bold group-hover:shadow-glow transition-all duration-300">
+                  <div className="glass rounded-3xl p-6 hover-lift hover-scale transition-all duration-300">
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-lg font-bold group-hover:shadow-glow transition-all duration-300">
                       {leader.avatar}
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{leader.name}</h3>
-                    <p className="text-primary font-semibold mb-4">{leader.position}</p>
-                    <p className="text-muted-foreground">{leader.bio}</p>
+                    <h3 className="text-lg font-bold mb-1">{leader.name}</h3>
+                    <p className="text-primary font-semibold text-sm mb-3">{leader.position}</p>
+                    <p className="text-muted-foreground text-sm">{leader.bio}</p>
                   </div>
                 </div>
               ))}

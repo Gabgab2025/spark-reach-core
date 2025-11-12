@@ -22,55 +22,34 @@ const Contact = () => {
       icon: Phone,
       title: 'Phone',
       details: [
-        { label: 'Main Line', value: '1-800-CALL-PRO' },
-        { label: 'Sales', value: '1-800-555-0123' },
-        { label: 'Support', value: '1-800-555-0124' }
+        { label: 'Main Line', value: '+63 917 771 22824' }
       ]
     },
     {
       icon: Mail,
       title: 'Email',
       details: [
-        { label: 'General Inquiries', value: 'info@callcenterpro.com' },
-        { label: 'Sales', value: 'sales@callcenterpro.com' },
-        { label: 'Support', value: 'support@callcenterpro.com' }
+        { label: 'General Inquiries', value: 'dbdealca@jdgkbsi.ph' },
+        { label: 'Support', value: 'help@jdgkbsi.ph' }
       ]
     },
     {
       icon: MapPin,
-      title: 'Headquarters',
+      title: 'Office Location',
       details: [
-        { label: 'Address', value: '123 Business Center Drive' },
-        { label: 'City', value: 'New York, NY 10001' },
-        { label: 'Hours', value: 'Mon-Fri: 8:00 AM - 6:00 PM EST' }
+        { label: 'Address', value: 'Phase 1-B4 L1 Ridge Point Subdivision' },
+        { label: 'City', value: 'Prinza 1880, Teresa, Rizal' },
+        { label: 'Country', value: 'Philippines' }
       ]
     }
   ];
 
   const offices = [
     {
-      city: 'New York',
-      address: '123 Business Center Drive\nNew York, NY 10001',
-      phone: '1-800-555-0123',
+      city: 'Teresa, Rizal',
+      address: 'Phase 1-B4 L1 Ridge Point Subdivision\nPrinza 1880, Teresa, Rizal\nPhilippines',
+      phone: '+63 917 771 22824',
       isHQ: true
-    },
-    {
-      city: 'Chicago',
-      address: '456 Technology Blvd\nChicago, IL 60601',
-      phone: '1-312-555-0123',
-      isHQ: false
-    },
-    {
-      city: 'Dallas',
-      address: '789 Innovation Way\nDallas, TX 75201',
-      phone: '1-214-555-0123',
-      isHQ: false
-    },
-    {
-      city: 'San Francisco',
-      address: '321 Tech Street\nSan Francisco, CA 94105',
-      phone: '1-415-555-0123',
-      isHQ: false
     }
   ];
 
@@ -100,12 +79,12 @@ const Contact = () => {
                 <span className="text-primary text-sm font-medium">Get In Touch</span>
               </div>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Ready to Transform
-                <span className="block text-gradient">Your Operations?</span>
+                Connect
+                <span className="block text-gradient">With Us</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Get in touch with our experts and discover how we can help drive 
-                your business forward with innovative solutions.
+                Get in touch with our team and discover how we can help drive 
+                your business forward with our comprehensive solutions.
               </p>
             </div>
           </div>
@@ -281,13 +260,13 @@ const Contact = () => {
                 </div>
 
                 <div className="mt-8 p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl">
-                  <h3 className="font-bold mb-3">Emergency Support</h3>
+                  <h3 className="font-bold mb-3">Business Hours</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Need immediate assistance? Our emergency support line is available 24/7.
+                    We're here to help you with your business needs.
                   </p>
-                  <a href="tel:1-800-555-HELP" className="flex items-center space-x-2 text-primary font-semibold">
+                  <a href="tel:+639177712282" className="flex items-center space-x-2 text-primary font-semibold">
                     <Phone className="w-4 h-4" />
-                    <span>1-800-555-HELP</span>
+                    <span>+63 917 771 22824</span>
                   </a>
                 </div>
               </div>
@@ -295,31 +274,29 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* Office Locations */}
+        {/* Office Location */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Our Locations</h2>
+              <h2 className="text-4xl font-bold mb-6">Our Office</h2>
               <p className="text-muted-foreground text-lg">
-                With offices across the country, we're always close to you
+                Visit us at our principal office in Teresa, Rizal
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="max-w-md mx-auto">
               {offices.map((office, index) => (
-                <Card key={index} className={`glass p-6 text-center hover-lift transition-all duration-300 ${office.isHQ ? 'ring-2 ring-primary/20' : ''}`}>
-                  {office.isHQ && (
-                    <div className="inline-flex items-center space-x-1 bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium mb-4">
-                      <span>Headquarters</span>
-                    </div>
-                  )}
-                  <h3 className="text-xl font-bold mb-4">{office.city}</h3>
-                  <div className="text-sm text-muted-foreground mb-4 whitespace-pre-line">
+                <Card key={index} className="glass p-8 text-center hover-lift transition-all duration-300 ring-2 ring-primary/20">
+                  <div className="inline-flex items-center space-x-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-6">
+                    <span>Principal Office</span>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-6">{office.city}</h3>
+                  <div className="text-muted-foreground mb-6 whitespace-pre-line leading-relaxed">
                     {office.address}
                   </div>
                   <div className="flex items-center justify-center space-x-2 text-primary">
-                    <Phone className="w-4 h-4" />
-                    <span className="font-medium">{office.phone}</span>
+                    <Phone className="w-5 h-5" />
+                    <span className="font-medium text-lg">{office.phone}</span>
                   </div>
                 </Card>
               ))}
@@ -331,9 +308,9 @@ const Contact = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-6">Visit Our Headquarters</h2>
+              <h2 className="text-4xl font-bold mb-6">Visit Our Office</h2>
               <p className="text-muted-foreground text-lg">
-                Located in the heart of New York's business district
+                Located in Teresa, Rizal, Philippines
               </p>
             </div>
 
@@ -341,10 +318,11 @@ const Contact = () => {
               <div className="w-full h-96 bg-muted rounded-2xl flex items-center justify-center">
                 <div className="text-center">
                   <MapPin className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground">Interactive Map</p>
+                  <p className="text-muted-foreground">Location Map</p>
                   <p className="text-sm text-muted-foreground mt-2">
-                    123 Business Center Drive<br />
-                    New York, NY 10001
+                    Phase 1-B4 L1 Ridge Point Subdivision<br />
+                    Prinza 1880, Teresa, Rizal<br />
+                    Philippines
                   </p>
                 </div>
               </div>
