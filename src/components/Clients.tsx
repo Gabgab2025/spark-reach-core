@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, Shield, TrendingUp } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 const Clients = () => {
   const clients = [
@@ -64,38 +65,50 @@ const Clients = () => {
           </p>
         </div>
 
-        {/* Client Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {clients.map((client, index) => (
-            <div key={index} className="group">
-              <div className="glass rounded-3xl p-8 h-full hover-lift transition-all duration-300">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
-                  {client.category.includes('Insurance') ? (
-                    <Shield className="w-8 h-8 text-white" />
-                  ) : client.category.includes('Lending') || client.category.includes('Finance') ? (
-                    <TrendingUp className="w-8 h-8 text-white" />
-                  ) : (
-                    <Building2 className="w-8 h-8 text-white" />
-                  )}
+        {/* Client Carousel */}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {clients.map((client, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="group p-1">
+                  <div className="glass rounded-3xl p-8 h-full hover-lift transition-all duration-300">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
+                      {client.category.includes('Insurance') ? (
+                        <Shield className="w-8 h-8 text-white" />
+                      ) : client.category.includes('Lending') || client.category.includes('Finance') ? (
+                        <TrendingUp className="w-8 h-8 text-white" />
+                      ) : (
+                        <Building2 className="w-8 h-8 text-white" />
+                      )}
+                    </div>
+                    
+                    <div className="mb-3">
+                      <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                        {client.category}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">
+                      {client.name}
+                    </h3>
+                    
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {client.description}
+                    </p>
+                  </div>
                 </div>
-                
-                <div className="mb-3">
-                  <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
-                    {client.category}
-                  </span>
-                </div>
-                
-                <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">
-                  {client.name}
-                </h3>
-                
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {client.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
+        </Carousel>
 
         {/* Stats */}
         <div className="mt-16 glass rounded-3xl p-8">
