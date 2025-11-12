@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Users, Target, Eye, Award, TrendingUp, Shield } from 'lucide-react';
 
 const About = () => {
+  const navigate = useNavigate();
+  
   const timeline = [
     { year: '2025', event: 'Company Registration', desc: 'JDGK Business Solutions Inc. registered with SEC on March 3, 2025' },
     { year: '2025', event: 'Operations Launch', desc: 'Commenced comprehensive business solutions services' },
@@ -22,61 +25,71 @@ const About = () => {
       name: 'Donna Bucad Dealca',
       position: 'Chief Executive Officer / President',
       bio: 'Visionary leader driving strategic direction and business growth with integrity and innovation',
-      avatar: 'DD'
+      avatar: 'DD',
+      slug: 'donna-bucad-dealca'
     },
     {
       name: 'Kristofferson Doctor Dealca',
       position: 'Vice President',
       bio: 'Dynamic leader focused on operational excellence and business expansion',
-      avatar: 'KD'
+      avatar: 'KD',
+      slug: 'kristofferson-doctor-dealca'
     },
     {
       name: 'Jaime Doblado Bucad Jr.',
       position: 'Board of Directors',
       bio: 'Expertise in business management and sustainable growth opportunities',
-      avatar: 'JB'
+      avatar: 'JB',
+      slug: 'jaime-doblado-bucad-jr'
     },
     {
       name: 'Joan Bucad Landeza',
       position: 'Board of Directors',
       bio: 'Supports corporate initiatives and business planning',
-      avatar: 'JL'
+      avatar: 'JL',
+      slug: 'joan-bucad-landeza'
     },
     {
       name: 'Erwin Landeza',
       position: 'Board of Directors',
       bio: 'Strengthens governance framework and promotes business sustainability',
-      avatar: 'EL'
+      avatar: 'EL',
+      slug: 'erwin-landeza'
     },
     {
       name: 'Randy Magauay Rodriguez',
       position: 'Board of Directors',
       bio: 'Provides insights in corporate governance and strategic decision-making',
-      avatar: 'RR'
+      avatar: 'RR',
+      slug: 'randy-magauay-rodriguez'
     },
     {
       name: 'Von Jaime Horlador Barro',
       position: 'Board of Directors',
       bio: 'Shapes company policies and strategies aligned with JDGK mission',
-      avatar: 'VB'
+      avatar: 'VB',
+      slug: 'von-jaime-horlador-barro'
     },
     {
       name: 'Geraldine Bucad Barro',
       position: 'Corporate Secretary',
       bio: 'Oversees corporate compliance, documentation, and governance',
-      avatar: 'GB'
+      avatar: 'GB',
+      slug: 'geraldine-bucad-barro'
     },
     {
       name: 'Zandy Lyn Jesalva Laid',
       position: 'Admin Head',
       bio: 'Manages administrative operations and daily business functions',
-      avatar: 'ZL'
+      avatar: 'ZL',
+      slug: 'zandy-lyn-jesalva-laid'
     },
     {
       name: 'Joshell Tuliao Rodriguez',
       position: 'Auditor',
       bio: 'Ensures financial transparency, compliance, and accountability',
-      avatar: 'JR'
+      avatar: 'JR',
+      slug: 'joshell-tuliao-rodriguez'
     }
   ];
 
@@ -260,12 +273,16 @@ const About = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {leadership.map((leader, index) => (
-                <div key={index} className="text-center group">
+                <div 
+                  key={index} 
+                  className="text-center group cursor-pointer"
+                  onClick={() => navigate(`/team/${leader.slug}`)}
+                >
                   <div className="glass rounded-3xl p-6 hover-lift hover-scale transition-all duration-300">
                     <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-lg font-bold group-hover:shadow-glow transition-all duration-300">
                       {leader.avatar}
                     </div>
-                    <h3 className="text-lg font-bold mb-1">{leader.name}</h3>
+                    <h3 className="text-lg font-bold mb-1 group-hover:text-primary transition-colors">{leader.name}</h3>
                     <p className="text-primary font-semibold text-sm mb-3">{leader.position}</p>
                     <p className="text-muted-foreground text-sm">{leader.bio}</p>
                   </div>
