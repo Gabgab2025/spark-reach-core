@@ -80,9 +80,9 @@ const Services = () => {
           </p>
         </div>
 
-        {/* Main Services */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {services.map((service, index) => (
+        {/* Main Services - Show only first 3 */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {services.slice(0, 3).map((service, index) => (
             <div key={index} className="group">
               <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
@@ -117,6 +117,17 @@ const Services = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* View More Button */}
+        <div className="text-center mb-16">
+          <Button 
+            className="btn-hero px-8 py-4 text-lg font-semibold group"
+            onClick={() => navigate('/services')}
+          >
+            View All Services
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
         </div>
 
         {/* Capabilities */}
