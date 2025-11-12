@@ -142,7 +142,7 @@ const Hero = () => {
           {/* Visual Element */}
           <div className="hidden lg:block relative">
             <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
-              <div className="absolute inset-0 bg-white/10 border border-white/30 rounded-3xl" />
+              
               <div className="relative z-10 h-full flex flex-col justify-center">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Our Core Services</h3>
                 <div className="space-y-3">
