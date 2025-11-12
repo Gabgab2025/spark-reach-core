@@ -1,65 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, Star, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Headphones, Shield, Search, FileCheck, Phone, Users, TrendingUp, DollarSign } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
-
-interface Service {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  features: string[];
-  pricing_info: string;
-  icon: string;
-  image_url: string;
-  category: string;
-  is_featured: boolean;
-  sort_order: number;
-}
 
 const Services = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const selectedService = searchParams.get('service');
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('sort_order', { ascending: true });
-
-      if (error) throw error;
-      setServices(data || []);
-    } catch (error) {
-      console.error('Error fetching services:', error);
-    } finally {
-      setLoading(false);
+  const services = [
+    {
+      icon: Headphones,
+      title: 'Credit Collection Recovery',
+      description: 'Comprehensive credit recovery services designed to optimize cash flow and minimize bad debts using proven, ethical strategies.',
+      features: [
+        'Debt Collection & Negotiation',
+        'Account Reconciliation',
+        'Skip Tracing',
+        'Legal Referrals'
+      ],
+      category: 'Financial Services'
+    },
+    {
+      icon: Shield,
+      title: 'Repossession',
+      description: 'Professional and discreet asset recovery operations that ensure compliance and protect client interests.',
+      features: [
+        'Asset Tracing & Retrieval',
+        'Secure Asset Storage',
+        'Detailed Condition Reporting'
+      ],
+      category: 'Asset Recovery'
+    },
+    {
+      icon: Search,
+      title: 'Skip Tracing',
+      description: 'Specialized investigative service for locating individuals or assets with precision and discretion. Used in collections, legal, finance, and real estate industries.',
+      features: [
+        'Advanced Location Services',
+        'Confidential Investigations',
+        'Industry-Specific Solutions'
+      ],
+      category: 'Investigation'
+    },
+    {
+      icon: FileCheck,
+      title: 'Credit Investigation',
+      description: 'Verification of credit and financial background for loan applications, collections, or client vetting.',
+      features: [
+        'Comprehensive Background Checks',
+        'Financial History Analysis',
+        'Risk Assessment'
+      ],
+      category: 'Verification'
+    },
+    {
+      icon: Phone,
+      title: 'Tele Sales',
+      description: 'Outbound and inbound calling solutions for lead generation, follow-ups, and debt recovery support.',
+      features: [
+        'Lead Generation',
+        'Customer Follow-ups',
+        'Sales Campaign Management'
+      ],
+      category: 'Sales Support'
+    },
+    {
+      icon: Users,
+      title: 'Virtual Assistance',
+      description: 'Reliable and streamlined administrative and operational support to help clients focus on their core business priorities.',
+      features: [
+        'Administrative Support',
+        'Customer Service',
+        'Data Entry',
+        'Scheduling & Calendar Management',
+        'Bookkeeping'
+      ],
+      category: 'Business Support'
     }
-  };
-
-  const handleServiceClick = (slug: string) => {
-    navigate(`/service/${slug}`);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
@@ -89,77 +108,52 @@ const Services = () => {
         {/* Services Grid */}
         <section className="pb-20">
           <div className="container mx-auto px-4">
-            {services.length === 0 ? (
-              <div className="text-center py-20">
-                <h2 className="text-2xl font-bold mb-4">No Services Available</h2>
-                <p className="text-muted-foreground mb-8">Services will appear here once they are added to the system.</p>
-                <Button onClick={() => navigate('/')}>
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Home
-                </Button>
-              </div>
-            ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {services.map((service) => (
-                  <Card key={service.id} className="group cursor-pointer hover-lift" onClick={() => handleServiceClick(service.slug)}>
-                    <CardHeader>
-                      {service.image_url && (
-                        <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
-                          <img 
-                            src={service.image_url} 
-                            alt={service.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                      )}
-                      <div className="flex items-center justify-between">
-                        <Badge variant="secondary">{service.category}</Badge>
-                        {service.is_featured && (
-                          <Badge className="bg-gradient-to-r from-primary to-accent text-white">
-                            <Star className="w-3 h-3 mr-1" />
-                            Featured
-                          </Badge>
-                        )}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, index) => {
+                const IconComponent = service.icon;
+                return (
+                  <div key={index} className="group">
+                    <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
+                        <IconComponent className="w-8 h-8 text-white" />
                       </div>
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                      
+                      <div className="mb-3">
+                        <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                          {service.category}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors">
                         {service.title}
-                      </CardTitle>
-                      <CardDescription className="text-muted-foreground">
+                      </h3>
+                      
+                      <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                         {service.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {service.features && service.features.length > 0 && (
-                        <div className="space-y-2 mb-6">
-                          {service.features.slice(0, 3).map((feature, idx) => (
-                            <div key={idx} className="flex items-center text-sm">
-                              <CheckCircle className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
-                              {feature}
-                            </div>
-                          ))}
-                          {service.features.length > 3 && (
-                            <div className="text-sm text-muted-foreground">
-                              +{service.features.length - 3} more features
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      </p>
                       
-                      {service.pricing_info && (
-                        <div className="mb-4">
-                          <p className="text-sm font-medium text-primary">{service.pricing_info}</p>
-                        </div>
-                      )}
+                      <ul className="space-y-2 mb-6">
+                        {service.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start text-sm">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 mr-2 flex-shrink-0" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
                       
-                      <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground">
+                      <Button 
+                        variant="outline" 
+                        className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all"
+                        onClick={() => navigate('/contact')}
+                      >
                         Learn More
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
@@ -168,7 +162,7 @@ const Services = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-                Why Choose CallCenter Pro?
+                Why Choose JDGK Business Solutions?
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 Industry-leading capabilities that set us apart from the competition
@@ -176,41 +170,35 @@ const Services = () => {
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="text-center hover-lift">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">Proven Results</h3>
-                  <p className="text-muted-foreground">
-                    Track record of delivering exceptional results for our clients
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="glass rounded-3xl p-8 text-center hover-lift">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <TrendingUp className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Proven Results</h3>
+                <p className="text-muted-foreground">
+                  Track record of delivering exceptional results for our clients
+                </p>
+              </div>
               
-              <Card className="text-center hover-lift">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <Star className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">Award-Winning</h3>
-                  <p className="text-muted-foreground">
-                    Recognized industry leader with multiple awards and certifications
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="glass rounded-3xl p-8 text-center hover-lift">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Trusted Partner</h3>
+                <p className="text-muted-foreground">
+                  Recognized industry leader serving major financial institutions
+                </p>
+              </div>
               
-              <Card className="text-center hover-lift">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <ArrowRight className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">Future-Ready</h3>
-                  <p className="text-muted-foreground">
-                    Cutting-edge technology and innovative solutions for tomorrow's challenges
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="glass rounded-3xl p-8 text-center hover-lift">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <DollarSign className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Maximize Profitability</h3>
+                <p className="text-muted-foreground">
+                  Optimize operational efficiency and maximize your bottom line
+                </p>
+              </div>
             </div>
           </div>
         </section>
