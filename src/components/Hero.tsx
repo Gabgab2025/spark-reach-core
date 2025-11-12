@@ -139,41 +139,6 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Visual Element */}
-          <div className="hidden lg:block relative">
-            <div className="relative w-full h-96 glass rounded-3xl p-8 hover-lift">
-              
-              <div className="relative z-10 h-full flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Our Core Services</h3>
-                <div className="space-y-3">
-                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-foreground font-medium">Credit Collection Recovery</span>
-                    </div>
-                  </div>
-                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-foreground font-medium">Repossession Services</span>
-                    </div>
-                  </div>
-                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-foreground font-medium">Skip Tracing</span>
-                    </div>
-                  </div>
-                  <div className="bg-card/20 dark:bg-card/40 rounded-lg p-3">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-foreground font-medium">Virtual Assistance</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
