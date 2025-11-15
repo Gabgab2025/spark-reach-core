@@ -307,16 +307,27 @@ const Contact = () => {
             </div>
 
             <div className="glass rounded-3xl p-2 overflow-hidden">
-              <div className="w-full h-96 rounded-2xl overflow-hidden relative">
-                <iframe
-                  className="absolute top-0 left-0 w-full h-full"
-                  frameBorder="0"
-                  scrolling="no"
-                  marginHeight={0}
-                  marginWidth={0}
-                  src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Phase%201-B4%20L1%20Ridge%20Point%20Subdivision%20Prinza%201880%2C%20Teresa%2C%20Rizal%20Philippines&t=p&z=15&ie=UTF8&iwloc=B&output=embed"
-                  title="Office Location Map"
-                />
+              <div className="w-full h-96 rounded-2xl overflow-hidden">
+                <div className="embed-map-responsive">
+                  <div className="embed-map-container">
+                    <iframe 
+                      className="embed-map-frame" 
+                      frameBorder="0" 
+                      scrolling="no" 
+                      marginHeight={0} 
+                      marginWidth={0} 
+                      src="https://maps.google.com/maps?width=600&height=400&hl=en&q=14.542172875010287%2C%20121.22006609754878&t=p&z=15&ie=UTF8&iwloc=B&output=embed"
+                      title="Office Location Map"
+                    />
+                  </div>
+                </div>
+                <style dangerouslySetInnerHTML={{
+                  __html: `
+                    .embed-map-responsive{position:relative;text-align:right;width:100%;height:0;padding-bottom:66.66666666666666%;}
+                    .embed-map-container{overflow:hidden;background:none!important;width:100%;height:100%;position:absolute;top:0;left:0;}
+                    .embed-map-frame{width:100%!important;height:100%!important;position:absolute;top:0;left:0;}
+                  `
+                }} />
               </div>
             </div>
           </div>
