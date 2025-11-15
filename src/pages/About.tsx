@@ -19,7 +19,9 @@ const About = () => {
   const timeline = [
     { year: '2025', event: 'Company Registration', desc: 'JDGK Business Solutions Inc. registered with SEC on March 3, 2025' },
     { year: '2025', event: 'Operations Launch', desc: 'Commenced comprehensive business solutions services' },
-    { year: '2025', event: 'Client Partnerships', desc: 'Established partnerships with major financial institutions' }
+    { year: '2025', event: 'Client Partnerships', desc: 'Established partnerships with major financial institutions' },
+    { year: '2025', event: 'Email Blasting, Text Blasting', desc: 'Launched comprehensive communication solutions for mass outreach' },
+    { year: '2026', event: 'CRM Launch and Smart AI Automations', desc: 'Introducing advanced customer relationship management with AI-powered automation integrations' }
   ];
 
   const values = [
