@@ -16,6 +16,7 @@ import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import SEOEngine from "./pages/admin/SEOEngine";
 import ServiceDetail from "./pages/ServiceDetail";
 import PageDetail from "./pages/PageDetail";
 import BlogDetail from "./pages/BlogDetail";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/auth-proadmin2025" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/seo-engine" element={<SEOEngine />} />
               <Route path="/service/:slug" element={<ServiceDetail />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/job/:id" element={<JobDetail />} />
