@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Play, Phone, Users, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { ArrowRight, Play, Phone, Users, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const heroImages = [
-    '/hero/office-1.jpg',
-    '/hero/office-2.jpg',
-    '/hero/office-3.jpg',
-  ];
+  const heroImages = ["/hero/office-1.jpg", "/hero/office-2.jpg", "/hero/office-3.jpg"];
 
   // Preload images
   useEffect(() => {
@@ -40,43 +36,44 @@ const Hero = () => {
 
   const handleStartProject = () => {
     // First try to scroll to services section
-    const servicesSection = document.getElementById('services');
+    const servicesSection = document.getElementById("services");
     if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
+      servicesSection.scrollIntoView({ behavior: "smooth" });
       // After a short delay, navigate to contact page
       setTimeout(() => {
-        navigate('/contact');
+        navigate("/contact");
       }, 1500);
     } else {
       // If services section doesn't exist, go directly to contact
-      navigate('/contact');
+      navigate("/contact");
     }
   };
 
   const handleWatchDemo = () => {
     // Scroll to services section to show capabilities
-    const servicesSection = document.getElementById('services');
+    const servicesSection = document.getElementById("services");
     if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
+      servicesSection.scrollIntoView({ behavior: "smooth" });
     }
   };
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Slideshow */}
       <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-charcoal-light">
-        {imagesLoaded && heroImages.map((image, index) => (
-          <div
-            key={index}
-            className="absolute inset-0 transition-opacity duration-1000"
-            style={{
-              backgroundImage: `url(${image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              opacity: currentSlide === index ? 1 : 0,
-            }}
-          />
-        ))}
+        {imagesLoaded &&
+          heroImages.map((image, index) => (
+            <div
+              key={index}
+              className="absolute inset-0 transition-opacity duration-1000"
+              style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                opacity: currentSlide === index ? 1 : 0,
+              }}
+            />
+          ))}
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/60" />
       </div>
@@ -84,8 +81,14 @@ const Hero = () => {
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-primary/20 animate-float" />
-        <div className="absolute top-40 right-20 w-32 h-32 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-20 left-20 w-16 h-16 rounded-full bg-primary/30 animate-float" style={{ animationDelay: '4s' }} />
+        <div
+          className="absolute top-40 right-20 w-32 h-32 rounded-full bg-accent/20 animate-float"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute bottom-20 left-20 w-16 h-16 rounded-full bg-primary/30 animate-float"
+          style={{ animationDelay: "4s" }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -108,19 +111,18 @@ const Hero = () => {
 
             <div className="mb-12">
               <p className="text-white/90 dark:text-card-foreground text-lg leading-relaxed mb-8 max-w-3xl mx-auto lg:mx-0">
-                We are focused on fostering strong, results-driven partnerships with our clients. With our dedicated team, we live up to our mission to provide exceptional business solutions that help clients achieve their goals, optimize operational efficiency, and maximize profitability.
+                We are focused on fostering strong, results-driven partnerships with our clients. With our dedicated
+                team, we live up to our mission to provide exceptional business solutions that help clients achieve
+                their goals, optimize operational efficiency, and maximize profitability.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button 
-                  className="btn-hero px-8 py-4 text-lg font-semibold group"
-                  onClick={handleStartProject}
-                >
+                <Button className="btn-hero px-8 py-4 text-lg font-semibold group" onClick={handleStartProject}>
                   Let's Work Together
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="btn-glass px-8 py-4 text-lg font-semibold bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white"
                   onClick={handleWatchDemo}
                 >
@@ -135,7 +137,7 @@ const Hero = () => {
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start mb-2">
                   <Users className="w-6 h-6 text-primary mr-2" />
-                  <span className="text-2xl font-bold text-white dark:text-foreground">8+</span>
+                  <span className="text-2xl font-bold text-white dark:text-foreground">13+</span>
                 </div>
                 <p className="text-white/70 dark:text-muted-foreground text-sm">Major Clients</p>
               </div>
@@ -155,7 +157,6 @@ const Hero = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
