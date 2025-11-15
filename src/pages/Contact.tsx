@@ -316,9 +316,9 @@ const Contact = () => {
             </div>
 
             <div className="glass rounded-3xl p-2 overflow-hidden">
-            <div className="relative w-full pb-[66.67%] rounded-2xl overflow-hidden">
+            <div className="w-full h-96 rounded-2xl overflow-hidden">
               <iframe 
-                className="absolute top-0 left-0 w-full h-full"
+                className="w-full h-full"
                 frameBorder="0" 
                 scrolling="no" 
                 marginHeight={0} 
