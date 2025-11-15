@@ -84,7 +84,7 @@ const Services = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {services.slice(0, 3).map((service, index) => (
             <div key={index} className="group">
-              <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300">
+              <div className="glass rounded-3xl p-8 h-full hover-lift hover-scale transition-all duration-300 flex flex-col">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300`}>
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
@@ -97,7 +97,7 @@ const Services = () => {
                   {service.description}
                 </p>
 
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 flex-grow">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center text-sm">
                       <div className="w-2 h-2 bg-primary rounded-full mr-3" />
