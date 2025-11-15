@@ -154,11 +154,11 @@ const Navigation = () => {
               ))}
               <div className="pt-4 border-t border-border">
                 <a
-                  href="tel:+1-800-CALL-PRO"
+                  href="tel:+02-8252-0584"
                   className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3"
                 >
                   <Phone className="w-4 h-4" />
-                  <span>1-800-CALL-PRO</span>
+                  <span>02-8252-0584</span>
                 </a>
                 {user && (
                   <div className="space-y-2">
