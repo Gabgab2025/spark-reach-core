@@ -316,7 +316,7 @@ const Contact = () => {
                       scrolling="no" 
                       marginHeight={0} 
                       marginWidth={0} 
-                      src="https://maps.google.com/maps?width=600&height=400&hl=en&q=14.542172875010287%2C%20121.22006609754878&t=p&z=15&ie=UTF8&iwloc=B&output=embed"
+                      src="https://maps.google.com/maps?width=600&height=400&hl=en&q=14.542113422200385%2C%20121.2203198955366&t=k&z=15&ie=UTF8&iwloc=B&output=embed"
                       title="Office Location Map"
                     />
                   </div>
