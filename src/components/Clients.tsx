@@ -6,8 +6,33 @@ const Clients = () => {
   const clients = [
     {
       name: 'Unistar Credit and Finance Corporation',
-      description: 'A non-depository lending and financing company offering Motorcycle, Auto, Mortgage, Personal, and Business Loans.',
-      category: 'Lending & Financing'
+      description: 'JDGK assists Unistar in sourcing clients who are willing to mortgage the Official Receipt (OR) and Certificate of Registration (CR) of their vehicles as collateral for financing. A non-depository lending and financing company offering Motorcycle, Auto, Mortgage, Personal, and Business Loans.',
+      category: 'Tele Sales & Marketing'
+    },
+    {
+      name: 'AMG Collection Services Inc',
+      description: 'JDGK delivers professional collection and recovery solutions, driving efficient loan repayment while reinforcing the institution\'s credit accessibility and financial resilience. AMGCSI is an IT-enabled debt management firm specializing in recovery of unsecured loans through debt collection operations.',
+      category: 'Credit & Collection'
+    },
+    {
+      name: 'Flexi Finance',
+      description: 'JDGK provides professional collection and recovery services to Flexi Finance, ensuring efficient loan repayment and improved credit management. Flexi Finance offers flexible and affordable loan products for individuals, employees, and small business owners, providing installment plans for consumer goods, gadgets, motorcycles, and personal needs.',
+      category: 'Credit & Collection'
+    },
+    {
+      name: 'Aiqon Unicorp',
+      description: 'JDGK extends its collection and recovery expertise to AIQON Unicorp, ensuring efficient account management and consistent loan repayment performance. AIQON Unicorp provides innovative credit and loan solutions with accessible and technology-driven financial products designed to meet the evolving needs of modern consumers.',
+      category: 'Credit & Collection'
+    },
+    {
+      name: 'Supremebike',
+      description: 'JDGK provides credit investigation, repossession and collection recovery services to support financing and after-sales operation. Supremebikes operates as a motorcycle dealership and service provider, retailing new and used motorcycles, supplying accessories and parts, and offering repair, servicing, and maintenance.',
+      category: 'Repossession'
+    },
+    {
+      name: 'Top Ride Motorcycle Hub',
+      description: 'JDGK provides credit investigation, repossession and collection recovery services to support financing and after-sales operation. Top Ride Motorcycle Hub operates as a motorcycle dealership delivering expert, customer-focused advice.',
+      category: 'Repossession'
     },
     {
       name: 'AACT Moneylink Corporation',
@@ -114,11 +139,11 @@ const Clients = () => {
         <div className="mt-16 glass rounded-3xl p-8">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-gradient mb-2">8+</div>
+              <div className="text-4xl font-bold text-gradient mb-2">13+</div>
               <p className="text-muted-foreground">Major Clients</p>
             </div>
             <div>
-              <div className="text-4xl font-bold text-gradient mb-2">5+</div>
+              <div className="text-4xl font-bold text-gradient mb-2">8+</div>
               <p className="text-muted-foreground">Industries Served</p>
             </div>
             <div>
