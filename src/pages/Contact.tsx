@@ -178,10 +178,12 @@ const Contact = () => {
                       className="w-full p-3 border border-border rounded-lg bg-background"
                     >
                       <option value="">Select a service</option>
-                      <option value="call-center">Call Center Solutions</option>
-                      <option value="collections">Bank Collections</option>
-                      <option value="customer-experience">Customer Experience</option>
-                      <option value="technology">Technology Integration</option>
+                      <option value="credit-collection">Credit Collection Recovery</option>
+                      <option value="repossession">Repossession</option>
+                      <option value="skip-tracing">Skip Tracing</option>
+                      <option value="credit-investigation">Credit Investigation</option>
+                      <option value="tele-sales">Tele Sales</option>
+                      <option value="virtual-assistance">Virtual Assistance</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
