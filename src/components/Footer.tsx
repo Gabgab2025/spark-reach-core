@@ -115,23 +115,37 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white dark:text-foreground">Contact</h4>
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-yellow-500" />
-                <a href="tel:+639177712282" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
-                  +63 917 771 2282
-                </a>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-yellow-500" />
+                  <a href="tel:+639177122824" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    +639177122824
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-yellow-500 opacity-0" />
+                  <a href="tel:+639954902070" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    +639954902070
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-yellow-500 opacity-0" />
+                  <a href="tel:0282520584" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    02-8252-0584
+                  </a>
+                </div>
               </div>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-yellow-500" />
-                  <a href="mailto:dbdealca@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
-                    dbdealca@jdgkbsi.ph
+                  <a href="mailto:info@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    info@jdgkbsi.ph
                   </a>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-yellow-500 opacity-0" />
-                  <a href="mailto:help@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
-                    help@jdgkbsi.ph
+                  <a href="mailto:dbdealca@jdgkbsi.ph" className="text-white/90 dark:text-card-foreground hover:text-white dark:hover:text-foreground transition-colors">
+                    dbdealca@jdgkbsi.ph
                   </a>
                 </div>
               </div>

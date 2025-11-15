@@ -22,24 +22,24 @@ const Contact = () => {
       icon: Phone,
       title: 'Phone',
       details: [
-        { label: 'Main Line', value: '+63 917 771 22824' }
+        { label: 'Mobile 1', value: '+639177122824' },
+        { label: 'Mobile 2', value: '+639954902070' },
+        { label: 'Telephone', value: '02-8252-0584' }
       ]
     },
     {
       icon: Mail,
       title: 'Email',
       details: [
-        { label: 'General Inquiries', value: 'dbdealca@jdgkbsi.ph' },
-        { label: 'Support', value: 'help@jdgkbsi.ph' }
+        { label: 'General Inquiries', value: 'info@jdgkbsi.ph' },
+        { label: 'Business', value: 'dbdealca@jdgkbsi.ph' }
       ]
     },
     {
       icon: MapPin,
       title: 'Office Location',
       details: [
-        { label: 'Address', value: 'Phase 1-B4 L1 Ridge Point Subdivision' },
-        { label: 'City', value: 'Prinza 1880, Teresa, Rizal' },
-        { label: 'Country', value: 'Philippines' }
+        { label: 'Address', value: 'Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines' }
       ]
     }
   ];
@@ -48,7 +48,8 @@ const Contact = () => {
     {
       city: 'Teresa, Rizal',
       address: 'Phase 1-B4 L1 Ridge Point Subdivision\nPrinza 1880, Teresa, Rizal\nPhilippines',
-      phone: '+63 917 771 22824',
+      phone: '+639177122824 / +639954902070',
+      tel: '02-8252-0584',
       isHQ: true
     }
   ];
