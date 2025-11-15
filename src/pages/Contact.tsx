@@ -1,70 +1,70 @@
-import React, { useState } from 'react';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Calendar, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
+import React, { useState } from "react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Calendar, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-    service: '',
-    message: ''
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    service: "",
+    message: "",
   });
 
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Phone',
+      title: "Phone",
       details: [
-        { label: 'Mobile 1', value: '+639177122824' },
-        { label: 'Mobile 2', value: '+639954902070' },
-        { label: 'Telephone', value: '02-8252-0584' }
-      ]
+        { label: "Mobile 1", value: "+639177122824" },
+        { label: "Mobile 2", value: "+639954902070" },
+        { label: "Telephone", value: "02-8252-0584" },
+      ],
     },
     {
       icon: Mail,
-      title: 'Email',
+      title: "Email",
       details: [
-        { label: 'General Inquiries', value: 'info@jdgkbsi.ph' },
-        { label: 'Business', value: 'dbdealca@jdgkbsi.ph' }
-      ]
+        { label: "General Inquiries", value: "info@jdgkbsi.ph" },
+        { label: "Business", value: "dbdealca@jdgkbsi.ph" },
+      ],
     },
     {
       icon: MapPin,
-      title: 'Office Location',
+      title: "Office Location",
       details: [
-        { label: 'Address', value: 'Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines' }
-      ]
-    }
+        { label: "Address", value: "Phase 1-B4 L1 Ridge Point Subdivision, Prinza 1880, Teresa, Rizal, Philippines" },
+      ],
+    },
   ];
 
   const offices = [
     {
-      city: 'Teresa, Rizal',
-      address: 'Phase 1-B4 L1 Ridge Point Subdivision\nPrinza 1880, Teresa, Rizal\nPhilippines',
-      phone: '+639177122824 / +639954902070',
-      tel: '02-8252-0584',
-      isHQ: true
-    }
+      city: "Teresa, Rizal",
+      address: "Phase 1-B4 L1 Ridge Point Subdivision\nPrinza 1880, Teresa, Rizal\nPhilippines",
+      phone: "+639177122824 / +639954902070",
+      tel: "02-8252-0584",
+      isHQ: true,
+    },
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
-    console.log('Form submitted:', formData);
+    console.log("Form submitted:", formData);
   };
 
   return (
@@ -84,8 +84,8 @@ const Contact = () => {
                 <span className="block text-gradient">With Us</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Get in touch with our team and discover how we can help drive 
-                your business forward with our comprehensive solutions.
+                Get in touch with our team and discover how we can help drive your business forward with our
+                comprehensive solutions.
               </p>
             </div>
           </div>
@@ -238,9 +238,7 @@ const Contact = () => {
                         <h3 className="font-bold mb-1">Live Chat</h3>
                         <p className="text-sm text-muted-foreground">Get instant answers to your questions</p>
                       </div>
-                      <Button variant="outline">
-                        Chat Now
-                      </Button>
+                      <Button variant="outline">Chat Now</Button>
                     </div>
                   </Card>
 
@@ -253,21 +251,17 @@ const Contact = () => {
                         <h3 className="font-bold mb-1">Request Demo</h3>
                         <p className="text-sm text-muted-foreground">See our solutions in action</p>
                       </div>
-                      <Button variant="outline">
-                        Watch Demo
-                      </Button>
+                      <Button variant="outline">Watch Demo</Button>
                     </div>
                   </Card>
                 </div>
 
                 <div className="mt-8 p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl">
                   <h3 className="font-bold mb-3">Business Hours</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    We're here to help you with your business needs.
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">We're here to help you with your business needs.</p>
                   <a href="tel:+639177712282" className="flex items-center space-x-2 text-primary font-semibold">
                     <Phone className="w-4 h-4" />
-                    <span>+63 917 771 22824</span>
+                    <span>+63 917 71 22824</span>
                   </a>
                 </div>
               </div>
@@ -280,21 +274,20 @@ const Contact = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6">Our Office</h2>
-              <p className="text-muted-foreground text-lg">
-                Visit us at our principal office in Teresa, Rizal
-              </p>
+              <p className="text-muted-foreground text-lg">Visit us at our principal office in Teresa, Rizal</p>
             </div>
 
             <div className="max-w-md mx-auto">
               {offices.map((office, index) => (
-                <Card key={index} className="glass p-8 text-center hover-lift transition-all duration-300 ring-2 ring-primary/20">
+                <Card
+                  key={index}
+                  className="glass p-8 text-center hover-lift transition-all duration-300 ring-2 ring-primary/20"
+                >
                   <div className="inline-flex items-center space-x-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-6">
                     <span>Principal Office</span>
                   </div>
                   <h3 className="text-2xl font-bold mb-6">{office.city}</h3>
-                  <div className="text-muted-foreground mb-6 whitespace-pre-line leading-relaxed">
-                    {office.address}
-                  </div>
+                  <div className="text-muted-foreground mb-6 whitespace-pre-line leading-relaxed">{office.address}</div>
                   <div className="flex items-center justify-center space-x-2 text-primary">
                     <Phone className="w-5 h-5" />
                     <span className="font-medium text-lg">{office.phone}</span>
@@ -310,17 +303,15 @@ const Contact = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-6">Visit Our Office</h2>
-              <p className="text-muted-foreground text-lg">
-                Located in Teresa, Rizal, Philippines
-              </p>
+              <p className="text-muted-foreground text-lg">Located in Teresa, Rizal, Philippines</p>
             </div>
 
             <div className="glass rounded-3xl p-2 overflow-hidden">
               <div className="w-full h-96 rounded-2xl overflow-hidden relative">
-                <iframe 
+                <iframe
                   className="absolute top-0 left-0 w-full h-full"
-                  frameBorder="0" 
-                  scrolling="no" 
+                  frameBorder="0"
+                  scrolling="no"
                   marginHeight={0}
                   marginWidth={0}
                   src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Phase%201-B4%20L1%20Ridge%20Point%20Subdivision%20Prinza%201880%2C%20Teresa%2C%20Rizal%20Philippines&t=p&z=15&ie=UTF8&iwloc=B&output=embed"
