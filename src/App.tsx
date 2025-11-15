@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import SettingsRenderer from "@/components/SettingsRenderer";
+import StructuredData from "@/components/StructuredData";
 import AdminRedirect from "@/components/auth/AdminRedirect";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -32,6 +33,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <SettingsRenderer />
+          <StructuredData />
           <AdminRedirect>
             <Routes>
             <Route path="/" element={<Index />} />
