@@ -101,8 +101,8 @@ const Clients = () => {
           <CarouselContent>
             {clients.map((client, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <div className="group p-1">
-                  <div className="glass rounded-3xl p-8 h-full hover-lift transition-all duration-300">
+                <div className="group p-1 h-full">
+                  <div className="glass rounded-3xl p-8 h-full hover-lift transition-all duration-300 flex flex-col">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:shadow-glow transition-all duration-300">
                       {client.category.includes('Insurance') ? (
                         <Shield className="w-8 h-8 text-white" />
@@ -123,7 +123,7 @@ const Clients = () => {
                       {client.name}
                     </h3>
                     
-                    <p className="text-muted-foreground text-sm leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
                       {client.description}
                     </p>
                   </div>
