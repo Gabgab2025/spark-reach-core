@@ -316,17 +316,17 @@ const Contact = () => {
             </div>
 
             <div className="glass rounded-3xl p-2 overflow-hidden">
-            <div className="w-full h-96 rounded-2xl overflow-hidden">
-              <iframe 
-                className="w-full h-full"
-                frameBorder="0" 
-                scrolling="no" 
-                marginHeight={0} 
-                marginWidth={0} 
-                src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Phase%201-B4%20L1%20Ridge%20Point%20Subdivision%20Prinza%201880%2C%20Teresa%2C%20Rizal%20Philippines&t=&z=15&ie=UTF8&iwloc=B&output=embed"
-                title="JDGK Business Solutions Inc. Office Location"
-              />
-            </div>
+              <div className="w-full h-96 bg-muted rounded-2xl flex items-center justify-center">
+                <div className="text-center">
+                  <MapPin className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground">Location Map</p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Phase 1-B4 L1 Ridge Point Subdivision<br />
+                    Prinza 1880, Teresa, Rizal<br />
+                    Philippines
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
