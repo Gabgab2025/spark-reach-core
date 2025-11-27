@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Users, Target, Eye, Award, TrendingUp, Shield } from 'lucide-react';
 import { useCMS } from '@/hooks/useCMS';
 import { useQuery } from '@tanstack/react-query';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import Autoplay from 'embla-carousel-autoplay';
 
 const About = () => {
   const navigate = useNavigate();
   const cms = useCMS();
+  const [selectedLicense, setSelectedLicense] = useState<string | null>(null);
   
   const { data: settings } = useQuery({
     queryKey: ['cms', 'settings'],
@@ -370,57 +374,62 @@ const About = () => {
               <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
             </div>
 
-            <div className="max-w-7xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <img 
-                      src="/licenses/business-permits-wall.jpg" 
-                      alt="Business Permits and Licenses Display" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <p className="text-center text-muted-foreground text-sm mt-4">Business Permits & Registrations</p>
-                </div>
-
-                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <img 
-                      src="/licenses/award-rookie.jpg" 
-                      alt="Top Shining Rookie Award" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <p className="text-center text-muted-foreground text-sm mt-4">Top Shining Rookie Award 2024</p>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <img 
-                      src="/licenses/certificate-appreciation.jpg" 
-                      alt="Certificate of Appreciation from Tomas Claudio Colleges" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <p className="text-center text-muted-foreground text-sm mt-4">Certificate of Appreciation</p>
-                </div>
-
-                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <img 
-                      src="/licenses/circle-gold-franchisee.jpg" 
-                      alt="Circle of Gold Franchisee Certificate" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <p className="text-center text-muted-foreground text-sm mt-4">Circle of Gold Franchisee</p>
-                </div>
-              </div>
+            <div className="max-w-5xl mx-auto">
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                plugins={[
+                  Autoplay({
+                    delay: 3000,
+                  }),
+                ]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {[
+                    { src: "/licenses/business-permits-wall.jpg", alt: "Business Permits and Licenses Display", caption: "Business Permits & Registrations" },
+                    { src: "/licenses/award-rookie.jpg", alt: "Top Shining Rookie Award", caption: "Top Shining Rookie Award 2024" },
+                    { src: "/licenses/certificate-appreciation.jpg", alt: "Certificate of Appreciation from Tomas Claudio Colleges", caption: "Certificate of Appreciation" },
+                    { src: "/licenses/circle-gold-franchisee.jpg", alt: "Circle of Gold Franchisee Certificate", caption: "Circle of Gold Franchisee" }
+                  ].map((license, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                      <div 
+                        className="group cursor-pointer bg-card border border-border rounded-2xl p-4 hover:border-primary/40 hover:shadow-glow transition-all duration-300 h-full"
+                        onClick={() => setSelectedLicense(license.src)}
+                      >
+                        <div className="aspect-[3/4] overflow-hidden rounded-lg mb-3">
+                          <img 
+                            src={license.src} 
+                            alt={license.alt} 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                        <p className="text-center text-muted-foreground text-sm">{license.caption}</p>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-0" />
+                <CarouselNext className="right-0" />
+              </Carousel>
             </div>
           </div>
         </section>
+
+        {/* License Image Dialog */}
+        <Dialog open={!!selectedLicense} onOpenChange={() => setSelectedLicense(null)}>
+          <DialogContent className="max-w-4xl">
+            {selectedLicense && (
+              <img 
+                src={selectedLicense} 
+                alt="License Certificate" 
+                className="w-full h-auto"
+              />
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>
