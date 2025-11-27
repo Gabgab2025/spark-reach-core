@@ -1,13 +1,47 @@
 import React, { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Calendar, User } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Calendar, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+// Client-side validation schema
+const contactSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters")
+    .regex(/^[a-zA-Z\s\-'.]+$/, "Name can only contain letters, spaces, hyphens, apostrophes, and periods"),
+  email: z.string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(255, "Email must be less than 255 characters"),
+  company: z.string()
+    .trim()
+    .max(100, "Company name must be less than 100 characters")
+    .optional(),
+  phone: z.string()
+    .trim()
+    .max(20, "Phone must be less than 20 characters")
+    .regex(/^[\d\s\-+().]*$/, "Phone can only contain numbers and basic punctuation")
+    .optional(),
+  service: z.string()
+    .trim()
+    .max(50, "Service must be less than 50 characters")
+    .optional(),
+  message: z.string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must be less than 2000 characters"),
+});
 
 const Contact = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +49,11 @@ const Contact = () => {
     phone: "",
     service: "",
     message: "",
+    honeypot: "", // Hidden spam trap
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const contactInfo = [
     {
@@ -61,10 +99,77 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
+    setErrors({});
+
+    // Client-side validation
+    try {
+      contactSchema.parse(formData);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0].toString()] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+        toast({
+          title: "Validation Error",
+          description: "Please check the form for errors.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    // Prevent double submission
+    if (isSubmitting || isSubmitted) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData,
+      });
+
+      if (error) throw error;
+
+      // Success!
+      toast({
+        title: "Message Sent! 🎉",
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
+
+      // Clear form
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        phone: "",
+        service: "",
+        message: "",
+        honeypot: "",
+      });
+      
+      setIsSubmitted(true);
+      
+      // Reset submission lock after 30 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 30000);
+
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      toast({
+        title: "Error Sending Message",
+        description: error.message || "Something went wrong. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,6 +228,18 @@ const Contact = () => {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot field - hidden from users, bots will fill it */}
+                  <input
+                    type="text"
+                    name="honeypot"
+                    value={formData.honeypot}
+                    onChange={handleInputChange}
+                    style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium mb-2">Full Name *</label>
@@ -132,7 +249,12 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
                         required
+                        disabled={isSubmitting}
+                        className={errors.name ? "border-destructive" : ""}
                       />
+                      {errors.name && (
+                        <p className="text-destructive text-sm mt-1">{errors.name}</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Email Address *</label>
@@ -143,7 +265,12 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="Enter your email"
                         required
+                        disabled={isSubmitting}
+                        className={errors.email ? "border-destructive" : ""}
                       />
+                      {errors.email && (
+                        <p className="text-destructive text-sm mt-1">{errors.email}</p>
+                      )}
                     </div>
                   </div>
 
@@ -155,7 +282,12 @@ const Contact = () => {
                         value={formData.company}
                         onChange={handleInputChange}
                         placeholder="Enter your company name"
+                        disabled={isSubmitting}
+                        className={errors.company ? "border-destructive" : ""}
                       />
+                      {errors.company && (
+                        <p className="text-destructive text-sm mt-1">{errors.company}</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Phone Number</label>
@@ -165,7 +297,12 @@ const Contact = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="Enter your phone number"
+                        disabled={isSubmitting}
+                        className={errors.phone ? "border-destructive" : ""}
                       />
+                      {errors.phone && (
+                        <p className="text-destructive text-sm mt-1">{errors.phone}</p>
+                      )}
                     </div>
                   </div>
 
@@ -175,7 +312,8 @@ const Contact = () => {
                       name="service"
                       value={formData.service}
                       onChange={handleInputChange}
-                      className="w-full p-3 border border-border rounded-lg bg-background"
+                      disabled={isSubmitting}
+                      className={`w-full p-3 border border-border rounded-lg bg-background ${errors.service ? "border-destructive" : ""}`}
                     >
                       <option value="">Select a service</option>
                       <option value="credit-collection">Credit Collection Recovery</option>
@@ -186,6 +324,9 @@ const Contact = () => {
                       <option value="virtual-assistance">Virtual Assistance</option>
                       <option value="other">Other</option>
                     </select>
+                    {errors.service && (
+                      <p className="text-destructive text-sm mt-1">{errors.service}</p>
+                    )}
                   </div>
 
                   <div>
@@ -197,12 +338,32 @@ const Contact = () => {
                       placeholder="Tell us about your needs and how we can help..."
                       rows={5}
                       required
+                      disabled={isSubmitting}
+                      className={errors.message ? "border-destructive" : ""}
                     />
+                    {errors.message && (
+                      <p className="text-destructive text-sm mt-1">{errors.message}</p>
+                    )}
                   </div>
 
-                  <Button type="submit" className="btn-hero w-full py-4 text-lg font-semibold">
-                    Send Message
-                    <Send className="w-5 h-5 ml-2" />
+                  <Button 
+                    type="submit" 
+                    className="btn-hero w-full py-4 text-lg font-semibold"
+                    disabled={isSubmitting || isSubmitted}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : isSubmitted ? (
+                      <>Message Sent! ✓</>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send className="w-5 h-5 ml-2" />
+                      </>
+                    )}
                   </Button>
                 </form>
               </div>
