@@ -41,21 +41,11 @@ ENV VITE_SUPABASE_PROJECT_ID=$VITE_SUPABASE_PROJECT_ID
 # Build the application
 RUN npm run build
 
-# Stage 2: Production stage with Nginx on Ubuntu
-FROM ubuntu:22.04 AS production
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install Nginx and security updates
-RUN apt-get update && apt-get install -y \
-    nginx \
-    curl \
-    && apt-get upgrade -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Stage 2: Production stage with Nginx
+FROM nginx:alpine AS production
 
 # Remove default nginx config
-RUN rm -rf /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
+RUN rm -rf /etc/nginx/conf.d/default.conf
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -63,20 +53,12 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create non-root user for security
-RUN useradd -r -s /bin/false nginx-user \
-    && chown -R nginx-user:nginx-user /usr/share/nginx/html \
-    && chown -R nginx-user:nginx-user /var/log/nginx \
-    && chown -R nginx-user:nginx-user /var/lib/nginx \
-    && touch /run/nginx.pid \
-    && chown -R nginx-user:nginx-user /run/nginx.pid
-
 # Expose port 80
 EXPOSE 80
 
 # Health check for Coolify
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:80/health || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:80/health || exit 1
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
