@@ -358,6 +358,69 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Business License Section */}
+        <section className="py-24 bg-gradient-to-b from-muted/30 to-background">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Business License</h2>
+              <p className="text-muted-foreground text-lg">
+                Certified and accredited business credentials
+              </p>
+              <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
+            </div>
+
+            <div className="max-w-7xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
+                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                    <img 
+                      src="/licenses/business-permits-wall.jpg" 
+                      alt="Business Permits and Licenses Display" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <p className="text-center text-muted-foreground text-sm mt-4">Business Permits & Registrations</p>
+                </div>
+
+                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
+                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                    <img 
+                      src="/licenses/award-rookie.jpg" 
+                      alt="Top Shining Rookie Award" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <p className="text-center text-muted-foreground text-sm mt-4">Top Shining Rookie Award 2024</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
+                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                    <img 
+                      src="/licenses/certificate-appreciation.jpg" 
+                      alt="Certificate of Appreciation from Tomas Claudio Colleges" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <p className="text-center text-muted-foreground text-sm mt-4">Certificate of Appreciation</p>
+                </div>
+
+                <div className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/40 hover:shadow-medium transition-all duration-300">
+                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                    <img 
+                      src="/licenses/circle-gold-franchisee.jpg" 
+                      alt="Circle of Gold Franchisee Certificate" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <p className="text-center text-muted-foreground text-sm mt-4">Circle of Gold Franchisee</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
