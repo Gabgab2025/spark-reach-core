@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 
 interface Page {
   id: string;
@@ -31,15 +31,15 @@ const PageDetail = () => {
 
   const fetchPage = async () => {
     try {
-      const { data, error } = await supabase
-        .from('pages')
-        .select('*')
-        .eq('slug', slug)
-        .eq('status', 'published')
-        .maybeSingle();
+      const { data, error } = await api.get('/pages', {
+        params: { 
+          slug,
+          status: 'published'
+        }
+      });
 
       if (error) throw error;
-      setPage(data);
+      setPage(data && data.length > 0 ? data[0] : null);
     } catch (error) {
       console.error('Error fetching page:', error);
     } finally {

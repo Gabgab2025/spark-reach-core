@@ -15,7 +15,6 @@ const SettingsDebugger = () => {
   const fixAuthIssues = async () => {
     try {
       // Clear any problematic tokens
-      localStorage.removeItem('supabase.auth.token');
       localStorage.clear();
       
       // Sign out to clear session

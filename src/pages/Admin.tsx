@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -95,21 +95,16 @@ const AdminContent = () => {
     setIsCreatingUser(true);
     try {
       // Sign up the user
-      const { data, error: signUpError } = await supabase.auth.admin.createUser({
+      const { data, error: signUpError } = await api.post('/admin/users', {
         email: newUserEmail,
         password: newUserPassword,
-        user_metadata: {
-          full_name: newUserFullName
-        },
-        email_confirm: true
+        full_name: newUserFullName,
+        role: 'admin'
       });
 
       if (signUpError) throw signUpError;
 
-      if (data.user) {
-        // Assign admin role
-        await updateUserRole(data.user.id, 'admin');
-        
+      if (data) {
         // Refresh users list
         const usersData = await getAllUsersWithRoles();
         setUsers(usersData);

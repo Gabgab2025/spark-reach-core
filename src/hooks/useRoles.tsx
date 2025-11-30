@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
@@ -35,11 +35,7 @@ export const useRoles = () => {
       }
 
       try {
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .maybeSingle();
+        const { data, error } = await api.get('/user_roles/me');
 
         if (error) {
           console.error('Error fetching user role:', error);
@@ -75,37 +71,11 @@ export const useRoles = () => {
     }
 
     try {
-      const { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select('user_id, full_name');
+      const { data, error } = await api.get('/admin/users');
 
-      if (profilesError) throw profilesError;
+      if (error) throw error;
 
-      const { data: roles, error: rolesError } = await supabase
-        .from('user_roles')
-        .select('user_id, role');
-
-      if (rolesError) throw rolesError;
-
-      // Get auth users (admin only can see this)
-      const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
-
-      if (authError) throw authError;
-
-      // Combine the data
-      const usersWithRoles: UserWithRole[] = authUsers.users.map(authUser => {
-        const profile = profiles.find(p => p.user_id === authUser.id);
-        const roleData = roles.find(r => r.user_id === authUser.id);
-
-        return {
-          id: authUser.id,
-          email: authUser.email || '',
-          full_name: profile?.full_name,
-          role: roleData?.role as UserRole || 'user'
-        };
-      });
-
-      return usersWithRoles;
+      return data as UserWithRole[];
     } catch (error) {
       console.error('Error fetching users with roles:', error);
       throw error;
@@ -119,12 +89,9 @@ export const useRoles = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('user_roles')
-        .upsert({
-          user_id: userId,
-          role: newRole
-        });
+      const { error } = await api.put(`/admin/users/${userId}/role`, {
+        role: newRole
+      });
 
       if (error) throw error;
 

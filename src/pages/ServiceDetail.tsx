@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 
 interface Service {
   id: string;
@@ -36,14 +36,12 @@ const ServiceDetail = () => {
 
   const fetchService = async () => {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
+      const { data, error } = await api.get('/services', {
+        params: { slug }
+      });
 
       if (error) throw error;
-      setService(data);
+      setService(data && data.length > 0 ? data[0] : null);
     } catch (error) {
       console.error('Error fetching service:', error);
     } finally {

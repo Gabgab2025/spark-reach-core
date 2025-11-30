@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
 interface PageContent {
@@ -24,10 +24,9 @@ export const usePageContent = () => {
   const { data: pages, isLoading } = useQuery({
     queryKey: ['pages'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('pages')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await api.get('/pages', {
+        params: { _sort: 'created_at:desc' }
+      });
 
       if (error) throw error;
       return data as PageContent[];
@@ -36,28 +35,24 @@ export const usePageContent = () => {
 
   // Fetch single page by slug (for public)
   const fetchPageBySlug = async (slug: string): Promise<PageContent | null> => {
-    const { data, error } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .maybeSingle();
+    const { data, error } = await api.get('/pages', {
+      params: { 
+        slug,
+        status: 'published'
+      }
+    });
 
     if (error) {
       console.error('Error fetching page:', error);
       return null;
     }
-    return data;
+    return data && data.length > 0 ? data[0] : null;
   };
 
   // Create page mutation
   const createMutation = useMutation({
     mutationFn: async (pageData: Omit<PageContent, 'id' | 'created_at' | 'updated_at'>) => {
-      const { data, error } = await supabase
-        .from('pages')
-        .insert([pageData])
-        .select()
-        .single();
+      const { data, error } = await api.post('/pages', pageData);
 
       if (error) throw error;
       return data;
@@ -81,12 +76,7 @@ export const usePageContent = () => {
   // Update page mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...pageData }: Partial<PageContent> & { id: string }) => {
-      const { data, error } = await supabase
-        .from('pages')
-        .update(pageData)
-        .eq('id', id)
-        .select()
-        .single();
+      const { data, error } = await api.put(`/pages/${id}`, pageData);
 
       if (error) throw error;
       return data;
@@ -110,10 +100,7 @@ export const usePageContent = () => {
   // Delete page mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('pages')
-        .delete()
-        .eq('id', id);
+      const { error } = await api.delete(`/pages/${id}`);
 
       if (error) throw error;
     },

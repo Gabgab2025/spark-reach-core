@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 
@@ -60,20 +60,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       const fileExt = file.name.split('.').pop();
       const fileName = `${folder}/${timestamp}.${fileExt}`;
 
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('page-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('path', fileName);
+      formData.append('bucket', 'page-images');
+
+      // Upload to API
+      const { data, error } = await api.post('/storage/upload', formData);
 
       if (error) throw error;
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('page-images')
-        .getPublicUrl(data.path);
+      const publicUrl = data.publicUrl;
 
       onImageSelect(publicUrl);
       setIsDialogOpen(false);

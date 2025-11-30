@@ -5,7 +5,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { format } from 'date-fns';
 
 interface BlogPost {
@@ -37,15 +37,15 @@ const BlogDetail = () => {
 
   const fetchPost = async () => {
     try {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('slug', slug)
-        .eq('status', 'published')
-        .maybeSingle();
+      const { data, error } = await api.get('/blog_posts', {
+        params: { 
+          slug,
+          status: 'published'
+        }
+      });
 
       if (error) throw error;
-      setPost(data);
+      setPost(data && data.length > 0 ? data[0] : null);
     } catch (error) {
       console.error('Error fetching blog post:', error);
     } finally {

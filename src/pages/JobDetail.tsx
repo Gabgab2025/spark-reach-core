@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { format } from 'date-fns';
 
 interface JobListing {
@@ -38,15 +38,15 @@ const JobDetail = () => {
 
   const fetchJob = async () => {
     try {
-      const { data, error } = await supabase
-        .from('job_listings')
-        .select('*')
-        .eq('id', id)
-        .eq('status', 'open')
-        .maybeSingle();
+      const { data, error } = await api.get('/job_listings', {
+        params: { 
+          id,
+          status: 'open'
+        }
+      });
 
       if (error) throw error;
-      setJob(data);
+      setJob(data && data.length > 0 ? data[0] : null);
     } catch (error) {
       console.error('Error fetching job listing:', error);
     } finally {
