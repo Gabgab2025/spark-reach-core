@@ -188,27 +188,34 @@ const SettingsRenderer = () => {
         
         // Apply Google Tag Manager
         if (settings.google_tag_manager_code) {
-          console.log('Applying Google Tag Manager');
-          // GTM Head Script
-          const gtmHeadScript = document.createElement('script');
-          gtmHeadScript.setAttribute('data-settings-applied', 'google-tag-manager');
-          gtmHeadScript.innerHTML = `
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${settings.google_tag_manager_code}');
-          `;
-          document.head.appendChild(gtmHeadScript);
+          // Check if GTM is already on the page (e.g. from index.html)
+          const existingGTM = document.querySelector(`script[src*="googletagmanager.com/gtm.js?id=${settings.google_tag_manager_code}"]`);
           
-          // GTM Body NoScript
-          const gtmBodyNoScript = document.createElement('noscript');
-          gtmBodyNoScript.setAttribute('data-settings-applied', 'google-tag-manager');
-          gtmBodyNoScript.innerHTML = `
-            <iframe src="https://www.googletagmanager.com/ns.html?id=${settings.google_tag_manager_code}"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
-          `;
-          document.body.insertBefore(gtmBodyNoScript, document.body.firstChild);
+          if (existingGTM && !existingGTM.hasAttribute('data-settings-applied')) {
+            console.log('GTM already present in static HTML, skipping injection');
+          } else {
+            console.log('Applying Google Tag Manager');
+            // GTM Head Script
+            const gtmHeadScript = document.createElement('script');
+            gtmHeadScript.setAttribute('data-settings-applied', 'google-tag-manager');
+            gtmHeadScript.innerHTML = `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${settings.google_tag_manager_code}');
+            `;
+            document.head.appendChild(gtmHeadScript);
+            
+            // GTM Body NoScript
+            const gtmBodyNoScript = document.createElement('noscript');
+            gtmBodyNoScript.setAttribute('data-settings-applied', 'google-tag-manager');
+            gtmBodyNoScript.innerHTML = `
+              <iframe src="https://www.googletagmanager.com/ns.html?id=${settings.google_tag_manager_code}"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            `;
+            document.body.insertBefore(gtmBodyNoScript, document.body.firstChild);
+          }
         }
         
         // Apply Meta Pixel
