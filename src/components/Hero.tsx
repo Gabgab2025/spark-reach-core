@@ -6,25 +6,8 @@ import { useNavigate } from "react-router-dom";
 const Hero = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const heroImages = ["/hero/office-1.jpg", "/hero/office-2.jpg", "/hero/office-3.jpg"];
-
-  // Preload images
-  useEffect(() => {
-    const imagePromises = heroImages.map((src) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = src;
-        img.onload = resolve;
-        img.onerror = reject;
-      });
-    });
-
-    Promise.all(imagePromises)
-      .then(() => setImagesLoaded(true))
-      .catch(() => setImagesLoaded(true)); // Show anyway on error
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -60,8 +43,7 @@ const Hero = () => {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Slideshow */}
       <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-charcoal-light">
-        {imagesLoaded &&
-          heroImages.map((image, index) => (
+        {heroImages.map((image, index) => (
             <div
               key={index}
               className="absolute inset-0 transition-opacity duration-1000"

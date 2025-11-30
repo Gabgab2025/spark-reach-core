@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
 export interface CMSPage {
@@ -147,39 +147,28 @@ export const useCMS = () => {
 
   // Pages Management
   const getPages = async (): Promise<CMSPage[]> => {
-    const { data, error } = await supabase
-      .from('pages')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await api.get<CMSPage[]>('/pages');
     
     if (error) throw error;
     return data || [];
   };
 
   const createPage = async (pageData: Partial<CMSPage>): Promise<void> => {
-    const { error } = await supabase
-      .from('pages')
-      .insert(pageData as any);
+    const { error } = await api.post('/pages', pageData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Page created successfully" });
   };
 
   const updatePage = async (id: string, pageData: Partial<CMSPage>): Promise<void> => {
-    const { error } = await supabase
-      .from('pages')
-      .update(pageData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/pages/${id}`, pageData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Page updated successfully" });
   };
 
   const deletePage = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('pages')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/pages/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Page deleted successfully" });
@@ -187,39 +176,28 @@ export const useCMS = () => {
 
   // Services Management
   const getServices = async (): Promise<CMSService[]> => {
-    const { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .order('sort_order', { ascending: true });
+    const { data, error } = await api.get<CMSService[]>('/services');
     
     if (error) throw error;
     return data || [];
   };
 
   const createService = async (serviceData: Partial<CMSService>): Promise<void> => {
-    const { error } = await supabase
-      .from('services')
-      .insert(serviceData as any);
+    const { error } = await api.post('/services', serviceData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Service created successfully" });
   };
 
   const updateService = async (id: string, serviceData: Partial<CMSService>): Promise<void> => {
-    const { error } = await supabase
-      .from('services')
-      .update(serviceData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/services/${id}`, serviceData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Service updated successfully" });
   };
 
   const deleteService = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('services')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/services/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Service deleted successfully" });
@@ -227,39 +205,28 @@ export const useCMS = () => {
 
   // Blog Posts Management
   const getBlogPosts = async (): Promise<CMSBlogPost[]> => {
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await api.get<CMSBlogPost[]>('/blog_posts');
     
     if (error) throw error;
     return data || [];
   };
 
   const createBlogPost = async (postData: Partial<CMSBlogPost>): Promise<void> => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .insert(postData as any);
+    const { error } = await api.post('/blog_posts', postData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Blog post created successfully" });
   };
 
   const updateBlogPost = async (id: string, postData: Partial<CMSBlogPost>): Promise<void> => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .update(postData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/blog_posts/${id}`, postData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Blog post updated successfully" });
   };
 
   const deleteBlogPost = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/blog_posts/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Blog post deleted successfully" });
@@ -267,39 +234,28 @@ export const useCMS = () => {
 
   // Job Listings Management
   const getJobListings = async (): Promise<CMSJobListing[]> => {
-    const { data, error } = await supabase
-      .from('job_listings')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await api.get<CMSJobListing[]>('/job_listings');
     
     if (error) throw error;
     return data || [];
   };
 
   const createJobListing = async (jobData: Partial<CMSJobListing>): Promise<void> => {
-    const { error } = await supabase
-      .from('job_listings')
-      .insert(jobData as any);
+    const { error } = await api.post('/job_listings', jobData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Job listing created successfully" });
   };
 
   const updateJobListing = async (id: string, jobData: Partial<CMSJobListing>): Promise<void> => {
-    const { error } = await supabase
-      .from('job_listings')
-      .update(jobData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/job_listings/${id}`, jobData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Job listing updated successfully" });
   };
 
   const deleteJobListing = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('job_listings')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/job_listings/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Job listing deleted successfully" });
@@ -307,39 +263,28 @@ export const useCMS = () => {
 
   // Testimonials Management
   const getTestimonials = async (): Promise<CMSTestimonial[]> => {
-    const { data, error } = await supabase
-      .from('testimonials')
-      .select('*')
-      .order('sort_order', { ascending: true });
+    const { data, error } = await api.get<CMSTestimonial[]>('/testimonials');
     
     if (error) throw error;
     return data || [];
   };
 
   const createTestimonial = async (testimonialData: Partial<CMSTestimonial>): Promise<void> => {
-    const { error } = await supabase
-      .from('testimonials')
-      .insert(testimonialData as any);
+    const { error } = await api.post('/testimonials', testimonialData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Testimonial created successfully" });
   };
 
   const updateTestimonial = async (id: string, testimonialData: Partial<CMSTestimonial>): Promise<void> => {
-    const { error } = await supabase
-      .from('testimonials')
-      .update(testimonialData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/testimonials/${id}`, testimonialData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Testimonial updated successfully" });
   };
 
   const deleteTestimonial = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('testimonials')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/testimonials/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Testimonial deleted successfully" });
@@ -347,39 +292,28 @@ export const useCMS = () => {
 
   // Team Members Management
   const getTeamMembers = async (): Promise<CMSTeamMember[]> => {
-    const { data, error } = await supabase
-      .from('team_members')
-      .select('*')
-      .order('sort_order', { ascending: true });
+    const { data, error } = await api.get<CMSTeamMember[]>('/team_members');
     
     if (error) throw error;
     return data || [];
   };
 
   const createTeamMember = async (memberData: Partial<CMSTeamMember>): Promise<void> => {
-    const { error } = await supabase
-      .from('team_members')
-      .insert(memberData as any);
+    const { error } = await api.post('/team_members', memberData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Team member added successfully" });
   };
 
   const updateTeamMember = async (id: string, memberData: Partial<CMSTeamMember>): Promise<void> => {
-    const { error } = await supabase
-      .from('team_members')
-      .update(memberData as any)
-      .eq('id', id);
+    const { error } = await api.put(`/team_members/${id}`, memberData);
     
     if (error) throw error;
     toast({ title: "Success", description: "Team member updated successfully" });
   };
 
   const deleteTeamMember = async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from('team_members')
-      .delete()
-      .eq('id', id);
+    const { error } = await api.delete(`/team_members/${id}`);
     
     if (error) throw error;
     toast({ title: "Success", description: "Team member removed successfully" });
@@ -387,21 +321,14 @@ export const useCMS = () => {
 
   // Analytics Data
   const getAnalyticsData = async (): Promise<AnalyticsData[]> => {
-    const { data, error } = await supabase
-      .from('analytics_data')
-      .select('*')
-      .order('metric_date', { ascending: false });
+    const { data, error } = await api.get<AnalyticsData[]>('/analytics_data');
     
     if (error) throw error;
     return data || [];
   };
 
   const getAnalyticsByCategory = async (category: string): Promise<AnalyticsData[]> => {
-    const { data, error } = await supabase
-      .from('analytics_data')
-      .select('*')
-      .eq('category', category)
-      .order('metric_date', { ascending: false });
+    const { data, error } = await api.get<AnalyticsData[]>(`/analytics_data?category=${category}`);
     
     if (error) throw error;
     return data || [];
@@ -483,9 +410,7 @@ export const useCMS = () => {
     // Settings
     getSettings: async (): Promise<CMSSettings> => {
       try {
-        const { data, error } = await supabase
-          .from('settings')
-          .select('*');
+        const { data, error } = await api.get<any[]>('/settings');
         
         if (error) throw error;
         
@@ -519,21 +444,10 @@ export const useCMS = () => {
         }));
         
         // Delete existing settings and insert new ones
-        const { error: deleteError } = await supabase
-          .from('settings')
-          .delete()
-          .gte('created_at', '1900-01-01'); // Delete all existing settings
+        // Note: This logic might need to be handled by the backend in a transaction
+        const { error: updateError } = await api.post('/settings/bulk_update', { settings: settingsArray });
         
-        if (deleteError) throw deleteError;
-        
-        // Insert new settings
-        if (settingsArray.length > 0) {
-          const { error: insertError } = await supabase
-            .from('settings')
-            .insert(settingsArray);
-          
-          if (insertError) throw insertError;
-        }
+        if (updateError) throw updateError;
         
         toast({
           title: "Settings Updated",

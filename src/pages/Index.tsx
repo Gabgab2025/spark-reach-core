@@ -108,6 +108,8 @@ const Index = () => {
                             <img
                               src={license.src}
                               alt={license.title}
+                              loading="lazy"
+                              decoding="async"
                               className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="p-4 text-center">
