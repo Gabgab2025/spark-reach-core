@@ -30,6 +30,8 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libpangocairo-1.0-0 \
     libatk1.0-0 \
+    libgbm1 \
+    libxshmfence1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
