@@ -130,7 +130,9 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await api.post('/contact', formData);
+      // Exclude honeypot from the payload
+      const { honeypot, ...payload } = formData;
+      const { data, error } = await api.post('/contact', payload);
 
       if (error) throw error;
 
@@ -150,9 +152,9 @@ const Contact = () => {
         message: "",
         honeypot: "",
       });
-      
+
       setIsSubmitted(true);
-      
+
       // Reset submission lock after 30 seconds
       setTimeout(() => {
         setIsSubmitted(false);
@@ -344,8 +346,8 @@ const Contact = () => {
                     )}
                   </div>
 
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="btn-hero w-full py-4 text-lg font-semibold"
                     disabled={isSubmitting || isSubmitted}
                   >
@@ -471,12 +473,12 @@ const Contact = () => {
               <div className="w-full h-96 rounded-2xl overflow-hidden">
                 <div className="embed-map-responsive">
                   <div className="embed-map-container">
-                    <iframe 
-                      className="embed-map-frame" 
-                      frameBorder="0" 
-                      scrolling="no" 
-                      marginHeight={0} 
-                      marginWidth={0} 
+                    <iframe
+                      className="embed-map-frame"
+                      frameBorder="0"
+                      scrolling="no"
+                      marginHeight={0}
+                      marginWidth={0}
                       src="https://maps.google.com/maps?width=600&height=400&hl=en&q=14.542113422200385%2C%20121.2203198955366&t=&z=15&ie=UTF8&iwloc=B&output=embed"
                       title="Office Location Map"
                     />
