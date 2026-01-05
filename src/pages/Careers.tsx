@@ -159,7 +159,7 @@ const Careers = () => {
             <div className="glass rounded-3xl p-8 lg:p-12 text-center">
               <h3 className="text-3xl font-bold mb-6">Our Culture</h3>
               <p className="text-muted-foreground text-lg mb-8 max-w-3xl mx-auto">
-                At CallCenter Pro, we foster an environment of collaboration, innovation, and continuous learning. 
+                At JDGK Business Solutions, we foster an environment of collaboration, innovation, and continuous learning. 
                 Our team members are empowered to make decisions, drive change, and grow their careers while 
                 delivering exceptional results for our clients.
               </p>

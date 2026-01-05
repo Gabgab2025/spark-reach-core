@@ -18,3 +18,14 @@ services:
       start_period: 10s
     environment:
       - NODE_ENV=production
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/data:/app/data
+    restart: unless-stopped
+

@@ -409,7 +409,7 @@ const AdminContent = () => {
                       <div>
                         <CardTitle className="text-slate-900 dark:text-white">User Management</CardTitle>
                         <CardDescription>
-                          Manage user accounts and permissions for your CallCenter Pro system.
+                          Manage user accounts and permissions for your JDGK Business Solutions system.
                         </CardDescription>
                       </div>
                       <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>

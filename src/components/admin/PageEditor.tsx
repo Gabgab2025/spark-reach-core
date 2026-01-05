@@ -445,7 +445,7 @@ const PageEditor = () => {
                 ...prev,
                 hero: { ...prev.hero, title: e.target.value }
               }))}
-              placeholder="About CallCenter Pro"
+              placeholder="About JDGK Business Solutions"
             />
           </div>
           <div>
@@ -691,7 +691,7 @@ const PageEditor = () => {
                       email: { ...prev.contact_info.email, general: e.target.value }
                     }
                   }))}
-                  placeholder="info@callcenterpro.com"
+                  placeholder="info@jdgkbsi.ph"
                 />
               </div>
               <div>
@@ -706,7 +706,7 @@ const PageEditor = () => {
                       email: { ...prev.contact_info.email, sales: e.target.value }
                     }
                   }))}
-                  placeholder="sales@callcenterpro.com"
+                  placeholder="sales@jdgkbsi.ph"
                 />
               </div>
               <div>
@@ -721,7 +721,7 @@ const PageEditor = () => {
                       email: { ...prev.contact_info.email, support: e.target.value }
                     }
                   }))}
-                  placeholder="support@callcenterpro.com"
+                  placeholder="support@jdgkbsi.ph"
                 />
               </div>
             </div>

@@ -14,6 +14,22 @@ RUN apt-get update && apt-get install -y \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && apt-get update \
     && apt-get install -y nodejs \
+    # Install dependencies for Puppeteer
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libasound2 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxi6 \
+    libxtst6 \
+    libcups2 \
+    libxrandr2 \
+    libxss1 \
+    libpangocairo-1.0-0 \
+    libatk1.0-0 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

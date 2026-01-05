@@ -32,10 +32,10 @@ const Blog = () => {
 
   useEffect(() => {
     // Update page meta
-    document.title = 'Blog - CallCenter Pro | Latest Industry Insights';
+    document.title = 'Blog - JDGK Business Solutions | Latest Industry Insights';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Stay updated with the latest call center industry insights, tips, and best practices from CallCenter Pro experts.');
+      metaDescription.setAttribute('content', 'Stay updated with the latest call center industry insights, tips, and best practices from JDGK Business Solutions experts.');
     }
   }, []);
 

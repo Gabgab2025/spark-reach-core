@@ -44,7 +44,7 @@ const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 dark:text-white">Admin CMS</h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">CallCenter Pro</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">JDGK Business Solutions</p>
                   </div>
                 </div>
               )}
