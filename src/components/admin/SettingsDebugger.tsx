@@ -1,0 +1,287 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
+import { useCMS } from '@/hooks/useCMS';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle, CheckCircle, ExternalLink, Loader2, RefreshCw, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+
+const SettingsDebugger = () => {
+  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const cms = useCMS();
+  const { signOut } = useAuth();
+
+  const fixAuthIssues = async () => {
+    try {
+      // Clear any problematic tokens
+      localStorage.clear();
+      
+      // Sign out to clear session
+      await signOut();
+      
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      console.error('Error fixing auth issues:', error);
+      // Force reload anyway
+      window.location.reload();
+    }
+  };
+
+  const runDebug = async () => {
+    setIsLoading(true);
+    try {
+      const settings = await cms.getSettings();
+      
+      // Check what's actually in the DOM
+      const chatWidgetElements = document.querySelectorAll('[data-settings-applied="chat-widget"]');
+      const customHeadElements = document.querySelectorAll('[data-settings-applied="custom-head"]');
+      const customBodyElements = document.querySelectorAll('[data-settings-applied="custom-body"]');
+      const googleAnalyticsElements = document.querySelectorAll('[data-settings-applied="google-analytics"]');
+      const googleTagManagerElements = document.querySelectorAll('[data-settings-applied="google-tag-manager"]');
+      const metaPixelElements = document.querySelectorAll('[data-settings-applied="meta-pixel"]');
+      const googleVerificationElements = document.querySelectorAll('[data-settings-applied="google-verification"]');
+      const bingVerificationElements = document.querySelectorAll('[data-settings-applied="bing-verification"]');
+      
+      // Check for meta tags in head
+      const existingGoogleMeta = document.querySelector('meta[name="google-site-verification"]');
+      const existingBingMeta = document.querySelector('meta[name="msvalidate.01"]');
+      const gtmScripts = document.querySelectorAll('script[src*="googletagmanager.com"]');
+      const gaScripts = document.querySelectorAll('script[src*="google-analytics.com"], script[src*="googletagmanager.com/gtag"]');
+      
+      setDebugInfo({
+        settings,
+        domElements: {
+          chatWidgetCount: chatWidgetElements.length,
+          customHeadCount: customHeadElements.length,
+          customBodyCount: customBodyElements.length,
+          googleAnalyticsCount: googleAnalyticsElements.length,
+          googleTagManagerCount: googleTagManagerElements.length,
+          metaPixelCount: metaPixelElements.length,
+          googleVerificationCount: googleVerificationElements.length,
+          bingVerificationCount: bingVerificationElements.length,
+          totalSettingsElements: document.querySelectorAll('[data-settings-applied]').length,
+          // Check actual scripts/meta tags in DOM
+          existingGoogleMeta: existingGoogleMeta?.getAttribute('content') || 'Not found',
+          existingBingMeta: existingBingMeta?.getAttribute('content') || 'Not found',
+          gtmScriptsCount: gtmScripts.length,
+          gaScriptsCount: gaScripts.length
+        },
+        currentPath: window.location.pathname,
+        isPublicPage: !window.location.pathname.startsWith('/admin'),
+        settingsKeys: Object.keys(settings),
+        hasAnySettings: Object.keys(settings).length > 0,
+        chatWidgetPreview: settings.chat_widget_code ? settings.chat_widget_code.substring(0, 100) + '...' : 'No chat widget code',
+        seoConfigured: {
+          googleAnalytics: !!settings.google_analytics_code,
+          googleTagManager: !!settings.google_tag_manager_code,
+          metaPixel: !!settings.meta_pixel_code,
+          googleVerification: !!settings.google_search_console_code,
+          bingVerification: !!settings.bing_webmaster_code
+        }
+      });
+    } catch (error) {
+      console.error('Debug error:', error);
+      setDebugInfo({ error: error.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const forceReloadSettings = () => {
+    // Remove existing elements
+    document.querySelectorAll('[data-settings-applied]').forEach(el => el.remove());
+    
+    // Trigger a page reload to re-apply settings
+    window.location.reload();
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <AlertCircle className="h-5 w-5" />
+          Settings Debugger
+        </CardTitle>
+        <CardDescription>
+          Debug why your chat widget isn't showing on public pages
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-800 mb-2">
+            <strong>🚨 Auth Error Detected:</strong> Invalid refresh token is preventing settings from working properly.
+          </p>
+          <Button variant="destructive" size="sm" onClick={fixAuthIssues}>
+            <LogOut className="mr-2 h-3 w-3" />
+            Fix Auth Issues (Sign Out & Clear Cache)
+          </Button>
+        </div>
+        
+        <div className="flex gap-2">
+          <Button onClick={runDebug} disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Debug Settings
+          </Button>
+          <Button variant="outline" onClick={forceReloadSettings}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Force Reload
+          </Button>
+          <Button variant="outline" onClick={() => window.open('/', '_blank')}>
+            <ExternalLink className="mr-2 h-4 w-4" />
+            Test on Homepage
+          </Button>
+          <Button variant="outline" onClick={() => {
+            // Test chat widget injection manually
+            const testWidget = '<iframe src="https://example.com" width="300" height="400" style="position:fixed;bottom:20px;right:20px;z-index:9999;border:1px solid #ccc;"></iframe>';
+            console.log('Testing widget injection:', testWidget);
+            const container = document.createElement('div');
+            container.innerHTML = testWidget;
+            container.setAttribute('data-test-widget', 'true');
+            document.body.appendChild(container);
+            setTimeout(() => {
+              const testEl = document.querySelector('[data-test-widget]');
+              if (testEl) testEl.remove();
+            }, 5000);
+          }}>
+            Test Widget Injection
+          </Button>
+        </div>
+
+        {debugInfo && (
+          <div className="space-y-4">
+            {debugInfo.error ? (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-sm text-red-800">Error: {debugInfo.error}</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-3 border rounded">
+                    <div className="text-sm font-medium">Current Page</div>
+                    <div className="text-xs text-muted-foreground">{debugInfo.currentPath}</div>
+                    <Badge variant={debugInfo.isPublicPage ? "default" : "secondary"}>
+                      {debugInfo.isPublicPage ? "Public Page" : "Admin Page"}
+                    </Badge>
+                  </div>
+                  
+                  <div className="p-3 border rounded">
+                    <div className="text-sm font-medium">Settings Status</div>
+                    <div className="text-xs text-muted-foreground">{debugInfo.settingsKeys.length} settings found</div>
+                    <Badge variant={debugInfo.hasAnySettings ? "default" : "secondary"}>
+                      {debugInfo.hasAnySettings ? "Has Settings" : "No Settings"}
+                    </Badge>
+                  </div>
+                  
+                  <div className="p-3 border rounded">
+                    <div className="text-sm font-medium">DOM Elements Applied</div>
+                    <div className="text-xs text-muted-foreground">
+                      Total: {debugInfo.domElements.totalSettingsElements} elements
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      GA: {debugInfo.domElements.googleAnalyticsCount}, GTM: {debugInfo.domElements.googleTagManagerCount}
+                    </div>
+                    <Badge variant={debugInfo.domElements.totalSettingsElements > 0 ? "default" : "secondary"}>
+                      {debugInfo.domElements.totalSettingsElements} Applied
+                    </Badge>
+                  </div>
+                  
+                  <div className="p-3 border rounded">
+                    <div className="text-sm font-medium">SEO Scripts in DOM</div>
+                    <div className="text-xs text-muted-foreground">
+                      GA Scripts: {debugInfo.domElements.gaScriptsCount}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      GTM Scripts: {debugInfo.domElements.gtmScriptsCount}
+                    </div>
+                    <Badge variant={(debugInfo.domElements.gaScriptsCount + debugInfo.domElements.gtmScriptsCount) > 0 ? "default" : "secondary"}>
+                      {debugInfo.domElements.gaScriptsCount + debugInfo.domElements.gtmScriptsCount} Scripts
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">SEO Configuration Status:</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Analytics</span>
+                      <Badge variant={debugInfo.seoConfigured.googleAnalytics ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleAnalytics ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Tag Manager</span>
+                      <Badge variant={debugInfo.seoConfigured.googleTagManager ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleTagManager ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Meta Pixel</span>
+                      <Badge variant={debugInfo.seoConfigured.metaPixel ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.metaPixel ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 border rounded text-sm">
+                      <span>Google Search Console</span>
+                      <Badge variant={debugInfo.seoConfigured.googleVerification ? "default" : "secondary"}>
+                        {debugInfo.seoConfigured.googleVerification ? "Configured" : "Not Set"}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Meta Tags in DOM:</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    <div className="p-2 border rounded text-xs">
+                      <strong>Google Verification:</strong> {debugInfo.domElements.existingGoogleMeta}
+                    </div>
+                    <div className="p-2 border rounded text-xs">
+                      <strong>Bing Verification:</strong> {debugInfo.domElements.existingBingMeta}
+                    </div>
+                  </div>
+                </div>
+
+                {debugInfo.settings.chat_widget_code && debugInfo.domElements.chatWidgetCount === 0 && debugInfo.isPublicPage && (
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                    <p className="text-sm text-yellow-800">
+                      <strong>⚠️ Issue Found:</strong> Chat widget is configured but not applied to DOM. Try "Force Reload" button.
+                    </p>
+                  </div>
+                )}
+
+                {!debugInfo.isPublicPage && (
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
+                    <p className="text-sm text-amber-900">
+                      <strong>ℹ️ Note:</strong> You're on an admin page. Chat widgets only show on public pages.
+                    </p>
+                  </div>
+                )}
+
+                {debugInfo.isPublicPage && !debugInfo.settings.chat_widget_code && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-sm text-red-800">
+                      <strong>❌ Issue:</strong> No chat widget code found in settings. Please add it in the admin panel.
+                    </p>
+                  </div>
+                )}
+
+                {debugInfo.isPublicPage && debugInfo.settings.chat_widget_code && debugInfo.domElements.chatWidgetCount > 0 && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-sm text-green-800">
+                      <strong>✅ Success:</strong> Chat widget should be visible on this page!
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+export default SettingsDebugger;

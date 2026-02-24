@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Corporate Call Center & Collections Agency Design System 2025 */
+
+@layer base {
+  :root {
+    /* Brand Colors - Modern Corporate Golden & Charcoal Palette */
+    --background: 0 0% 100%;
+    --foreground: 210 11% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 11% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 11% 15%;
+
+    --primary: 48 100% 50%;
+    --primary-foreground: 210 11% 15%;
+
+    --secondary: 210 11% 71%;
+    --secondary-foreground: 210 11% 15%;
+
+    --muted: 210 11% 96%;
+    --muted-foreground: 210 11% 45%;
+
+    --accent: 33 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 11% 91%;
+    --input: 210 11% 91%;
+    --ring: 48 100% 50%;
+
+    --radius: 1rem;
+
+    /* Corporate Brand Colors */
+    --charcoal: 210 11% 15%;
+    --charcoal-light: 210 11% 25%;
+    --golden: 48 100% 50%;
+    --golden-light: 48 100% 60%;
+    --orange: 33 100% 60%;
+    --orange-light: 33 100% 70%;
+    --silver: 210 11% 89%;
+    --silver-dark: 210 11% 71%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--orange)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--charcoal)) 0%, hsl(var(--golden)) 50%, hsl(var(--orange)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--background)) 0%, hsl(var(--silver)) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(var(--golden) / 0.2), hsl(var(--orange) / 0.2));
+    
+    /* Glass Effects */
+    --glass-bg: hsl(var(--background) / 0.8);
+    --glass-border: hsl(var(--border) / 0.2);
+    --glass-shadow: 0 8px 32px hsl(var(--navy) / 0.1);
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px hsl(var(--charcoal) / 0.08);
+    --shadow-medium: 0 8px 30px hsl(var(--charcoal) / 0.12);
+    --shadow-strong: 0 20px 60px hsl(var(--charcoal) / 0.15);
+    --shadow-glow: 0 0 40px hsl(var(--golden) / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Primary Dark Backgrounds - WCAG AA+ Compliant */
+    --background: 214 100% 3.9%;          /* #0A0A0C - Very dark primary */
+    --foreground: 0 0% 96%;               /* #F5F5F7 - Primary body text */
+
+    --card: 214 11% 11.8%;                /* #1E1E1E - Secondary surfaces */
+    --card-foreground: 0 0% 88%;          /* #E0E0E0 - Card text */
+
+    --popover: 214 11% 16.5%;             /* #2A2A2A - Elevated surfaces */
+    --popover-foreground: 0 0% 96%;       /* #F5F5F7 - Popover text */
+
+    /* Interactive Elements */
+    --primary: 48 100% 60%;               /* Brighter golden for dark mode */
+    --primary-foreground: 214 100% 3.9%; /* Dark text on bright elements */
+
+    --secondary: 214 11% 16.5%;           /* #2A2A2A - Secondary buttons */
+    --secondary-foreground: 0 0% 96%;     /* #F5F5F7 - Light text */
+
+    --muted: 214 11% 11.8%;               /* #1E1E1E - Muted backgrounds */
+    --muted-foreground: 0 0% 69%;         /* #B0B0B0 - Sub-text, metadata */
+
+    --accent: 33 100% 70%;                /* Brighter orange for contrast */
+    --accent-foreground: 214 100% 3.9%;  /* Dark text on accent */
+
+    --destructive: 0 84% 65%;             /* Lighter red for visibility */
+    --destructive-foreground: 0 0% 100%;  /* White text */
+
+    /* Borders & Inputs */
+    --border: 214 11% 20%;                /* #333333 - Visible borders */
+    --input: 214 11% 16.5%;               /* #2A2A2A - Input backgrounds */
+    --ring: 48 100% 60%;                  /* Golden focus rings */
+
+    /* Corporate Brand Colors - Dark Mode Adjusted */
+    --charcoal: 214 100% 3.9%;            /* Primary dark background */
+    --charcoal-light: 214 11% 11.8%;      /* Secondary dark surfaces */
+    --golden: 48 100% 60%;                /* Brighter golden for visibility */
+    --golden-light: 48 100% 70%;          /* Even brighter for hover states */
+    --orange: 33 100% 70%;                /* Adjusted orange for contrast */
+    --orange-light: 33 100% 80%;          /* Lighter orange for accents */
+    --silver: 0 0% 69%;                   /* #B0B0B0 - Subtle text */
+    --silver-dark: 0 0% 45%;              /* #737373 - Very subtle elements */
+    
+    /* Gradients - Dark Mode Optimized */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--orange)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--charcoal)) 0%, hsl(var(--charcoal-light)) 50%, hsl(var(--golden) / 0.2) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(var(--golden) / 0.3), hsl(var(--orange) / 0.3));
+    
+    /* Glass Effects - Dark Mode */
+    --glass-bg: hsl(var(--card) / 0.8);
+    --glass-border: hsl(var(--border) / 0.3);
+    --glass-shadow: 0 8px 32px hsl(var(--charcoal) / 0.5);
+    
+    /* Shadows - Enhanced for Dark Mode */
+    --shadow-soft: 0 4px 20px hsl(var(--charcoal) / 0.3);
+    --shadow-medium: 0 8px 30px hsl(var(--charcoal) / 0.4);
+    --shadow-strong: 0 20px 60px hsl(var(--charcoal) / 0.6);
+    --shadow-glow: 0 0 40px hsl(var(--golden) / 0.4);
+
+    /* Sidebar - Dark Mode */
+    --sidebar-background: 214 11% 8.6%;   /* #161616 - Sidebar background */
+    --sidebar-foreground: 0 0% 96%;       /* #F5F5F7 - Sidebar text */
+    --sidebar-primary: 48 100% 60%;       /* Golden primary */
+    --sidebar-primary-foreground: 214 100% 3.9%; /* Dark text */
+    --sidebar-accent: 214 11% 16.5%;      /* #2A2A2A - Accent background */
+    --sidebar-accent-foreground: 0 0% 96%; /* Light text */
+    --sidebar-border: 214 11% 20%;        /* Visible borders */
+    --sidebar-ring: 48 100% 60%;          /* Golden focus */
+
+    /* Navigation & Interactive States */
+    --nav-bg: hsl(var(--charcoal) / 0.9);
+    --nav-text: hsl(var(--foreground));
+    --nav-text-muted: hsl(var(--muted-foreground));
+    --nav-hover: hsl(var(--golden));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Glass Effect Components */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Hero Components */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+
+  /* Button Variants */
+  .btn-hero {
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .btn-hero:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    transition: var(--transition-smooth);
+  }
+
+  .btn-glass:hover {
+    background: hsl(var(--primary) / 0.1);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  /* Animation Classes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .hover-scale {
+    transition: var(--transition-bounce);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-medium { box-shadow: var(--shadow-medium); }
+  .shadow-strong { box-shadow: var(--shadow-strong); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px hsl(var(--golden) / 0.4); }
+  to { box-shadow: 0 0 40px hsl(var(--golden) / 0.8); }
+}

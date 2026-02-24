@@ -1,0 +1,35 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+.env
+.env.*
+.vscode
+.idea
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+coverage
+.nyc_output
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+__tests__
+__mocks__
+supabase/.branches
+supabase/.temp
+
+# Dev archive — not needed in any Docker image
+_dev_archive/
+
+# Python caches
+**/__pycache__/
+*.pyc
+.pytest_cache/
+*.db
+
+# Stale lockfiles
+bun.lockb

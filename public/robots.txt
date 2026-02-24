@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /auth-proadmin2025
+Disallow: /api/
+
+Sitemap: https://jdgkbsi.ph/sitemap.xml

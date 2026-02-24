@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.env
+*.db
+venv/
+tests/
+debug_*.py
+seed_*.py
+run_dev.ps1
+data/
