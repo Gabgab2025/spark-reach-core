@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRoles, UserRole } from '@/hooks/useRoles';
+import { UserRole } from '@/hooks/useRoles';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -65,10 +65,12 @@ const AddUserDialog = ({ open, onOpenChange, onSuccess }: AddUserDialogProps) =>
     const [role, setRole] = useState<UserRole>('user');
 
     const mutation = useMutation({
-        mutationFn: () =>
-            api.post('/admin/users', { email, password, full_name: fullName, role }),
-        onSuccess: (res) => {
+        mutationFn: async () => {
+            const res = await api.post('/admin/users', { email, password, full_name: fullName, role });
             if (res.error) throw res.error;
+            return res.data;
+        },
+        onSuccess: () => {
             toast({ title: 'User created', description: `${fullName || email} has been added.` });
             setFullName(''); setEmail(''); setPassword(''); setRole('user');
             onOpenChange(false);
@@ -186,17 +188,21 @@ const EditUserDialog = ({ user, open, onOpenChange, onSuccess }: EditUserDialogP
     const [fullName, setFullName] = useState(user?.full_name ?? '');
     const [role, setRole] = useState<UserRole>((user?.role as UserRole) ?? 'user');
 
-    // Sync form when the target user changes
-    const resetForm = (u?: UserRow | null) => {
-        setFullName(u?.full_name ?? '');
-        setRole((u?.role as UserRole) ?? 'user');
-    };
+    // Sync form when the target user changes (useState only uses initial value once)
+    useEffect(() => {
+        if (user) {
+            setFullName(user.full_name ?? '');
+            setRole((user.role as UserRole) ?? 'user');
+        }
+    }, [user]);
 
     const mutation = useMutation({
-        mutationFn: () =>
-            api.put(`/admin/users/${user?.id}`, { full_name: fullName, role }),
-        onSuccess: (res) => {
+        mutationFn: async () => {
+            const res = await api.put(`/admin/users/${user?.id}`, { full_name: fullName, role });
             if (res.error) throw res.error;
+            return res.data;
+        },
+        onSuccess: () => {
             toast({ title: 'User updated', description: 'Changes saved successfully.' });
             onOpenChange(false);
             onSuccess();
@@ -207,7 +213,7 @@ const EditUserDialog = ({ user, open, onOpenChange, onSuccess }: EditUserDialogP
     });
 
     return (
-        <Dialog open={open} onOpenChange={v => { onOpenChange(v); if (!v) resetForm(user); }}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
@@ -269,7 +275,6 @@ const UserManagement = () => {
     const { toast } = useToast();
     const queryClient = useQueryClient();
     const { user: currentUser } = useAuth();
-    const { getAllUsersWithRoles, updateUserRole } = useRoles();
 
     // Dialog state
     const [addOpen, setAddOpen] = useState(false);
@@ -277,10 +282,16 @@ const UserManagement = () => {
     const [deleteTarget, setDeleteTarget] = useState<UserRow | null>(null);
     const [search, setSearch] = useState('');
 
-    // ── Data ──
+    // ── Data — fetch users directly, enabled only when admin ──
+    const isAdmin = currentUser?.role === 'admin';
     const { data: users = [], isLoading, refetch } = useQuery<UserRow[]>({
         queryKey: ['admin', 'users'],
-        queryFn: getAllUsersWithRoles as () => Promise<UserRow[]>,
+        queryFn: async () => {
+            const { data, error } = await api.get<UserRow[]>('/admin/users');
+            if (error) throw error;
+            return data ?? [];
+        },
+        enabled: !!isAdmin,
         staleTime: 2 * 60 * 1000,
         refetchOnWindowFocus: false,
     });
@@ -298,7 +309,9 @@ const UserManagement = () => {
     // ── Inline role change ──
     const handleRoleChange = async (userId: string, newRole: UserRole) => {
         try {
-            await updateUserRole(userId, newRole);
+            const { error } = await api.put(`/admin/users/${userId}/role`, { role: newRole });
+            if (error) throw error;
+            toast({ title: 'Success', description: `User role updated to ${newRole}` });
             queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
         } catch (err: any) {
             toast({ title: 'Error', description: err?.message || 'Role update failed', variant: 'destructive' });
@@ -307,9 +320,12 @@ const UserManagement = () => {
 
     // ── Delete ──
     const deleteMutation = useMutation({
-        mutationFn: (userId: string) => api.delete(`/admin/users/${userId}`),
-        onSuccess: (res) => {
+        mutationFn: async (userId: string) => {
+            const res = await api.delete(`/admin/users/${userId}`);
             if (res.error) throw res.error;
+            return res.data;
+        },
+        onSuccess: () => {
             toast({ title: 'User deleted', description: `${deleteTarget?.full_name || deleteTarget?.email} removed.` });
             setDeleteTarget(null);
             refetch();
