@@ -21,7 +21,14 @@ router = APIRouter(tags=["auth"])
 @router.post("/auth/login", response_model=schemas.SessionResponse)
 @limiter.limit("10/minute")
 def login(request: Request, login_data: schemas.LoginRequest, db: Session = Depends(get_db)):
-    user = crud.authenticate_user(db, login_data.email, login_data.password)
+    try:
+        user = crud.authenticate_user(db, login_data.email, login_data.password)
+    except ValueError as e:
+        # Account is locked — return 429 with lock message
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(e),
+        )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

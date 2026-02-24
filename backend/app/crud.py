@@ -41,10 +41,50 @@ def get_user_by_id(db: Session, user_id: str):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 def authenticate_user(db: Session, email: str, password: str):
-    """Verify email/password and return user if valid, None otherwise."""
+    """
+    Verify email/password and return user if valid.
+    Tracks failed attempts and enforces account lockout.
+    Returns:
+        user  — on success (resets counter)
+        None  — wrong credentials (increments counter)
+    Raises:
+        ValueError — account is locked (message contains remaining minutes)
+    """
+    from datetime import datetime, timezone, timedelta
+    from .models import MAX_FAILED_ATTEMPTS, LOCKOUT_MINUTES
+
     user = get_user_by_email(db, email)
-    if not user or not verify_password(password, user.hashed_password):
-        return None
+    if not user:
+        return None  # Don't reveal whether email exists
+
+    # ── Check lockout ─────────────────────────────────────────────────────
+    now = datetime.now(timezone.utc)
+    if user.locked_until and user.locked_until > now:
+        remaining = (user.locked_until - now).total_seconds()
+        minutes_left = max(1, int(remaining // 60) + 1)
+        raise ValueError(
+            f"Account locked due to too many failed attempts. "
+            f"Try again in {minutes_left} minute{'s' if minutes_left != 1 else ''}."
+        )
+
+    # ── Verify password ───────────────────────────────────────────────────
+    if not verify_password(password, user.hashed_password):
+        user.failed_login_attempts = (user.failed_login_attempts or 0) + 1
+        if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
+            user.locked_until = now + timedelta(minutes=LOCKOUT_MINUTES)
+            db.commit()
+            raise ValueError(
+                f"Account locked after {MAX_FAILED_ATTEMPTS} failed attempts. "
+                f"Try again in {LOCKOUT_MINUTES} minutes."
+            )
+        remaining_attempts = MAX_FAILED_ATTEMPTS - user.failed_login_attempts
+        db.commit()
+        return None  # Caller shows generic "invalid credentials" message
+
+    # ── Success — reset counters ──────────────────────────────────────────
+    user.failed_login_attempts = 0
+    user.locked_until = None
+    db.commit()
     return user
 
 def create_user(db: Session, user: schemas.UserCreate):

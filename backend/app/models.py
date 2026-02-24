@@ -8,6 +8,10 @@ from .database import Base
 def generate_uuid():
     return str(uuid.uuid4())
 
+# Login security constants
+MAX_FAILED_ATTEMPTS = 5
+LOCKOUT_MINUTES = 10
+
 class User(Base):
     __tablename__ = "users"
 
@@ -17,6 +21,8 @@ class User(Base):
     full_name = Column(String, nullable=True)
     avatar_url = Column(String, nullable=True)
     role = Column(String, default="user") # admin, user
+    failed_login_attempts = Column(Integer, default=0, nullable=False, server_default="0")
+    locked_until = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

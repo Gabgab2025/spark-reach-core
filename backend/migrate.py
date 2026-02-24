@@ -144,6 +144,12 @@ def migrate():
             print("📋 Checking blog_posts table for SEO columns...")
             add_column_if_missing(conn, "blog_posts", "meta_keywords", "VARCHAR")
 
+        # ── users table ── Add login lockout columns ──────────────────────
+        if table_exists(conn, "users"):
+            print("📋 Checking users table for login lockout columns...")
+            add_column_if_missing(conn, "users", "failed_login_attempts", "INTEGER", "0")
+            add_column_if_missing(conn, "users", "locked_until", "TIMESTAMPTZ")
+
         # ── Normalize user roles to lowercase ────────────────────────────────
         print("📋 Normalizing user roles to lowercase...")
         result = conn.execute(text(

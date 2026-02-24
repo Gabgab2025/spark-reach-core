@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import { Helmet } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -48,6 +49,17 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
+        {/* Security headers — XSS / clickjacking / MIME-sniff protection */}
+        <Helmet>
+          <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+          <meta http-equiv="X-Frame-Options" content="DENY" />
+          <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+          <meta name="referrer" content="strict-origin-when-cross-origin" />
+          <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src 'self' https://www.googletagmanager.com; object-src 'none'; base-uri 'self';"
+          />
+        </Helmet>
         <Toaster />
         <Sonner />
         <BrowserRouter>
