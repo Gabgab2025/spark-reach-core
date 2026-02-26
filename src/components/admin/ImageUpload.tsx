@@ -10,8 +10,14 @@ import { useToast } from '@/hooks/use-toast';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 interface ImageUploadProps {
+  /** Preferred prop name */
   currentImageUrl?: string;
-  onImageSelect: (imageUrl: string) => void;
+  /** Alias used by BlockManager / PageEditor */
+  currentImage?: string;
+  /** Preferred callback */
+  onImageSelect?: (imageUrl: string) => void;
+  /** Alias used by BlockManager / PageEditor */
+  onImageUploaded?: (imageUrl: string) => void;
   folder?: string;
   aspectRatio?: string;
   label?: string;
@@ -19,11 +25,16 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   currentImageUrl,
+  currentImage,
   onImageSelect,
+  onImageUploaded,
   folder = 'general',
   aspectRatio = 'aspect-video',
   label = 'Upload Image'
 }) => {
+  // Resolve aliased props so both naming conventions work
+  const resolvedImageUrl = currentImageUrl || currentImage;
+  const resolvedOnSelect = onImageSelect || onImageUploaded || (() => {});
   const [isUploading, setIsUploading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,7 +85,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       // Get public URL
       const publicUrl = data.publicUrl;
 
-      onImageSelect(publicUrl);
+      resolvedOnSelect(publicUrl);
       setIsDialogOpen(false);
 
       toast({
@@ -100,7 +111,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleRemoveImage = () => {
-    onImageSelect('');
+    resolvedOnSelect('');
     setIsDialogOpen(false);
   };
 
@@ -108,11 +119,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     <div className="space-y-2">
       <Label>{label}</Label>
       
-      {currentImageUrl ? (
+      {resolvedImageUrl ? (
         <div className="relative group">
           <div className={`${aspectRatio} w-full rounded-lg overflow-hidden border border-border bg-muted`}>
             <img 
-              src={currentImageUrl} 
+              src={resolvedImageUrl} 
               alt="Current image" 
               className="w-full h-full object-cover"
             />

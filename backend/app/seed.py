@@ -412,6 +412,29 @@ def init_db(db: Session):
                 'title': 'Professional Call Center Solutions',
                 'subtitle': 'Excellence in Service',
                 'description': 'Transforming customer service with dedicated professionals and cutting-edge technology. JDGK Business Solutions delivers results-driven BPO services.',
+                'background_images': ['/hero/office-1.jpg', '/hero/office-2.jpg'],
+                'cta_text': "Let's Work Together",
+            },
+        ))
+
+    # ── Seed Home License Gallery Block ───────────────────────────────────────
+    if not db.query(models.ContentBlock).filter(models.ContentBlock.name == 'home-licenses').first():
+        print("Adding content block: home-licenses")
+        crud.create_content_block(db=db, block=schemas.ContentBlockCreate(
+            name='home-licenses',
+            label='Home - Licenses & Certificates',
+            block_type='gallery',
+            status='published',
+            sort_order=2,
+            page_assignments=['home'],
+            content={
+                'title': 'Our Business License',
+                'images': [
+                    {'src': '/licenses/business-permits-wall.jpg', 'alt': 'Business Permits & Registrations', 'category': 'license'},
+                    {'src': '/licenses/award-rookie.jpg', 'alt': 'Top Shining Rookie Award 2024', 'category': 'license'},
+                    {'src': '/licenses/certificate-appreciation.jpg', 'alt': 'Certificate of Appreciation', 'category': 'license'},
+                    {'src': '/licenses/circle-gold-franchisee.jpg', 'alt': 'Circle of Gold Franchisee', 'category': 'license'},
+                ],
             },
         ))
 
