@@ -316,6 +316,105 @@ def init_db(db: Session):
             print(f"Adding content block: {block.name}")
             crud.create_content_block(db=db, block=block)
 
+    # ── Seed Services ─────────────────────────────────────────────────────────
+    services_data = [
+        {
+            "title": "Credit Collection Recovery",
+            "slug": "credit-collection-recovery",
+            "description": "Comprehensive credit recovery services designed to optimize cash flow and minimize bad debts using proven, ethical strategies.",
+            "category": "bank_collections",
+            "icon": "Headphones",
+            "features": ["Debt Collection & Negotiation", "Account Reconciliation", "Skip Tracing", "Legal Referrals"],
+            "is_featured": True,
+            "sort_order": 1,
+        },
+        {
+            "title": "Repossession",
+            "slug": "repossession",
+            "description": "Professional and discreet asset recovery operations that ensure compliance and protect client interests.",
+            "category": "bank_collections",
+            "icon": "Shield",
+            "features": ["Asset Tracing & Retrieval", "Secure Asset Storage", "Detailed Condition Reporting"],
+            "is_featured": True,
+            "sort_order": 2,
+        },
+        {
+            "title": "Skip Tracing",
+            "slug": "skip-tracing",
+            "description": "Specialized investigative service for locating individuals or assets with precision and discretion. Used in collections, legal, finance, and real estate industries.",
+            "category": "consulting",
+            "icon": "Search",
+            "features": ["Advanced Location Services", "Confidential Investigations", "Industry-Specific Solutions"],
+            "is_featured": False,
+            "sort_order": 3,
+        },
+        {
+            "title": "Credit Investigation",
+            "slug": "credit-investigation",
+            "description": "Verification of credit and financial background for loan applications, collections, or client vetting.",
+            "category": "consulting",
+            "icon": "FileCheck",
+            "features": ["Comprehensive Background Checks", "Financial History Analysis", "Risk Assessment"],
+            "is_featured": False,
+            "sort_order": 4,
+        },
+        {
+            "title": "Tele Sales",
+            "slug": "tele-sales",
+            "description": "Outbound and inbound calling solutions for lead generation, follow-ups, and debt recovery support.",
+            "category": "call_center",
+            "icon": "Phone",
+            "features": ["Lead Generation", "Customer Follow-ups", "Sales Campaign Management"],
+            "is_featured": True,
+            "sort_order": 5,
+        },
+        {
+            "title": "Virtual Assistance",
+            "slug": "virtual-assistance",
+            "description": "Reliable and streamlined administrative and operational support to help clients focus on their core business priorities.",
+            "category": "consulting",
+            "icon": "Users",
+            "features": ["Administrative Support", "Customer Service", "Data Entry", "Scheduling & Calendar Management", "Bookkeeping"],
+            "is_featured": False,
+            "sort_order": 6,
+        },
+    ]
+
+    existing_slugs = {s.slug for s in db.query(models.Service.slug).all()}
+    new_services = [svc for svc in services_data if svc["slug"] not in existing_slugs]
+    if new_services:
+        print(f"Seeding {len(new_services)} services (skipping {len(existing_slugs)} existing)...")
+        for svc in new_services:
+            db.add(models.Service(
+                id=str(uuid.uuid4()),
+                title=svc["title"],
+                slug=svc["slug"],
+                description=svc["description"],
+                category=svc["category"],
+                icon=svc["icon"],
+                features=svc["features"],
+                is_featured=svc["is_featured"],
+                sort_order=svc["sort_order"],
+            ))
+
+    # ── Seed Home Hero Block ──────────────────────────────────────────────────
+    if not db.query(models.ContentBlock).filter(models.ContentBlock.name == 'home-hero').first():
+        print("Adding content block: home-hero")
+        crud.create_content_block(db=db, block=schemas.ContentBlockCreate(
+            name='home-hero',
+            label='Home - Hero Section',
+            block_type='hero',
+            status='published',
+            sort_order=1,
+            page_assignments=['home'],
+            content={
+                'badge': 'Premier BPO Partner',
+                'title': 'Professional Call Center Solutions',
+                'subtitle': 'Excellence in Service',
+                'description': 'Transforming customer service with dedicated professionals and cutting-edge technology. JDGK Business Solutions delivers results-driven BPO services.',
+            },
+        ))
+
     # ── Seed Gallery Items ──────────────────────────────────────────────────────
     gallery_items = [
         {"title": "Gallery Image 1", "image_url": "/gallery/A7C05991.jpg", "alt_text": "Gallery Image 1", "category": "office", "sort_order": 1},

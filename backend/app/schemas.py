@@ -73,14 +73,13 @@ class ServiceBase(BaseModel):
     title: str
     slug: str
     description: Optional[str] = None
-    category: str
+    category: str = "consulting"
     features: Optional[List[str]] = None
     pricing_info: Optional[str] = None
     icon: Optional[str] = None
     image_url: Optional[str] = None
     sort_order: Optional[int] = 0
     is_featured: Optional[bool] = False
-    category: Literal["call_center", "bank_collections", "consulting"]
 
 class ServiceCreate(ServiceBase):
     pass
