@@ -155,12 +155,12 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   });
 
   // Fetch system users for "Create from User" (team only)
-  const { data: systemUsers = [] } = useQuery<any[]>({
+  const { data: systemUsers = [] } = useQuery({
     queryKey: ['admin', 'users-for-team'],
-    queryFn: async () => {
+    queryFn: async (): Promise<any[]> => {
       const { data, error } = await api.get('/admin/users');
       if (error) return [];
-      return data ?? [];
+      return (data as any[]) ?? [];
     },
     staleTime: 5 * 60 * 1000,
     enabled: contentType === 'team',
@@ -250,7 +250,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
 
   // Filter system users for picker (exclude those already team members)
   const existingTeamEmails = new Set((data as CMSItem[]).map(m => (m as any).email?.toLowerCase()).filter(Boolean));
-  const filteredSystemUsers = systemUsers
+  const filteredSystemUsers = (systemUsers as any[])
     .filter((u: any) => {
       const q = userSearch.toLowerCase();
       const matchesSearch = !q || (u.full_name ?? '').toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
@@ -261,7 +261,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
   const handleEdit = (item: CMSItem) => {
     setEditingItem(item);
     setFormData(item);
-    setSelectedBlocks(item.page_blocks || []);
+    setSelectedBlocks((item.page_blocks as string[]) || []);
     setDialogOpen(true);
   };
 
@@ -306,7 +306,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
           targetUrl = `/about`;
           break;
         case 'team': {
-          const teamSlug = item.slug || (item.name ? item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : item.id);
+          const teamSlug = item.slug || (item.name ? String(item.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : item.id);
           targetUrl = `/team/${teamSlug}`;
           break;
         }
