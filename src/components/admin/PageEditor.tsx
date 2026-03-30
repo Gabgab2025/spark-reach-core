@@ -324,15 +324,23 @@ const PageEditor = () => {
           <div className="space-y-4">
             <div>
               <Label>Main Title</Label>
-              <Input value={blockData.title || ''} onChange={e => bd('title', e.target.value)} placeholder="Professional Call Center Solutions" />
+              <Input value={blockData.title ?? ''} onChange={e => bd('title', e.target.value)} placeholder="Professional Call Center Solutions" />
             </div>
             <div>
               <Label>Subtitle</Label>
-              <Input value={blockData.subtitle || ''} onChange={e => bd('subtitle', e.target.value)} placeholder="Excellence in Service" />
+              <Input value={blockData.subtitle ?? ''} onChange={e => bd('subtitle', e.target.value)} placeholder="Excellence in Service" />
             </div>
             <div>
               <Label>Description</Label>
-              <Textarea value={blockData.description || ''} onChange={e => bd('description', e.target.value)} rows={3} />
+              <Textarea value={blockData.description ?? ''} onChange={e => bd('description', e.target.value)} rows={2} />
+            </div>
+            <div>
+              <Label>Body</Label>
+              <Textarea value={blockData.body ?? ''} onChange={e => bd('body', e.target.value)} rows={4} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Button Text</Label><Input value={blockData.cta_text ?? ''} onChange={e => bd('cta_text', e.target.value)} /></div>
+              <div><Label>Button Link</Label><Input value={blockData.cta_link ?? ''} onChange={e => bd('cta_link', e.target.value)} /></div>
             </div>
             <div>
               <Label className="mb-2 block">Background Images (Slideshow)</Label>
@@ -357,16 +365,6 @@ const PageEditor = () => {
               <Button variant="outline" size="sm" onClick={() => bd('background_images', [...(blockData.background_images || []), ''])}>
                 <Plus className="w-4 h-4 mr-1" /> Add Slide
               </Button>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Button Text</Label>
-                <Input value={blockData.cta_text || ''} onChange={e => bd('cta_text', e.target.value)} />
-              </div>
-              <div>
-                <Label>Button Link</Label>
-                <Input value={blockData.cta_link || ''} onChange={e => bd('cta_link', e.target.value)} />
-              </div>
             </div>
           </div>
         );

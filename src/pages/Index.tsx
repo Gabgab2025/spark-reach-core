@@ -46,10 +46,10 @@ const Index = () => {
   });
 
   // License section text — fallback chain: Pages API → hardcoded
-  const licenseBadge = pageContent?.license_section?.badge ?? 'Certified & Accredited';
-  const licenseTitle = pageContent?.license_section?.title ?? 'Our Business';
-  const licenseHighlight = pageContent?.license_section?.highlight ?? 'License';
-  const licenseSubtitle = pageContent?.license_section?.subtitle ?? 'Certified and accredited business credentials demonstrating our commitment to excellence';
+  const licenseBadge = pageContent?.license_section?.badge || 'Certified & Accredited';
+  const licenseTitle = pageContent?.license_section?.title || 'Our Business';
+  const licenseHighlight = pageContent?.license_section?.highlight || 'License';
+  const licenseSubtitle = pageContent?.license_section?.subtitle || 'Certified and accredited business credentials demonstrating our commitment to excellence';
 
   const FALLBACK_LICENSE_IMAGES = [
     { src: '/licenses/business-permits-wall.jpg', title: 'Business Permits & Registrations' },
@@ -61,7 +61,7 @@ const Index = () => {
   // License images — fallback chain: Block gallery images → Pages API → hardcoded
   const licenseImages = blockGalleryImages.length > 0
     ? blockGalleryImages
-    : pageContent?.license_section?.images ?? FALLBACK_LICENSE_IMAGES;
+    : pageContent?.license_section?.images || FALLBACK_LICENSE_IMAGES;
 
   return (
     <div className="min-h-screen">

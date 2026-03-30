@@ -45,11 +45,17 @@ const Hero = () => {
           : defaultHeroImages;
 
   // Hero text — fallback chain: Block → Pages API → hardcoded
-  const heroTitle = heroBlock?.title ?? homePageContent?.hero?.title ?? "Results Driven,";
-  const heroTitleHighlight = heroBlock?.subtitle ?? homePageContent?.hero?.subtitle ?? "Client Focused";
-  const heroTagline = heroBlock?.description ?? homePageContent?.hero?.description ?? "Empowering businesses through efficient and innovative solutions.";
-  const heroBody = heroBlock?.body ?? homePageContent?.hero?.body ?? "We are focused on fostering strong, results-driven partnerships with our clients. With our dedicated team, we live up to our mission to provide exceptional business solutions that help clients achieve their goals, optimize operational efficiency, and maximize profitability.";
-  const heroCta = heroBlock?.cta_text ?? homePageContent?.hero?.cta_text ?? "Let's Work Together";
+  const getVal = (...args: (string | undefined)[]) => {
+    const valid = args.find(a => a !== undefined && a !== null);
+    return valid !== undefined ? valid : args[args.length - 1] as string;
+  };
+
+  const heroTitle = getVal(heroBlock?.title, homePageContent?.hero?.title, "Results Driven,");
+  const heroTitleHighlight = getVal(heroBlock?.subtitle, homePageContent?.hero?.subtitle, "Client Focused");
+  const heroTagline = getVal(heroBlock?.description, homePageContent?.hero?.description, "Empowering businesses through efficient and innovative solutions.");
+  const heroBody = getVal(heroBlock?.body, homePageContent?.hero?.body, "We are focused on fostering strong, results-driven partnerships with our clients. With our dedicated team, we live up to our mission to provide exceptional business solutions that help clients achieve their goals, optimize operational efficiency, and maximize profitability.");
+  const heroCta = getVal(heroBlock?.cta_text, homePageContent?.hero?.cta_text, "Let's Work Together");
+  const heroCtaLink = getVal(heroBlock?.cta_link, homePageContent?.hero?.cta_link, "/contact");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,14 +75,28 @@ const Hero = () => {
   }, []);
 
   const handleStartProject = () => {
-    const servicesSection = document.getElementById("services");
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: "smooth" });
-      startProjectTimeoutRef.current = window.setTimeout(() => {
+    if (heroCtaLink === "/contact") {
+      const servicesSection = document.getElementById("services");
+      if (servicesSection) {
+        servicesSection.scrollIntoView({ behavior: "smooth" });
+        startProjectTimeoutRef.current = window.setTimeout(() => {
+          navigate("/contact");
+        }, 1500);
+      } else {
         navigate("/contact");
-      }, 1500);
+      }
+      return;
+    }
+    
+    if (heroCtaLink.startsWith("#")) {
+      const section = document.getElementById(heroCtaLink.replace("#", ""));
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    } else if (heroCtaLink.startsWith("http")) {
+      window.open(heroCtaLink, "_blank");
     } else {
-      navigate("/contact");
+      navigate(heroCtaLink);
     }
   };
 

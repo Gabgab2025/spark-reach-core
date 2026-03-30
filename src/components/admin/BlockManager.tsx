@@ -176,11 +176,12 @@ const BlockManager = () => {
       case 'hero':
         return (
           <div className="space-y-4">
-            <div><Label>Title</Label><Input value={blockContent.title || ''} onChange={e => bc('title', e.target.value)} /></div>
-            <div><Label>Subtitle</Label><Input value={blockContent.subtitle || ''} onChange={e => bc('subtitle', e.target.value)} /></div>
-            <div><Label>Description</Label><Textarea value={blockContent.description || ''} onChange={e => bc('description', e.target.value)} rows={3} /></div>
-            <div><Label>Badge</Label><Input value={blockContent.badge || ''} onChange={e => bc('badge', e.target.value)} /></div>
-            <div><Label>Highlight</Label><Input value={blockContent.highlight || ''} onChange={e => bc('highlight', e.target.value)} /></div>
+            <div><Label>Title</Label><Input value={blockContent.title ?? ''} onChange={e => bc('title', e.target.value)} /></div>
+            <div><Label>Subtitle</Label><Input value={blockContent.subtitle ?? ''} onChange={e => bc('subtitle', e.target.value)} /></div>
+            <div><Label>Description</Label><Textarea value={blockContent.description ?? ''} onChange={e => bc('description', e.target.value)} rows={2} /></div>
+            <div><Label>Body</Label><Textarea value={blockContent.body ?? ''} onChange={e => bc('body', e.target.value)} rows={4} /></div>
+            <div><Label>Badge</Label><Input value={blockContent.badge ?? ''} onChange={e => bc('badge', e.target.value)} /></div>
+            <div><Label>Highlight</Label><Input value={blockContent.highlight ?? ''} onChange={e => bc('highlight', e.target.value)} /></div>
             <div>
               <Label className="mb-2 block">Background Images</Label>
               {(blockContent.background_images || []).map((img: string, idx: number) => (
@@ -206,8 +207,8 @@ const BlockManager = () => {
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div><Label>Button Text</Label><Input value={blockContent.cta_text || ''} onChange={e => bc('cta_text', e.target.value)} /></div>
-              <div><Label>Button Link</Label><Input value={blockContent.cta_link || ''} onChange={e => bc('cta_link', e.target.value)} /></div>
+              <div><Label>Button Text</Label><Input value={blockContent.cta_text ?? ''} onChange={e => bc('cta_text', e.target.value)} /></div>
+              <div><Label>Button Link</Label><Input value={blockContent.cta_link ?? ''} onChange={e => bc('cta_link', e.target.value)} /></div>
             </div>
           </div>
         );
