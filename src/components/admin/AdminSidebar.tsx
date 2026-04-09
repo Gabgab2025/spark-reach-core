@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/sidebar';
 import {
   BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight,
-  LogOut, User, Target, MessageSquare, Building, Star, Layers, Sun, Moon, Image, ClipboardList
+  LogOut, User, Target, MessageSquare, Building, Star, Layers, Sun, Moon, Image, ClipboardList, Layout
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from 'next-themes';
@@ -24,6 +24,7 @@ const NAV_ITEMS = [
 ];
 
 const CONTENT_ITEMS = [
+  { id: 'hero', label: 'Hero Section', icon: Layout },
   { id: 'pages', label: 'Pages', icon: FileText },
   { id: 'services', label: 'Services', icon: Target },
   { id: 'blog', label: 'Blog Posts', icon: MessageSquare },

@@ -17,6 +17,7 @@ import UserManagement from '@/components/admin/UserManagement';
 import UserProfile from '@/components/admin/UserProfile';
 import PageEditor from '@/components/admin/PageEditor';
 import BlockManager from '@/components/admin/BlockManager';
+import HeroManager from '@/components/admin/HeroManager';
 import JobApplicationsManager from '@/components/admin/JobApplicationsManager';
 import ContactMessagesManager from '@/components/admin/ContactMessagesManager';
 import {
@@ -242,6 +243,7 @@ const AdminContent = () => {
 
               {/* ── Content ───────────────────────────────────────────── */}
               <TabsContent value="content" className="space-y-8">
+                {contentSubTab === 'hero' && <HeroManager />}
                 {contentSubTab === 'pages' && <PageEditor />}
                 {contentSubTab === 'services' && <CMSContentManager contentType="services" />}
                 {contentSubTab === 'blog' && <CMSContentManager contentType="blog" />}
