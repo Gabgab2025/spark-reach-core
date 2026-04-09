@@ -25,13 +25,18 @@ ENV VITE_API_URL=$VITE_API_URL
 # Increase Node memory for large builds (CKEditor bundle is ~1.3 MB)
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Verify native binaries are present before building
-RUN echo "=== Node platform ===" && node -e "console.log(process.platform, process.arch)" \
-    && echo "=== esbuild check ===" && npx esbuild --version \
-    && echo "=== Files count ===" && find . -maxdepth 1 -type f | wc -l
-
-# Run vite build — capture full error output so Coolify shows the real error
-RUN npx vite build 2>&1
+# Build — use shell with error capture so BuildKit shows the actual error
+RUN set -e; \
+    echo "=== Node: $(node -e 'console.log(process.platform, process.arch)')"; \
+    echo "=== esbuild: $(./node_modules/.bin/esbuild --version 2>&1 || echo 'MISSING')"; \
+    echo "=== Starting vite build ==="; \
+    ./node_modules/.bin/vite build 2>&1 || { \
+      echo ""; \
+      echo "!!! VITE BUILD FAILED WITH EXIT CODE $? !!!"; \
+      echo ""; \
+      exit 1; \
+    }; \
+    echo "=== Vite build succeeded ==="
 
 # Stage 3: Production — Nginx serves built assets
 FROM nginx:1.27-alpine AS production
