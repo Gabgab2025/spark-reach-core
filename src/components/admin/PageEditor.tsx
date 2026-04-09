@@ -27,7 +27,7 @@ interface BlockDef {
 
 const PAGE_BLOCKS: Record<string, BlockDef[]> = {
   home: [
-    { key: 'hero', label: 'Hero Section', icon: <Layout className="w-4 h-4" /> },
+    // Hero Section is managed via Content > Hero Section (HeroManager)
     { key: 'services', label: 'Services Section', icon: <Briefcase className="w-4 h-4" /> },
     { key: 'license_section', label: 'License Section', icon: <Award className="w-4 h-4" /> },
   ],
@@ -916,6 +916,14 @@ const PageEditor = () => {
                   {isExpanded && blocks.length > 0 && (
                     <div className="border-t bg-slate-50/50 dark:bg-slate-900/50 p-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {/* Home page hero note — managed via Content > Hero Section */}
+                        {page.slug === 'home' && (
+                          <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg col-span-full text-sm text-amber-800 dark:text-amber-200">
+                            <Layout className="w-4 h-4 flex-shrink-0" />
+                            <span>Hero Section is managed from <strong>Content &gt; Hero Section</strong> in the sidebar.</span>
+                          </div>
+                        )}
+
                         {blocks.map((block) => (
                           <div
                             key={block.key}
