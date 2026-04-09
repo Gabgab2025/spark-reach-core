@@ -176,7 +176,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
-                  <Link to={`/services?service=${service.slug}`} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
+                  <Link to={`/service/${service.slug}`} className="text-white/80 hover:text-white dark:text-muted-foreground dark:hover:text-foreground transition-colors">
                     {service.label}
                   </Link>
                 </li>

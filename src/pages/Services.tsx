@@ -162,7 +162,7 @@ const Services = () => {
                       <Button 
                         variant="outline" 
                         className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all"
-                        onClick={() => navigate(`/services?service=${encodeURIComponent(service.slug)}`)}
+                        onClick={() => navigate(`/service/${encodeURIComponent(service.slug)}`)}
                       >
                         Learn More
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

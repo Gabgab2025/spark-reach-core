@@ -61,7 +61,7 @@ const Services = () => {
   }));
 
   const handleLearnMore = (serviceSlug: string) => {
-    navigate(`/services?service=${encodeURIComponent(serviceSlug)}`);
+    navigate(`/service/${encodeURIComponent(serviceSlug)}`);
   };
 
   const capabilities = [
