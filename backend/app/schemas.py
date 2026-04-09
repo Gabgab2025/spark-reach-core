@@ -1,6 +1,25 @@
 from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 from typing import List, Literal, Optional, Any, Dict
 from datetime import datetime
+import re
+
+
+# ── Shared sanitization helpers ──────────────────────────────────────────────
+
+_SCRIPT_RE = re.compile(r'<script|javascript:|on\w+\s*=', re.IGNORECASE)
+_HTML_TAG_RE = re.compile(r'<[^>]*>')
+
+
+def _strip_injection(value: str | None, max_len: int = 0) -> str | None:
+    """Strip HTML tags, script patterns, and optionally truncate."""
+    if value is None:
+        return None
+    value = _HTML_TAG_RE.sub('', value)           # strip all HTML tags
+    value = _SCRIPT_RE.sub('', value)             # remove residual patterns
+    value = value.replace('\x00', '')             # remove null bytes
+    if max_len and len(value) > max_len:
+        value = value[:max_len]
+    return value.strip()
 
 
 # --- Base Schemas ---
@@ -359,9 +378,37 @@ class SettingsBulkUpdate(BaseModel):
 class ContactCreate(BaseModel):
     full_name: str
     contact_number: Optional[str] = None
-    email: str
+    email: EmailStr
     message: str
     honeypot: Optional[str] = ""  # Anti-spam: must be empty on legitimate submissions
+
+    @field_validator("full_name")
+    @classmethod
+    def sanitize_full_name(cls, v: str) -> str:
+        v = _strip_injection(v, max_len=100)
+        if not v:
+            raise ValueError("Full name is required")
+        if not re.match(r"^[a-zA-Z\s\-'.]+$", v):
+            raise ValueError("Full name can only contain letters, spaces, hyphens, apostrophes, and periods")
+        return v
+
+    @field_validator("contact_number")
+    @classmethod
+    def sanitize_contact_number(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        v = _strip_injection(v, max_len=20)
+        if v and not re.match(r"^[\d\s\-+().]+$", v):
+            raise ValueError("Contact number can only contain numbers and basic punctuation")
+        return v
+
+    @field_validator("message")
+    @classmethod
+    def sanitize_message(cls, v: str) -> str:
+        v = _strip_injection(v, max_len=2000)
+        if not v or len(v) < 10:
+            raise ValueError("Message must be at least 10 characters")
+        return v
 
 class ContactMessageResponse(BaseModel):
     id: str
@@ -414,7 +461,7 @@ class JobApplicationCreate(BaseModel):
     last_name: str
     mobile: str
     alternate_mobile: Optional[str] = None
-    email: str
+    email: EmailStr
     address: Optional[str] = None
     state: Optional[str] = None
     city: Optional[str] = None
@@ -435,10 +482,60 @@ class JobApplicationCreate(BaseModel):
     referral: Optional[str] = None
     how_did_you_hear: Optional[str] = None
 
+    @field_validator("first_name", "last_name")
+    @classmethod
+    def sanitize_name(cls, v: str) -> str:
+        v = _strip_injection(v, max_len=100)
+        if not v:
+            raise ValueError("Name is required")
+        return v
+
+    @field_validator("mobile")
+    @classmethod
+    def sanitize_mobile(cls, v: str) -> str:
+        v = _strip_injection(v, max_len=20)
+        if not v or not re.match(r"^[\d\s\-+().]+$", v):
+            raise ValueError("Mobile must contain only numbers and basic punctuation")
+        return v
+
+    @field_validator("alternate_mobile")
+    @classmethod
+    def sanitize_alt_mobile(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        v = _strip_injection(v, max_len=20)
+        if v and not re.match(r"^[\d\s\-+().]+$", v):
+            raise ValueError("Alternate mobile must contain only numbers and basic punctuation")
+        return v or None
+
+    @field_validator("address", "state", "city", "country", "suffix",
+                     "highest_graduation", "expected_salary", "notice_period",
+                     "referral", "how_did_you_hear", "willing_to_relocate",
+                     "preferred_locations", "open_to_remote", "travel_percentage")
+    @classmethod
+    def sanitize_text_field(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return _strip_injection(v, max_len=300) or None
+
+    @field_validator("cover_letter")
+    @classmethod
+    def sanitize_cover_letter(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return _strip_injection(v, max_len=5000) or None
+
 
 class JobApplicationUpdate(BaseModel):
     status: Optional[Literal["new", "reviewing", "shortlisted", "rejected", "hired"]] = None
     notes: Optional[str] = None
+
+    @field_validator("notes")
+    @classmethod
+    def sanitize_notes(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return _strip_injection(v, max_len=2000) or None
 
 
 class JobApplicationResponse(JobApplicationCreate):

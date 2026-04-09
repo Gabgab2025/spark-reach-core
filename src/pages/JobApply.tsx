@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle2, Upload, ChevronLeft, ChevronRight, AlertCircle, Briefcase } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, sanitizeInput } from '@/lib/utils';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
@@ -162,6 +162,8 @@ const DEFAULT_FORM: FormData = {
 };
 
 // ── Validation per step ────────────────────────────────────────────
+const SCRIPT_PATTERN = /<script|javascript:|on\w+\s*=/i;
+
 function validateStep(step: number, form: FormData): string[] {
   const errors: string[] = [];
   if (step === 1) {
@@ -169,13 +171,23 @@ function validateStep(step: number, form: FormData): string[] {
   }
   if (step === 2) {
     if (!form.firstName.trim()) errors.push('First name is required.');
+    if (form.firstName.length > 100) errors.push('First name must be less than 100 characters.');
+    if (SCRIPT_PATTERN.test(form.firstName)) errors.push('First name contains invalid characters.');
     if (!form.lastName.trim()) errors.push('Last name is required.');
+    if (form.lastName.length > 100) errors.push('Last name must be less than 100 characters.');
+    if (SCRIPT_PATTERN.test(form.lastName)) errors.push('Last name contains invalid characters.');
     if (!form.mobile.trim()) errors.push('Mobile number is required.');
+    if (!/^[\d\s\-+().]{1,20}$/.test(form.mobile)) errors.push('Mobile number can only contain numbers and basic punctuation.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errors.push('Valid email is required.');
+    if (form.email.length > 255) errors.push('Email must be less than 255 characters.');
     if (!form.gender) errors.push('Please select a gender.');
+    if (form.address && form.address.length > 300) errors.push('Address must be less than 300 characters.');
+    if (form.address && SCRIPT_PATTERN.test(form.address)) errors.push('Address contains invalid characters.');
   }
   if (step === 5) {
     if (!form.coverLetter.trim()) errors.push('Cover letter / additional notes are required.');
+    if (form.coverLetter.length > 5000) errors.push('Cover letter must be less than 5000 characters.');
+    if (SCRIPT_PATTERN.test(form.coverLetter)) errors.push('Cover letter contains invalid content.');
   }
   return errors;
 }
@@ -226,26 +238,35 @@ const JobApply = () => {
       if (form.resumeFile) payload.append('resume', form.resumeFile);
       payload.append('applicant_data', JSON.stringify({
         suffix: form.suffix,
-        first_name: form.firstName,
-        last_name: form.lastName,
-        mobile: form.mobile,
-        alternate_mobile: form.alternateMobile,
-        email: form.email,
-        address: form.address,
-        state: form.state,
-        city: form.city,
-        country: form.country,
+        first_name: sanitizeInput(form.firstName),
+        last_name: sanitizeInput(form.lastName),
+        mobile: sanitizeInput(form.mobile),
+        alternate_mobile: sanitizeInput(form.alternateMobile),
+        email: form.email.trim(),
+        address: sanitizeInput(form.address),
+        state: sanitizeInput(form.state),
+        city: sanitizeInput(form.city),
+        country: sanitizeInput(form.country),
         highest_graduation: form.highestGraduation,
         gender: form.gender,
         languages: form.languages,
         job_alert: form.jobAlert,
-        previous_employment: form.isFreshGraduate ? [] : form.employments,
-        certifications: form.certifications,
-        cover_letter: form.coverLetter,
-        expected_salary: form.salaryIsCommission ? 'Commission Based' : form.expectedSalary,
+        previous_employment: form.isFreshGraduate ? [] : form.employments.map(emp => ({
+          ...emp,
+          company: sanitizeInput(emp.company),
+          title: sanitizeInput(emp.title),
+          responsibilities: sanitizeInput(emp.responsibilities),
+        })),
+        certifications: form.certifications.map(cert => ({
+          name: sanitizeInput(cert.name),
+          issuer: sanitizeInput(cert.issuer),
+          year: cert.year,
+        })),
+        cover_letter: sanitizeInput(form.coverLetter),
+        expected_salary: form.salaryIsCommission ? 'Commission Based' : sanitizeInput(form.expectedSalary),
         notice_period: form.noticePeriod,
-        referral: form.referral,
-        how_did_you_hear: form.howDidYouHear,
+        referral: sanitizeInput(form.referral),
+        how_did_you_hear: sanitizeInput(form.howDidYouHear),
       }));
 
       const { error } = await api.upload('/job_applications', payload);

@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { teamApi, TeamMember } from '@/lib/api/team';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
+import DOMPurify from 'dompurify';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -328,7 +329,7 @@ const UserProfile = () => {
                   <CardContent>
                     <div
                       className="prose prose-sm max-w-none text-muted-foreground"
-                      dangerouslySetInnerHTML={{ __html: linkedMember.bio }}
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(linkedMember.bio) }}
                     />
                   </CardContent>
                 </Card>

@@ -282,6 +282,7 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
                         required
+                        maxLength={100}
                         disabled={isSubmitting}
                         className={errors.full_name ? "border-destructive" : ""}
                       />
@@ -298,6 +299,7 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="Enter your contact number"
                         required
+                        maxLength={20}
                         disabled={isSubmitting}
                         className={errors.contact_number ? "border-destructive" : ""}
                       />
@@ -316,6 +318,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       placeholder="Enter your email address"
                       required
+                      maxLength={255}
                       disabled={isSubmitting}
                       className={errors.email ? "border-destructive" : ""}
                     />
@@ -333,6 +336,7 @@ const Contact = () => {
                       placeholder="Tell us about your needs and how we can help..."
                       rows={5}
                       required
+                      maxLength={2000}
                       disabled={isSubmitting}
                       className={errors.message ? "border-destructive" : ""}
                     />

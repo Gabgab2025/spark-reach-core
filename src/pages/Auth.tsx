@@ -70,6 +70,7 @@ const Auth = () => {
                 type="email"
                 placeholder="Enter your email"
                 required
+                maxLength={255}
               />
             </div>
             <div className="space-y-2">
@@ -80,6 +81,7 @@ const Auth = () => {
                 type="password"
                 placeholder="Enter your password"
                 required
+                maxLength={128}
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>

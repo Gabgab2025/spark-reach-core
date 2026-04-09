@@ -26,6 +26,7 @@ import { teamApi } from '@/lib/api/team';
 import type { TeamMember } from '@/lib/api/team';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDirectMeta } from '@/hooks/usePageMeta';
+import DOMPurify from 'dompurify';
 
 /** Build initials from a person's name. */
 const getInitials = (name: string) =>
@@ -327,7 +328,7 @@ const TeamMemberProfile: React.FC = () => {
                     </h2>
                     <div
                       className="prose prose-lg max-w-none text-muted-foreground leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: member.bio }}
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(member.bio) }}
                     />
                   </div>
                 )}

@@ -56,6 +56,18 @@ async def submit_job_application(
     except Exception as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 
+    # Sanitize nested dicts (previous_employment, certifications) that bypass field validators
+    if app_schema.previous_employment:
+        for emp in app_schema.previous_employment:
+            for k, v in emp.items():
+                if isinstance(v, str):
+                    emp[k] = schemas._strip_injection(v, max_len=500)
+    if app_schema.certifications:
+        for cert in app_schema.certifications:
+            for k, v in cert.items():
+                if isinstance(v, str):
+                    cert[k] = schemas._strip_injection(v, max_len=300)
+
     # Handle resume file
     resume_url: Optional[str] = None
     if resume and resume.filename:
