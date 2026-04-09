@@ -96,6 +96,7 @@ class JobListing(Base):
     requirements = Column(JSON, nullable=True)
     benefits = Column(JSON, nullable=True)
     salary_range = Column(String, nullable=True)
+    salary_type = Column(String, nullable=True)  # fixed_monthly, commission_based
     status = Column(String, default="open") # open, closed, on_hold
     applications_count = Column(Integer, default=0)
     expires_at = Column(DateTime(timezone=True), nullable=True)

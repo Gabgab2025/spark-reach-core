@@ -172,6 +172,7 @@ class JobListingBase(BaseModel):
     requirements: Optional[List[str]] = None
     benefits: Optional[List[str]] = None
     salary_range: Optional[str] = None
+    salary_type: Optional[Literal["fixed_monthly", "commission_based"]] = None
     status: Literal["open", "closed", "on_hold"] = "open"
     applications_count: Optional[int] = 0
     expires_at: Optional[datetime] = None
@@ -189,6 +190,7 @@ class JobListingUpdate(BaseModel):
     requirements: Optional[List[str]] = None
     benefits: Optional[List[str]] = None
     salary_range: Optional[str] = None
+    salary_type: Optional[Literal["fixed_monthly", "commission_based"]] = None
     status: Optional[Literal["open", "closed", "on_hold"]] = None
     applications_count: Optional[int] = None
     expires_at: Optional[datetime] = None

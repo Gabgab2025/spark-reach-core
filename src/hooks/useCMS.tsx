@@ -68,6 +68,7 @@ export interface CMSJobListing {
   requirements?: string[];
   benefits?: string[];
   salary_range?: string;
+  salary_type?: string;
   status: 'open' | 'closed' | 'on_hold';
   applications_count: number;
   created_at: string;

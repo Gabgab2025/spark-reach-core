@@ -198,6 +198,7 @@ def migrate():
         if table_exists(conn, "job_listings"):
             print("📋 Checking job_listings table columns...")
             add_column_if_missing(conn, "job_listings", "address", "VARCHAR")
+            add_column_if_missing(conn, "job_listings", "salary_type", "VARCHAR")
 
         # ── Create any missing tables using SQLAlchemy metadata ─────────────
         print("  📋 Ensuring all tables exist (create_all)...")

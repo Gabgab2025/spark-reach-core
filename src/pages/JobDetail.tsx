@@ -21,6 +21,7 @@ interface JobListing {
   requirements?: string[];
   benefits?: string[];
   salary_range?: string;
+  salary_type?: string;
   status: string;
   created_at: string;
   expires_at?: string;
@@ -129,7 +130,7 @@ const JobDetail = () => {
                   {job.salary_range && (
                     <div className="flex items-center gap-2">
                       <DollarSign className="w-5 h-5 text-muted-foreground" />
-                      <span>{job.salary_range}</span>
+                      <span>{job.salary_range}{job.salary_type === 'commission_based' ? ' (Commission Based)' : job.salary_type === 'fixed_monthly' ? ' (Fixed Monthly)' : ''}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2">

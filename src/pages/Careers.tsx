@@ -206,7 +206,7 @@ const Careers = () => {
                   <div className="flex items-center justify-between">
                     {job.salary_range && (
                       <span className="text-sm font-medium text-primary">
-                        {job.salary_range}
+                        {job.salary_range}{job.salary_type === 'commission_based' ? ' (Commission Based)' : job.salary_type === 'fixed_monthly' ? ' (Fixed Monthly)' : ''}
                       </span>
                     )}
                     <Button className="btn-hero ml-auto"

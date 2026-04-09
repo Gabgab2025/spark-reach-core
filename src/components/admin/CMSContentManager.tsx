@@ -95,7 +95,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Job Listings',
       description: 'Open positions and hiring',
       icon: Building,
-      fields: ['title', 'department', 'location', 'address', 'employment_type', 'status', 'salary_range', 'requirements', 'benefits', 'expires_at', 'description'],
+      fields: ['title', 'department', 'location', 'address', 'employment_type', 'status', 'salary_type', 'salary_range', 'requirements', 'benefits', 'expires_at', 'description'],
       fetchFn: cms.getJobListings,
       createFn: cms.createJobListing,
       updateFn: cms.updateJobListing,
@@ -452,7 +452,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
               <strong>Type:</strong> ${item.employment_type || 'N/A'} |
               <strong>Status:</strong> ${item.status || 'N/A'}
             </div>
-            ${item.salary_range ? `<div class="salary">Salary: ${item.salary_range}</div>` : ''}
+            ${item.salary_range ? `<div class="salary">Salary: ${item.salary_range}${item.salary_type === 'commission_based' ? ' (Commission Based)' : item.salary_type === 'fixed_monthly' ? ' (Fixed Monthly)' : ''}</div>` : ''}
             <div>${item.description || 'No description available'}</div>
             ${item.requirements && Array.isArray(item.requirements) && item.requirements.length > 0 ?
             `<div class="section">
@@ -742,6 +742,19 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
               <SelectItem value="part-time">Part Time</SelectItem>
               <SelectItem value="contract">Contract</SelectItem>
               <SelectItem value="remote">Remote</SelectItem>
+            </SelectContent>
+          </Select>
+        );
+
+      case 'salary_type':
+        return (
+          <Select value={formData[field] || ''} onValueChange={(value) => setFormData({ ...formData, [field]: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select salary type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="fixed_monthly">Fixed Monthly</SelectItem>
+              <SelectItem value="commission_based">Commission Based</SelectItem>
             </SelectContent>
           </Select>
         );
