@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/sidebar';
 import {
   BarChart3, FileText, Users, TrendingUp, Settings, Globe, ChevronLeft, ChevronRight,
-  LogOut, User, Target, MessageSquare, Building, Star, Phone, Layers, Sun, Moon, Image
+  LogOut, User, Target, MessageSquare, Building, Star, Layers, Sun, Moon, Image, ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from 'next-themes';
@@ -31,8 +31,9 @@ const CONTENT_ITEMS = [
   { id: 'testimonials', label: 'Testimonials', icon: Star },
   { id: 'team', label: 'Team Members', icon: Users },
   { id: 'gallery', label: 'Gallery', icon: Image },
-  { id: 'contact', label: 'Contact Us', icon: Phone },
+  { id: 'contact', label: 'Messages', icon: MessageSquare },
   { id: 'blocks', label: 'Blocks Library', icon: Layers },
+  { id: 'applications', label: 'Applications', icon: ClipboardList },
 ];
 
 const BOTTOM_ITEMS = [

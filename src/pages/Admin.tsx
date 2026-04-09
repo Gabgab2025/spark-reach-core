@@ -17,6 +17,8 @@ import UserManagement from '@/components/admin/UserManagement';
 import UserProfile from '@/components/admin/UserProfile';
 import PageEditor from '@/components/admin/PageEditor';
 import BlockManager from '@/components/admin/BlockManager';
+import JobApplicationsManager from '@/components/admin/JobApplicationsManager';
+import ContactMessagesManager from '@/components/admin/ContactMessagesManager';
 import {
   Shield, Users, BarChart3, FileText,
   MessageSquare, Settings, Globe, TrendingUp, Phone,
@@ -83,7 +85,7 @@ const AdminContent = () => {
     return [
       { title: 'Website Pages', value: dashboardStats?.pages ?? 0, icon: FileText, trend: '+8%', color: 'from-teal-500 to-cyan-500' },
       { title: 'Website Visitors', value: websiteVisitors ? websiteVisitors.toLocaleString() : '—', icon: Globe, trend: '+12%', color: 'from-amber-400 to-orange-500' },
-      { title: 'Monthly Calls', value: totalCalls ? totalCalls.toLocaleString() : '15.2K', icon: Phone, trend: '+15%', color: 'from-purple-500 to-pink-500' },
+      { title: 'Monthly Calls', value: totalCalls ? totalCalls.toLocaleString() : '—', icon: Phone, trend: '+15%', color: 'from-purple-500 to-pink-500' },
       { title: 'Client Satisfaction', value: satisfaction ? `${satisfaction}%` : '98%', icon: Star, trend: '+2%', color: 'from-orange-500 to-red-500' },
     ];
   }, [dashboardStats, analyticsData]);
@@ -96,7 +98,7 @@ const AdminContent = () => {
     { id: 'testimonials', title: 'Testimonials', icon: Star, count: dashboardStats?.testimonials ?? 0 },
     { id: 'team', title: 'Team Members', icon: Users, count: dashboardStats?.teamMembers ?? 0 },
     { id: 'gallery', title: 'Gallery', icon: Globe, count: dashboardStats?.galleryItems ?? 0 },
-    { id: 'contact', title: 'Contact Us', icon: Phone, count: 0 },
+    { id: 'contact', title: 'Messages', icon: MessageSquare, count: 0 },
   ];
 
   if (rolesLoading) {
@@ -248,28 +250,8 @@ const AdminContent = () => {
                 {contentSubTab === 'team' && <CMSContentManager contentType="team" />}
                 {contentSubTab === 'gallery' && <CMSContentManager contentType="gallery" />}
                 {contentSubTab === 'blocks' && <BlockManager />}
-                {contentSubTab === 'contact' && (
-                  <Card className="glass border-slate-200/50">
-                    <CardHeader>
-                      <CardTitle className="text-lg text-slate-900 dark:text-white flex items-center">
-                        <Phone className="w-5 h-5 mr-2 text-primary" /> Contact Form Management
-                      </CardTitle>
-                      <CardDescription>
-                        Contact form submissions are sent directly via email. Manage the Contact page through the Pages section.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <Button variant="outline" className="glass border-slate-200/50" onClick={() => setContentSubTab('pages')}>
-                          <FileText className="w-4 h-4 mr-2" /> Edit Contact Page
-                        </Button>
-                        <Button variant="outline" className="glass border-slate-200/50" onClick={() => window.open('/contact', '_blank')}>
-                          <Eye className="w-4 h-4 mr-2" /> Preview Contact Page
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                {contentSubTab === 'applications' && <JobApplicationsManager />}
+                {contentSubTab === 'contact' && <ContactMessagesManager />}
               </TabsContent>
 
               {/* ── Analytics ─────────────────────────────────────────── */}

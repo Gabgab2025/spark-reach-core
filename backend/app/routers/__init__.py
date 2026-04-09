@@ -12,6 +12,7 @@ from .content_blocks import router as content_blocks_router
 from .analytics import router as analytics_router
 from .storage import router as storage_router
 from .contact import router as contact_router
+from .job_applications import router as job_applications_router
 
 all_routers = [
     auth_router,
@@ -28,4 +29,5 @@ all_routers = [
     analytics_router,
     storage_router,
     contact_router,
+    job_applications_router,
 ]

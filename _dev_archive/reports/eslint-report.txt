@@ -1,0 +1,179 @@
+﻿
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\BlockRenderer.tsx
+   12:59  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   37:59  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   55:62  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   87:58  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  108:60  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  131:60  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  158:58  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  183:63  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  216:67  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  239:59  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  274:74  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  339:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\Testimonials.tsx
+  119:12  error  Parsing error: ')' expected
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\BlockManager.tsx
+   60:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  125:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  167:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  226:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  270:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  302:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  326:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  354:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  384:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  412:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  446:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  472:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  755:72  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\CMSContentManager.tsx
+   39:50  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+   40:44  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+   67:36  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+  140:36  error  React Hook "useQuery" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?     react-hooks/rules-of-hooks
+  142:46  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+  148:3   error  React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?    react-hooks/rules-of-hooks
+  152:25  error  React Hook "useMemo" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?      react-hooks/rules-of-hooks
+  158:26  error  React Hook "useMutation" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  159:24  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+  173:26  error  React Hook "useMutation" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  174:52  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+  187:26  error  React Hook "useMutation" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  518:21  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+  607:9   error  Unexpected lexical declaration in case block                                                                                                                                                   no-case-declarations
+  867:20  error  Unexpected any. Specify a different type                                                                                                                                                       @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\ImageUpload.tsx
+  89:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\PageEditor.tsx
+   71:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   84:11  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   92:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   96:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  131:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  253:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  254:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  430:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  469:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  508:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  640:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  700:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  763:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  821:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  917:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  997:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\SettingsDebugger.tsx
+  10:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\SettingsManager.tsx
+   27:6   warning  React Hook useEffect has a missing dependency: 'loadSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   57:57  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+  320:31  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\admin\SettingsPreview.tsx
+  9:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\badge.tsx
+  29:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\button.tsx
+  47:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\command.tsx
+  24:11  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\form.tsx
+  129:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\navigation-menu.tsx
+  111:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\sidebar.tsx
+  636:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\sonner.tsx
+  27:19  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\textarea.tsx
+  5:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\components\ui\toggle.tsx
+  37:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\contexts\AdminDataContext.tsx
+   9:14  warning  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  10:19  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  11:18  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  50:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\core\ai-seo-engine\services\aeoEngine.ts
+  220:97  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\core\ai-seo-engine\types\index.ts
+  77:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\hooks\useAuth.tsx
+   30:83  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   31:65  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  146:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\hooks\useCMS.tsx
+    9:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  438:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  443:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\hooks\useContentBlocks.tsx
+  10:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  69:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  84:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  98:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\hooks\usePageContent.tsx
+   10:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   67:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  114:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\lib\api.ts
+   22:10   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   29:109  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:105  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  128:37   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  129:36   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:38   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\Admin.tsx
+  132:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\BlogDetail.tsx
+  37:6  warning  React Hook useEffect has a missing dependency: 'fetchPost'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\Contact.tsx
+  230:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\JobDetail.tsx
+  38:6  warning  React Hook useEffect has a missing dependency: 'fetchJob'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\PageDetail.tsx
+  14:12  error    Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+  31:6   warning  React Hook useEffect has a missing dependency: 'fetchPage'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Gab\OneDrive\Desktop\my projects\jdgk-website\jdgkwebsite\spark-reach-core\src\pages\ServiceDetail.tsx
+  35:6  warning  React Hook useEffect has a missing dependency: 'fetchService'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+✖ 112 problems (96 errors, 16 warnings)
+

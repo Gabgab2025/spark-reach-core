@@ -11,11 +11,7 @@ export const AdminDataContext = React.createContext<{
   dashboardStats: any;
   analyticsData: any[];
   isLoading: boolean;
-}>({
-  dashboardStats: null,
-  analyticsData: [],
-  isLoading: true
-});
+} | null>(null);
 
 export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
   const cms = useCMS();

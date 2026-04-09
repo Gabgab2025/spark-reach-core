@@ -15,6 +15,7 @@ interface JobListing {
   title: string;
   department?: string;
   location?: string;
+  address?: string;
   employment_type?: string;
   description?: string;
   requirements?: string[];
@@ -32,28 +33,28 @@ const JobDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      fetchJob();
-    }
+    if (!id) return;
+    let cancelled = false;
+    const fetchJob = async () => {
+      try {
+        const { data, error } = await api.get('/job_listings', {
+          params: {
+            id,
+            status: 'open'
+          }
+        });
+        if (cancelled) return;
+        if (error) throw error;
+        setJob(data && data.length > 0 ? data[0] : null);
+      } catch (error) {
+        console.error('Error fetching job listing:', error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchJob();
+    return () => { cancelled = true; };
   }, [id]);
-
-  const fetchJob = async () => {
-    try {
-      const { data, error } = await api.get('/job_listings', {
-        params: { 
-          id,
-          status: 'open'
-        }
-      });
-
-      if (error) throw error;
-      setJob(data && data.length > 0 ? data[0] : null);
-    } catch (error) {
-      console.error('Error fetching job listing:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -137,7 +138,7 @@ const JobDetail = () => {
                   </div>
                 </div>
 
-                <Button className="btn-hero" onClick={() => navigate('/contact')}>
+                <Button className="btn-hero" onClick={() => navigate(`/job/${id}/apply`)}>
                   Apply Now
                 </Button>
               </div>
@@ -194,12 +195,38 @@ const JobDetail = () => {
                 )}
               </div>
 
+              {/* Location Map */}
+              {job.address && (
+                <Card className="mt-8">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MapPin className="w-5 h-5 text-primary" />
+                      Job Location
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">{job.address}</p>
+                    <div className="rounded-xl overflow-hidden border">
+                      <iframe
+                        className="w-full h-72"
+                        frameBorder="0"
+                        scrolling="no"
+                        src={`https://maps.google.com/maps?q=${encodeURIComponent(job.address)}&t=&z=15&ie=UTF8&iwloc=B&output=embed`}
+                        title="Job Location Map"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               <div className="mt-12 text-center bg-muted/50 rounded-2xl p-8">
                 <h3 className="text-2xl font-bold mb-4">Ready to Apply?</h3>
                 <p className="text-muted-foreground mb-6">
                   Join our team and help us deliver exceptional call center services.
                 </p>
-                <Button className="btn-hero" onClick={() => navigate('/contact')}>
+                <Button className="btn-hero" onClick={() => navigate(`/job/${id}/apply`)}>
                   Submit Application
                 </Button>
               </div>

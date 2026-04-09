@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import DOMPurify from 'dompurify';
 import { useBlocksByPage, ContentBlock } from '@/hooks/useContentBlocks';
 
 /* ------------------------------------------------------------------ */
@@ -45,7 +46,7 @@ const TextBlock = ({ content }: { content: Record<string, any> }) => (
         {content.body && (
           <div
             className="prose prose-lg dark:prose-invert max-w-none text-foreground/80 leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: content.body }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.body) }}
           />
         )}
       </div>

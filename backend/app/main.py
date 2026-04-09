@@ -13,6 +13,7 @@ All business logic lives in app/routers/ and app/crud.py.
 import logging
 import os
 import time
+from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
@@ -36,20 +37,24 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger("jdgk-api")
 
 # ── Database bootstrap ────────────────────────────────────────────────────────
-models.Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Run DB table creation and seed on startup."""
+    models.Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
+    try:
+        seed.init_db(db)
+    finally:
+        db.close()
+    yield  # App runs here
 
-db = SessionLocal()
-try:
-    seed.init_db(db)
-finally:
-    db.close()
 
 # ── Uploads directory ─────────────────────────────────────────────────────────
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # ── App factory ───────────────────────────────────────────────────────────────
-app = FastAPI(title="JDGK Business Solutions API")
+app = FastAPI(title="JDGK Business Solutions API", lifespan=lifespan)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

@@ -147,6 +147,7 @@ class JobListingBase(BaseModel):
     title: str
     department: Optional[str] = None
     location: Optional[str] = None
+    address: Optional[str] = None
     employment_type: Optional[str] = None
     description: Optional[str] = None
     requirements: Optional[List[str]] = None
@@ -163,6 +164,7 @@ class JobListingUpdate(BaseModel):
     title: Optional[str] = None
     department: Optional[str] = None
     location: Optional[str] = None
+    address: Optional[str] = None
     employment_type: Optional[str] = None
     description: Optional[str] = None
     requirements: Optional[List[str]] = None
@@ -355,12 +357,22 @@ class SettingsBulkUpdate(BaseModel):
     settings: List[SettingBase]
 
 class ContactCreate(BaseModel):
-    name: str
+    full_name: str
+    contact_number: Optional[str] = None
     email: str
-    company: Optional[str] = None
-    phone: Optional[str] = None
-    service: Optional[str] = None
     message: str
+    honeypot: Optional[str] = ""  # Anti-spam: must be empty on legitimate submissions
+
+class ContactMessageResponse(BaseModel):
+    id: str
+    full_name: str
+    contact_number: Optional[str] = None
+    email: str
+    message: str
+    is_read: bool
+    submitted_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 # --- Auth Schemas ---
 
@@ -391,3 +403,50 @@ class SessionResponse(BaseModel):
 
 class RoleUpdate(BaseModel):
     role: str
+
+
+# --- Job Applications ---
+
+class JobApplicationCreate(BaseModel):
+    job_id: Optional[str] = None
+    suffix: Optional[str] = None
+    first_name: str
+    last_name: str
+    mobile: str
+    alternate_mobile: Optional[str] = None
+    email: str
+    address: Optional[str] = None
+    state: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    highest_graduation: Optional[str] = None
+    gender: Optional[str] = None
+    languages: Optional[List[str]] = None
+    job_alert: Optional[bool] = False
+    previous_employment: Optional[List[Dict[str, Any]]] = None
+    certifications: Optional[List[Dict[str, Any]]] = None
+    willing_to_relocate: Optional[str] = None
+    preferred_locations: Optional[str] = None
+    open_to_remote: Optional[str] = None
+    travel_percentage: Optional[str] = None
+    cover_letter: Optional[str] = None
+    expected_salary: Optional[str] = None
+    notice_period: Optional[str] = None
+    referral: Optional[str] = None
+    how_did_you_hear: Optional[str] = None
+
+
+class JobApplicationUpdate(BaseModel):
+    status: Optional[Literal["new", "reviewing", "shortlisted", "rejected", "hired"]] = None
+    notes: Optional[str] = None
+
+
+class JobApplicationResponse(JobApplicationCreate):
+    id: str
+    resume_url: Optional[str] = None
+    status: str = "new"
+    notes: Optional[str] = None
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)

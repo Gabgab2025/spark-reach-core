@@ -169,8 +169,10 @@ def delete_page(db: Session, page_id: str):
     return db_page
 
 # --- Services ---
-def get_services(db: Session, skip: int = 0, limit: int = 100, sort_by: str = None, order: str = "asc"):
+def get_services(db: Session, skip: int = 0, limit: int = 100, slug: str = None, sort_by: str = None, order: str = "asc"):
     query = db.query(models.Service)
+    if slug:
+        query = query.filter(models.Service.slug == slug)
     query = _apply_sort(query, models.Service, sort_by or "sort_order", order)
     return query.offset(skip).limit(limit).all()
 
@@ -199,8 +201,10 @@ def delete_service(db: Session, service_id: str):
     return db_service
 
 # --- Blog Posts ---
-def get_blog_posts(db: Session, skip: int = 0, limit: int = 100, status: str = None, sort_by: str = None, order: str = "desc"):
+def get_blog_posts(db: Session, skip: int = 0, limit: int = 100, slug: str = None, status: str = None, sort_by: str = None, order: str = "desc"):
     query = db.query(models.BlogPost)
+    if slug:
+        query = query.filter(models.BlogPost.slug == slug)
     if status:
         query = query.filter(models.BlogPost.status == status)
     query = _apply_sort(query, models.BlogPost, sort_by or "created_at", order)
@@ -231,8 +235,10 @@ def delete_blog_post(db: Session, post_id: str):
     return db_post
 
 # --- Job Listings ---
-def get_job_listings(db: Session, skip: int = 0, limit: int = 100, status: str = None, sort_by: str = None, order: str = "desc"):
+def get_job_listings(db: Session, skip: int = 0, limit: int = 100, id: str = None, status: str = None, sort_by: str = None, order: str = "desc"):
     query = db.query(models.JobListing)
+    if id:
+        query = query.filter(models.JobListing.id == id)
     if status:
         query = query.filter(models.JobListing.status == status)
     query = _apply_sort(query, models.JobListing, sort_by or "created_at", order)
@@ -470,3 +476,66 @@ def get_analytics_data(db: Session, category: str = None):
     if category:
         query = query.filter(models.AnalyticsData.category == category)
     return query.all()
+
+
+# --- Job Applications ---
+
+def create_job_application(
+    db: Session,
+    data: schemas.JobApplicationCreate,
+    resume_url: Optional[str] = None,
+) -> models.JobApplication:
+    db_app = models.JobApplication(
+        **data.model_dump(),
+        resume_url=resume_url,
+    )
+    db.add(db_app)
+    # Increment applications_count on the job listing
+    if data.job_id:
+        db_job = db.query(models.JobListing).filter(models.JobListing.id == data.job_id).first()
+        if db_job:
+            db_job.applications_count = (db_job.applications_count or 0) + 1
+    db.commit()
+    db.refresh(db_app)
+    return db_app
+
+
+def get_job_applications(
+    db: Session,
+    job_id: Optional[str] = None,
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 100,
+):
+    query = db.query(models.JobApplication)
+    if job_id:
+        query = query.filter(models.JobApplication.job_id == job_id)
+    if status:
+        query = query.filter(models.JobApplication.status == status)
+    return query.order_by(desc(models.JobApplication.created_at)).offset(skip).limit(limit).all()
+
+
+def get_job_application(db: Session, app_id: str) -> Optional[models.JobApplication]:
+    return db.query(models.JobApplication).filter(models.JobApplication.id == app_id).first()
+
+
+def update_job_application(
+    db: Session,
+    app_id: str,
+    update: schemas.JobApplicationUpdate,
+) -> Optional[models.JobApplication]:
+    db_app = db.query(models.JobApplication).filter(models.JobApplication.id == app_id).first()
+    if db_app:
+        for key, value in update.model_dump(exclude_unset=True).items():
+            setattr(db_app, key, value)
+        db.commit()
+        db.refresh(db_app)
+    return db_app
+
+
+def delete_job_application(db: Session, app_id: str) -> Optional[models.JobApplication]:
+    db_app = db.query(models.JobApplication).filter(models.JobApplication.id == app_id).first()
+    if db_app:
+        db.delete(db_app)
+        db.commit()
+    return db_app

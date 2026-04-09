@@ -16,10 +16,11 @@ router = APIRouter(tags=["jobs"])
 @router.get("/job_listings", response_model=List[schemas.JobListing])
 def read_job_listings(
     skip: int = 0, limit: int = 100,
+    id: Optional[str] = None,
     status: Optional[str] = None, sort_by: Optional[str] = None, order: Optional[str] = "desc",
     db: Session = Depends(get_db),
 ):
-    return crud.get_job_listings(db, skip=skip, limit=limit, status=status, sort_by=sort_by, order=order)
+    return crud.get_job_listings(db, skip=skip, limit=limit, id=id, status=status, sort_by=sort_by, order=order)
 
 
 @router.post("/job_listings", response_model=schemas.JobListing)

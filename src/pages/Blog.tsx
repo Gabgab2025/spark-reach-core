@@ -58,8 +58,7 @@ const Blog = () => {
   const heroHighlight = pageContent?.hero?.highlight ?? 'Insights';
   const heroDescription = pageContent?.hero?.description ?? 'Stay updated with the latest trends, best practices, and expert insights in the call center industry.';
 
-  const featuredPost = allPosts.length > 0 ? allPosts[0] : null;
-  // Use all posts for the main list, not separating the featured one
+  // Use all posts for the main list
   const posts = useMemo(() => allPosts, [allPosts]);
 
   // Extract unique tags for the sidebar categories

@@ -49,7 +49,7 @@ export default function SEOEngine() {
   ]);
 
   // Redirect if not admin
-  if (!user || !isAdmin) {
+  if (!user || !isAdmin()) {
     return <Navigate to="/auth-proadmin2025/cms" replace />;
   }
 
@@ -89,6 +89,13 @@ export default function SEOEngine() {
           {loading ? 'Refreshing...' : 'Refresh Scores'}
         </Button>
       </div>
+
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          <strong>Preview / Coming Soon</strong> — The scores and recommendations shown below are illustrative placeholders. Live analysis against your CMS content is under development.
+        </AlertDescription>
+      </Alert>
 
       {/* Overall Score Cards */}
       <div className="grid gap-4 md:grid-cols-4">

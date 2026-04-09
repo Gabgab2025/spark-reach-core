@@ -1,6 +1,9 @@
 // API client with JWT auth — replaces Supabase client
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// Re-export ApiError so consumers can import from this canonical module
+export { ApiError } from './api-client';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // ---- Token helpers ----

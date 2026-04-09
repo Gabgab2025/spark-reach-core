@@ -16,10 +16,11 @@ router = APIRouter(tags=["blog"])
 @router.get("/blog_posts", response_model=List[schemas.BlogPost])
 def read_blog_posts(
     skip: int = 0, limit: int = 100,
+    slug: Optional[str] = None,
     status: Optional[str] = None, sort_by: Optional[str] = None, order: Optional[str] = "desc",
     db: Session = Depends(get_db),
 ):
-    return crud.get_blog_posts(db, skip=skip, limit=limit, status=status, sort_by=sort_by, order=order)
+    return crud.get_blog_posts(db, skip=skip, limit=limit, slug=slug, status=status, sort_by=sort_by, order=order)
 
 
 @router.post("/blog_posts", response_model=schemas.BlogPost)

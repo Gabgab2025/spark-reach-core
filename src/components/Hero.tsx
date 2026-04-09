@@ -79,9 +79,6 @@ const Hero = () => {
       const servicesSection = document.getElementById("services");
       if (servicesSection) {
         servicesSection.scrollIntoView({ behavior: "smooth" });
-        startProjectTimeoutRef.current = window.setTimeout(() => {
-          navigate("/contact");
-        }, 1500);
       } else {
         navigate("/contact");
       }

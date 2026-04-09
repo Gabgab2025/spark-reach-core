@@ -29,8 +29,7 @@ const SEOEngine = React.lazy(() => import("./pages/admin/SEOEngine"));
 const ServiceDetail = React.lazy(() => import("./pages/ServiceDetail"));
 const PageDetail = React.lazy(() => import("./pages/PageDetail"));
 const BlogDetail = React.lazy(() => import("./pages/BlogDetail"));
-const JobDetail = React.lazy(() => import("./pages/JobDetail"));
-const TeamMemberProfile = React.lazy(() => import("./pages/TeamMemberProfile"));
+const JobDetail = React.lazy(() => import("./pages/JobDetail"));const JobApply = React.lazy(() => import('./pages/JobApply'));const TeamMemberProfile = React.lazy(() => import("./pages/TeamMemberProfile"));
 
 // Lightweight redirect: /admin → CMS for authenticated admins
 const AdminShortcut = React.lazy(() => import("./components/auth/AdminShortcut"));
@@ -83,6 +82,7 @@ const App = () => (
                   <Route path="/service/:slug" element={<ServiceDetail />} />
                   <Route path="/blog/:slug" element={<BlogDetail />} />
                   <Route path="/job/:id" element={<JobDetail />} />
+                  <Route path="/job/:id/apply" element={<JobApply />} />
                   <Route path="/team/:id" element={<TeamMemberProfile />} />
                   <Route path="/:slug" element={<PageDetail />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

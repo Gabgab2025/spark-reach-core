@@ -38,28 +38,28 @@ const BlogDetail = () => {
   } : null);
 
   useEffect(() => {
-    if (slug) {
-      fetchPost();
-    }
+    if (!slug) return;
+    let cancelled = false;
+    const fetchPost = async () => {
+      try {
+        const { data, error } = await api.get('/blog_posts', {
+          params: {
+            slug,
+            status: 'published'
+          }
+        });
+        if (cancelled) return;
+        if (error) throw error;
+        setPost(data && data.length > 0 ? data[0] : null);
+      } catch (error) {
+        console.error('Error fetching blog post:', error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchPost();
+    return () => { cancelled = true; };
   }, [slug]);
-
-  const fetchPost = async () => {
-    try {
-      const { data, error } = await api.get('/blog_posts', {
-        params: { 
-          slug,
-          status: 'published'
-        }
-      });
-
-      if (error) throw error;
-      setPost(data && data.length > 0 ? data[0] : null);
-    } catch (error) {
-      console.error('Error fetching blog post:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (

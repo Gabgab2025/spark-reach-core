@@ -11,33 +11,25 @@ import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/api";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
-import type { CMSPage, CMSService, CMSSettings } from "@/hooks/useCMS";
+import type { CMSPage, CMSSettings } from "@/hooks/useCMS";
 import { usePageMeta } from '@/hooks/usePageMeta';
 
 // Client-side validation schema
 const contactSchema = z.object({
-  name: z.string()
+  full_name: z.string()
     .trim()
-    .min(1, "Name is required")
+    .min(1, "Full name is required")
     .max(100, "Name must be less than 100 characters")
     .regex(/^[a-zA-Z\s\-'.]+$/, "Name can only contain letters, spaces, hyphens, apostrophes, and periods"),
   email: z.string()
     .trim()
     .email("Please enter a valid email address")
     .max(255, "Email must be less than 255 characters"),
-  company: z.string()
+  contact_number: z.string()
     .trim()
-    .max(100, "Company name must be less than 100 characters")
-    .optional(),
-  phone: z.string()
-    .trim()
-    .max(20, "Phone must be less than 20 characters")
-    .regex(/^[\d\s\-+().]*$/, "Phone can only contain numbers and basic punctuation")
-    .optional(),
-  service: z.string()
-    .trim()
-    .max(50, "Service must be less than 50 characters")
-    .optional(),
+    .min(1, "Contact number is required")
+    .max(20, "Contact number must be less than 20 characters")
+    .regex(/^[\d\s\-+().]+$/, "Contact number can only contain numbers and basic punctuation"),
   message: z.string()
     .trim()
     .min(10, "Message must be at least 10 characters")
@@ -48,11 +40,9 @@ const Contact = () => {
   usePageMeta('contact');
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    name: "",
+    full_name: "",
     email: "",
-    company: "",
-    phone: "",
-    service: "",
+    contact_number: "",
     message: "",
     honeypot: "", // Hidden spam trap
   });
@@ -61,27 +51,13 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Fetch public settings for contact info
-  const { data: settings } = useQuery({
-    queryKey: ['public-settings'],
+  const { data: settings } = useQuery({    queryKey: ['public-settings'],
     queryFn: async () => {
       const { data, error } = await api.get<{ key: string; value: string }[]>('/settings/public');
       if (error) throw error;
       const map: Record<string, string> = {};
       data?.forEach((s) => { map[s.key] = s.value; });
       return map as Partial<CMSSettings>;
-    },
-    staleTime: 5 * 60 * 1000,
-  });
-
-  // Fetch services for dropdown
-  const { data: cmsServices } = useQuery({
-    queryKey: ['public-services'],
-    queryFn: async () => {
-      const { data, error } = await api.get<CMSService[]>('/services', {
-        params: { sort_by: 'sort_order', order: 'asc' },
-      });
-      if (error) throw error;
-      return data ?? [];
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -100,10 +76,10 @@ const Contact = () => {
   });
 
   // Hero text from CMS
-  const heroBadge = pageContent?.hero?.badge ?? 'Get In Touch';
-  const heroTitle = pageContent?.hero?.title ?? 'Connect';
-  const heroHighlight = pageContent?.hero?.highlight ?? 'With Us';
-  const heroDescription = pageContent?.hero?.description ?? 'Get in touch with our team and discover how we can help drive your business forward with our comprehensive solutions.';
+  const heroBadge = pageContent?.hero?.badge ?? 'Message Us';
+  const heroTitle = pageContent?.hero?.title ?? 'Message';
+  const heroHighlight = pageContent?.hero?.highlight ?? 'Us';
+  const heroDescription = pageContent?.hero?.description ?? 'Send us a message and our team will get back to you within 24 hours.';
 
   // Contact info from settings (same source as Footer)
   const phone1 = settings?.phone_primary ?? '+639177122824';
@@ -150,18 +126,6 @@ const Contact = () => {
     },
   ];
 
-  // Service dropdown options from CMS, with fallback
-  const serviceOptions = (cmsServices && cmsServices.length > 0)
-    ? cmsServices.map(s => ({ value: s.slug, label: s.title }))
-    : [
-        { value: 'credit-collection', label: 'Credit Collection Recovery' },
-        { value: 'repossession', label: 'Repossession' },
-        { value: 'skip-tracing', label: 'Skip Tracing' },
-        { value: 'credit-investigation', label: 'Credit Investigation' },
-        { value: 'tele-sales', label: 'Tele Sales' },
-        { value: 'virtual-assistance', label: 'Virtual Assistance' },
-      ];
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -172,6 +136,9 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+
+    // Honeypot check — bots fill hidden fields, humans leave them empty
+    if (formData.honeypot !== '') return;
 
     // Client-side validation
     try {
@@ -200,9 +167,8 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Exclude honeypot from the payload
-      const { honeypot, ...payload } = formData;
-      const { data, error } = await api.post('/contact', payload);
+      // Send form data including honeypot (backend validates it server-side too)
+      const { data, error } = await api.post('/contact', formData);
 
       if (error) throw error;
 
@@ -214,11 +180,9 @@ const Contact = () => {
 
       // Clear form
       setFormData({
-        name: "",
+        full_name: "",
         email: "",
-        company: "",
-        phone: "",
-        service: "",
+        contact_number: "",
         message: "",
         honeypot: "",
       });
@@ -291,7 +255,7 @@ const Contact = () => {
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Form */}
               <div>
-                <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
+                <h2 className="text-3xl font-bold mb-6">Message Us</h2>
                 <p className="text-muted-foreground mb-8">
                   Fill out the form below and our team will get back to you within 24 hours.
                 </p>
@@ -313,85 +277,50 @@ const Contact = () => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Full Name *</label>
                       <Input
-                        name="name"
-                        value={formData.name}
+                        name="full_name"
+                        value={formData.full_name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
                         required
                         disabled={isSubmitting}
-                        className={errors.name ? "border-destructive" : ""}
+                        className={errors.full_name ? "border-destructive" : ""}
                       />
-                      {errors.name && (
-                        <p className="text-destructive text-sm mt-1">{errors.name}</p>
+                      {errors.full_name && (
+                        <p className="text-destructive text-sm mt-1">{errors.full_name}</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Email Address *</label>
-                      <Input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Enter your email"
-                        required
-                        disabled={isSubmitting}
-                        className={errors.email ? "border-destructive" : ""}
-                      />
-                      {errors.email && (
-                        <p className="text-destructive text-sm mt-1">{errors.email}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Company</label>
-                      <Input
-                        name="company"
-                        value={formData.company}
-                        onChange={handleInputChange}
-                        placeholder="Enter your company name"
-                        disabled={isSubmitting}
-                        className={errors.company ? "border-destructive" : ""}
-                      />
-                      {errors.company && (
-                        <p className="text-destructive text-sm mt-1">{errors.company}</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Phone Number</label>
+                      <label className="block text-sm font-medium mb-2">Contact Number *</label>
                       <Input
                         type="tel"
-                        name="phone"
-                        value={formData.phone}
+                        name="contact_number"
+                        value={formData.contact_number}
                         onChange={handleInputChange}
-                        placeholder="Enter your phone number"
+                        placeholder="Enter your contact number"
+                        required
                         disabled={isSubmitting}
-                        className={errors.phone ? "border-destructive" : ""}
+                        className={errors.contact_number ? "border-destructive" : ""}
                       />
-                      {errors.phone && (
-                        <p className="text-destructive text-sm mt-1">{errors.phone}</p>
+                      {errors.contact_number && (
+                        <p className="text-destructive text-sm mt-1">{errors.contact_number}</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Service Interest</label>
-                    <select
-                      name="service"
-                      value={formData.service}
+                    <label className="block text-sm font-medium mb-2">Email Address *</label>
+                    <Input
+                      type="email"
+                      name="email"
+                      value={formData.email}
                       onChange={handleInputChange}
+                      placeholder="Enter your email address"
+                      required
                       disabled={isSubmitting}
-                      className={`w-full p-3 border border-border rounded-lg bg-background ${errors.service ? "border-destructive" : ""}`}
-                    >
-                      <option value="">Select a service</option>
-                      {serviceOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                      <option value="other">Other</option>
-                    </select>
-                    {errors.service && (
-                      <p className="text-destructive text-sm mt-1">{errors.service}</p>
+                      className={errors.email ? "border-destructive" : ""}
+                    />
+                    {errors.email && (
+                      <p className="text-destructive text-sm mt-1">{errors.email}</p>
                     )}
                   </div>
 
@@ -426,7 +355,7 @@ const Contact = () => {
                       <>Message Sent! ✓</>
                     ) : (
                       <>
-                        Send Message
+                        Message Us
                         <Send className="w-5 h-5 ml-2" />
                       </>
                     )}

@@ -16,10 +16,11 @@ router = APIRouter(tags=["services"])
 @router.get("/services", response_model=List[schemas.Service])
 def read_services(
     skip: int = 0, limit: int = 100,
+    slug: Optional[str] = None,
     sort_by: Optional[str] = None, order: Optional[str] = "asc",
     db: Session = Depends(get_db),
 ):
-    return crud.get_services(db, skip=skip, limit=limit, sort_by=sort_by, order=order)
+    return crud.get_services(db, skip=skip, limit=limit, slug=slug, sort_by=sort_by, order=order)
 
 
 @router.post("/services", response_model=schemas.Service)

@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # ── Backend API (FastAPI + Uvicorn) ──────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    # No depends_on — using external database. start.sh waits for DB readiness.
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      ADMIN_DEFAULT_PASSWORD: ${ADMIN_DEFAULT_PASSWORD:-JdgkAdmin2026!}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8080,https://jdgkbsi.ph,https://www.jdgkbsi.ph}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_FROM: ${MAIL_FROM:-info@jdgkbsi.ph}
+      MAIL_SERVER: ${MAIL_SERVER:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+    volumes:
+      - uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # ── Frontend (Vite/React + Nginx reverse proxy) ───────────────────────────────
+  jdgk-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-/api}
+    expose:
+      - "8080"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+      - coolify
+
+networks:
+  app-network:
+    driver: bridge
+  coolify:
+    external: true
+
+volumes:
+  uploads:

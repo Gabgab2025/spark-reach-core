@@ -1,7 +1,9 @@
 """
 Auth routes: login, session, signup, logout, user role.
 """
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import Optional
 
@@ -9,6 +11,8 @@ from .. import crud, models, schemas
 from ..database import get_db
 from ..auth import (
     create_access_token,
+    decode_token,
+    security,
     get_current_user,
     get_current_user_optional,
     ACCESS_TOKEN_EXPIRE_MINUTES,
@@ -44,10 +48,29 @@ def login(request: Request, login_data: schemas.LoginRequest, db: Session = Depe
 
 
 @router.get("/auth/session", response_model=schemas.SessionResponse)
-def get_session(current_user: Optional[models.User] = Depends(get_current_user_optional)):
+def get_session(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    current_user: Optional[models.User] = Depends(get_current_user_optional),
+):
     if current_user is None:
         return schemas.SessionResponse(session=None)
-    token = create_access_token(data={"sub": current_user.id, "email": current_user.email, "role": current_user.role})
+
+    # Only issue a new token if the current one is within 30 minutes of expiry.
+    # This prevents a fresh 24-hour token from being minted on every page load.
+    REFRESH_THRESHOLD_SECONDS = 30 * 60
+    token = None
+    if credentials:
+        try:
+            payload = decode_token(credentials.credentials)
+            exp = payload.get("exp")
+            if exp and (exp - datetime.now(timezone.utc).timestamp()) > REFRESH_THRESHOLD_SECONDS:
+                token = credentials.credentials
+        except Exception:
+            pass
+    if token is None:
+        token = create_access_token(
+            data={"sub": current_user.id, "email": current_user.email, "role": current_user.role}
+        )
     token_response = schemas.TokenResponse(
         access_token=token,
         expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60,

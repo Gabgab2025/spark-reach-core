@@ -95,7 +95,7 @@ const CMSContentManager = ({ contentType }: CMSContentManagerProps) => {
       title: 'Job Listings',
       description: 'Open positions and hiring',
       icon: Building,
-      fields: ['title', 'department', 'location', 'employment_type', 'status', 'salary_range', 'requirements', 'benefits', 'expires_at', 'description'],
+      fields: ['title', 'department', 'location', 'address', 'employment_type', 'status', 'salary_range', 'requirements', 'benefits', 'expires_at', 'description'],
       fetchFn: cms.getJobListings,
       createFn: cms.createJobListing,
       updateFn: cms.updateJobListing,

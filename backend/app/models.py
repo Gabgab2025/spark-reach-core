@@ -90,6 +90,7 @@ class JobListing(Base):
     title = Column(String)
     department = Column(String, nullable=True)
     location = Column(String, nullable=True)
+    address = Column(String, nullable=True)
     employment_type = Column(String, nullable=True)
     description = Column(Text, nullable=True)
     requirements = Column(JSON, nullable=True)
@@ -127,8 +128,8 @@ class TeamMember(Base):
     tagline = Column(String, nullable=True)  # Short one-liner under name
     bio = Column(Text, nullable=True)
     quote = Column(Text, nullable=True)  # Personal quote
-    expertise = Column(Text, nullable=True)  # JSON array stored as text
-    achievements = Column(Text, nullable=True)  # JSON array stored as text
+    expertise = Column(JSON, nullable=True)  # Array of strings
+    achievements = Column(JSON, nullable=True)  # Array of strings
     avatar_url = Column(String, nullable=True)
     cover_image_url = Column(String, nullable=True)  # Portfolio hero background
     email = Column(String, nullable=True)
@@ -190,3 +191,66 @@ class AnalyticsData(Base):
     category = Column(String, nullable=True)
     metadata_json = Column(JSON, nullable=True) # 'metadata' is reserved in some contexts
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class JobApplication(Base):
+    __tablename__ = "job_applications"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    job_id = Column(String, ForeignKey("job_listings.id", ondelete="SET NULL"), nullable=True, index=True)
+
+    # Applicant profile
+    suffix = Column(String, nullable=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    mobile = Column(String)
+    alternate_mobile = Column(String, nullable=True)
+    email = Column(String)
+    address = Column(String, nullable=True)
+    state = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    highest_graduation = Column(String, nullable=True)
+    gender = Column(String, nullable=True)
+    languages = Column(JSON, nullable=True)          # list[str]
+    job_alert = Column(Boolean, default=False)
+
+    # Rich structured data stored as JSON
+    previous_employment = Column(JSON, nullable=True)  # list of employment objects
+    certifications = Column(JSON, nullable=True)        # list of cert objects
+
+    # Geographic mobility
+    willing_to_relocate = Column(String, nullable=True)
+    preferred_locations = Column(String, nullable=True)
+    open_to_remote = Column(String, nullable=True)
+    travel_percentage = Column(String, nullable=True)
+
+    # Job-specific
+    cover_letter = Column(Text, nullable=True)
+    expected_salary = Column(String, nullable=True)
+    notice_period = Column(String, nullable=True)
+    referral = Column(String, nullable=True)
+    how_did_you_hear = Column(String, nullable=True)
+
+    # File
+    resume_url = Column(String, nullable=True)          # path relative to /uploads
+
+    # Workflow
+    status = Column(String, default="new")  # new, reviewing, shortlisted, rejected, hired
+    notes = Column(Text, nullable=True)     # admin notes
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    job = relationship("JobListing")
+
+
+class ContactMessage(Base):
+    __tablename__ = "contact_messages"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    full_name = Column(String, nullable=False)
+    contact_number = Column(String, nullable=True)
+    email = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    is_read = Column(Boolean, default=False)
+    submitted_at = Column(DateTime(timezone=True), server_default=func.now())

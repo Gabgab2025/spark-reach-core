@@ -33,7 +33,7 @@ const SettingsRenderer = () => {
   const location = useLocation();
   
   // Don't run on admin pages
-  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdminPage = location.pathname.startsWith('/auth-proadmin2025');
 
   useEffect(() => {
     // Don't load settings on admin pages

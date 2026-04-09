@@ -62,6 +62,7 @@ export interface CMSJobListing {
   title: string;
   department?: string;
   location?: string;
+  address?: string;
   employment_type?: string;
   description?: string;
   requirements?: string[];

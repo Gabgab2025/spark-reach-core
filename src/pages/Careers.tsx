@@ -1,25 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Briefcase, MapPin, Clock, Users, Heart, TrendingUp, Upload, Send } from 'lucide-react';
+import { Briefcase, MapPin, Clock, Users, Heart, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { CMSJobListing, CMSPage } from '@/hooks/useCMS';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/hooks/use-toast';
 import { usePageMeta } from '@/hooks/usePageMeta';
 
 const Careers = () => {
   usePageMeta('careers');
-  const [selectedJob, setSelectedJob] = useState<string | null>(null);
-  const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Fetch open job listings from CMS API
   const { data: cmsJobs, isLoading } = useQuery({
@@ -79,52 +73,8 @@ const Careers = () => {
   ];
 
   // Icon resolver for benefits
-  const BENEFIT_ICON_MAP: Record<string, typeof Heart> = { Heart, TrendingUp, Clock, Users, Briefcase, MapPin, Upload, Send };
+  const BENEFIT_ICON_MAP: Record<string, typeof Heart> = { Heart, TrendingUp, Clock, Users, Briefcase, MapPin };
   const resolveBenefitIcon = (name?: string) => BENEFIT_ICON_MAP[name || ''] ?? Heart;
-
-  const handleJobApplication = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      // Upload resume if present
-      let resumeUrl = '';
-      if (resumeFile) {
-        const uploadData = new FormData();
-        uploadData.append('file', resumeFile);
-        uploadData.append('path', 'resumes/');
-        const { data: uploadResult, error: uploadError } = await api.upload<{ publicUrl: string }>('/storage/upload', uploadData);
-        if (uploadError) throw uploadError;
-        resumeUrl = uploadResult?.publicUrl ?? '';
-      }
-
-      // Send application via contact endpoint
-      await api.post('/contact', {
-        name: `${formData.get('firstName')} ${formData.get('lastName')}`,
-        email: formData.get('email'),
-        phone: formData.get('phone') || '',
-        company: '',
-        service: `Job Application: ${formData.get('position')}`,
-        message: `Cover Letter:\n${formData.get('coverLetter') || 'N/A'}\n\nResume: ${resumeUrl || 'Not uploaded'}`,
-      });
-
-      toast({ title: 'Application Submitted', description: 'Thank you! We\'ll get back to you soon.' });
-      form.reset();
-      setResumeFile(null);
-    } catch {
-      toast({ title: 'Error', description: 'Failed to submit application. Please try again.', variant: 'destructive' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setResumeFile(file);
-  };
 
   return (
     <div className="min-h-screen">
@@ -244,10 +194,10 @@ const Careers = () => {
                     </div>
                     <Button 
                       variant="outline" 
-                      onClick={() => setSelectedJob(selectedJob === job.id ? null : job.id)}
+                      onClick={() => navigate(`/job/${job.id}`)}
                       className="shrink-0"
                     >
-                      {selectedJob === job.id ? 'Close' : 'View Details'}
+                      View Details
                     </Button>
                   </div>
 
@@ -260,131 +210,15 @@ const Careers = () => {
                       </span>
                     )}
                     <Button className="btn-hero ml-auto"
-                      onClick={() => {
-                        const formEl = document.getElementById('application-form');
-                        formEl?.scrollIntoView({ behavior: 'smooth' });
-                      }}
+                      onClick={() => navigate(`/job/${job.id}/apply`)}
                     >
                       Apply Now
                     </Button>
                   </div>
 
-                  {selectedJob === job.id && (
-                    <div className="mt-6 pt-6 border-t border-border">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        {job.requirements && job.requirements.length > 0 && (
-                        <div>
-                          <h4 className="font-bold mb-3">Requirements</h4>
-                          <ul className="space-y-2">
-                            {job.requirements.map((req, idx) => (
-                              <li key={idx} className="text-sm flex items-start">
-                                <div className="w-2 h-2 bg-primary rounded-full mr-3 mt-2 shrink-0" />
-                                {req}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        )}
-                        {job.benefits && job.benefits.length > 0 && (
-                        <div>
-                          <h4 className="font-bold mb-3">Benefits</h4>
-                          <ul className="space-y-2">
-                            {job.benefits.map((benefit, idx) => (
-                              <li key={idx} className="text-sm flex items-start">
-                                <div className="w-2 h-2 bg-accent rounded-full mr-3 mt-2 shrink-0" />
-                                {benefit}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </Card>
               ))
               )}
-            </div>
-          </div>
-        </section>
-
-        {/* Application Form */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold mb-6">Apply Today</h2>
-                <p className="text-muted-foreground text-lg">
-                  Ready to join our team? Submit your application and we'll get back to you soon.
-                </p>
-              </div>
-
-              <form id="application-form" onSubmit={handleJobApplication} className="glass rounded-3xl p-8 space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">First Name *</label>
-                    <Input name="firstName" placeholder="Enter your first name" required />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Last Name *</label>
-                    <Input name="lastName" placeholder="Enter your last name" required />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email Address *</label>
-                  <Input name="email" type="email" placeholder="Enter your email address" required />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Phone Number</label>
-                  <Input name="phone" type="tel" placeholder="Enter your phone number" />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Position of Interest *</label>
-                  <select name="position" className="w-full p-3 border border-border rounded-lg bg-background" required>
-                    <option value="">Select a position</option>
-                    {openPositions.map((job) => (
-                      <option key={job.id} value={job.title}>{job.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Cover Letter</label>
-                  <Textarea 
-                    name="coverLetter"
-                    placeholder="Tell us why you're interested in this position..." 
-                    rows={4}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Resume Upload</label>
-                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-muted-foreground mb-2">
-                      {resumeFile ? resumeFile.name : 'Drag and drop your resume here, or click to browse'}
-                    </p>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                    <Button variant="outline" type="button" onClick={() => fileInputRef.current?.click()}>
-                      Choose File
-                    </Button>
-                  </div>
-                </div>
-
-                <Button type="submit" className="btn-hero w-full py-4 text-lg font-semibold" disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
-                  <Send className="w-5 h-5 ml-2" />
-                </Button>
-              </form>
             </div>
           </div>
         </section>

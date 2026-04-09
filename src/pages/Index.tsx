@@ -34,7 +34,7 @@ const Index = () => {
 
   // ── Pages API (secondary source) ──
   const { data: pageContent } = useQuery({
-    queryKey: ['public-page', 'home-index'],
+    queryKey: ['public-page', 'home'],
     queryFn: async () => {
       const { data, error } = await api.get<CMSPage[]>('/pages', {
         params: { slug: 'home', status: 'published' },

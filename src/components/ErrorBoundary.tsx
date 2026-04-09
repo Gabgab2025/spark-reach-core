@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
-import { ApiError } from '@/lib/api-client';
+import { ApiError } from '@/lib/api';
 
 interface Props {
   children: ReactNode;

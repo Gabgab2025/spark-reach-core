@@ -37,6 +37,15 @@ def table_exists(conn, table: str) -> bool:
     return result.first() is not None
 
 
+def get_column_type(conn, table: str, column: str) -> str:
+    result = conn.execute(text(
+        "SELECT data_type FROM information_schema.columns "
+        "WHERE table_name = :t AND column_name = :c"
+    ), {"t": table, "c": column})
+    row = result.first()
+    return row[0] if row else None
+
+
 def add_column_if_missing(conn, table: str, column: str, col_type: str, default: str = None):
     if not column_exists(conn, table, column):
         default_clause = f" DEFAULT {default}" if default else ""
@@ -114,12 +123,26 @@ def migrate():
             add_column_if_missing(conn, "team_members", "slug", "VARCHAR")
             add_column_if_missing(conn, "team_members", "tagline", "VARCHAR")
             add_column_if_missing(conn, "team_members", "quote", "TEXT")
-            add_column_if_missing(conn, "team_members", "expertise", "TEXT")
-            add_column_if_missing(conn, "team_members", "achievements", "TEXT")
+            add_column_if_missing(conn, "team_members", "expertise", "JSON")
+            add_column_if_missing(conn, "team_members", "achievements", "JSON")
             add_column_if_missing(conn, "team_members", "cover_image_url", "VARCHAR")
             add_column_if_missing(conn, "team_members", "website_url", "VARCHAR")
             add_column_if_missing(conn, "team_members", "github_url", "VARCHAR")
             add_column_if_missing(conn, "team_members", "twitter_url", "VARCHAR")
+
+            # Convert expertise/achievements from TEXT to JSON if they were previously added as TEXT
+            for col in ("expertise", "achievements"):
+                if column_exists(conn, "team_members", col) and get_column_type(conn, "team_members", col) == "text":
+                    print(f"  🔄 Converting team_members.\"{col}\" from TEXT to JSON")
+                    try:
+                        conn.execute(text(
+                            f'ALTER TABLE team_members ALTER COLUMN "{col}" TYPE JSON '
+                            f'USING CASE WHEN "{col}" IS NULL OR "{col}" = \'\' THEN NULL ELSE "{col}"::json END'
+                        ))
+                        conn.commit()
+                    except Exception as e:
+                        print(f"  ⚠️ Could not convert {col} to JSON: {e}")
+                        conn.rollback()
 
         # ── gallery_items table ── Ensure table and columns exist ────────────
         if table_exists(conn, "gallery_items"):
@@ -160,6 +183,21 @@ def migrate():
             print(f"  🔄 Normalized {result.rowcount} user role(s) to lowercase")
         else:
             print("  ✅ All user roles already lowercase")
+
+        # ── contact_messages table ──────────────────────────────────────────
+        if table_exists(conn, "contact_messages"):
+            print("📋 Checking contact_messages table columns...")
+            add_column_if_missing(conn, "contact_messages", "full_name", "VARCHAR")
+            add_column_if_missing(conn, "contact_messages", "contact_number", "VARCHAR")
+            add_column_if_missing(conn, "contact_messages", "email", "VARCHAR")
+            add_column_if_missing(conn, "contact_messages", "message", "TEXT")
+            add_column_if_missing(conn, "contact_messages", "is_read", "BOOLEAN", "false")
+            add_column_if_missing(conn, "contact_messages", "submitted_at", "TIMESTAMP WITH TIME ZONE", "NOW()")
+
+        # ── job_listings table ── Add address column ────────────────────────
+        if table_exists(conn, "job_listings"):
+            print("📋 Checking job_listings table columns...")
+            add_column_if_missing(conn, "job_listings", "address", "VARCHAR")
 
         # ── Create any missing tables using SQLAlchemy metadata ─────────────
         print("  📋 Ensuring all tables exist (create_all)...")

@@ -36,25 +36,25 @@ const ServiceDetail = () => {
   } : null);
 
   useEffect(() => {
-    if (slug) {
-      fetchService();
-    }
+    if (!slug) return;
+    let cancelled = false;
+    const fetchService = async () => {
+      try {
+        const { data, error } = await api.get('/services', {
+          params: { slug }
+        });
+        if (cancelled) return;
+        if (error) throw error;
+        setService(data && data.length > 0 ? data[0] : null);
+      } catch (error) {
+        console.error('Error fetching service:', error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchService();
+    return () => { cancelled = true; };
   }, [slug]);
-
-  const fetchService = async () => {
-    try {
-      const { data, error } = await api.get('/services', {
-        params: { slug }
-      });
-
-      if (error) throw error;
-      setService(data && data.length > 0 ? data[0] : null);
-    } catch (error) {
-      console.error('Error fetching service:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (

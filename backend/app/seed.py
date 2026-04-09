@@ -9,7 +9,12 @@ def init_db(db: Session):
     # Check if admin exists
     admin = crud.get_user_by_email(db, "admin@jdgkbsi.ph")
     if not admin:
-        default_password = os.getenv("ADMIN_DEFAULT_PASSWORD", "JdgkAdmin2026!")
+        default_password = os.getenv("ADMIN_DEFAULT_PASSWORD")
+        if not default_password:
+            raise RuntimeError(
+                "ADMIN_DEFAULT_PASSWORD environment variable is not set. "
+                "Set it in your .env file before starting the server."
+            )
         print("Creating default admin user...")
         print("⚠️  SECURITY: Change the admin password after first login!")
         try:
