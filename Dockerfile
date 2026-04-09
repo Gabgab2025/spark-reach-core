@@ -25,8 +25,13 @@ ENV VITE_API_URL=$VITE_API_URL
 # Increase Node memory for large builds (CKEditor bundle is ~1.3 MB)
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Run vite build directly — prerender.js requires puppeteer/Chrome, not needed in production
-RUN npx vite build
+# Verify native binaries are present before building
+RUN echo "=== Node platform ===" && node -e "console.log(process.platform, process.arch)" \
+    && echo "=== esbuild check ===" && npx esbuild --version \
+    && echo "=== Files count ===" && find . -maxdepth 1 -type f | wc -l
+
+# Run vite build — capture full error output so Coolify shows the real error
+RUN npx vite build 2>&1
 
 # Stage 3: Production — Nginx serves built assets
 FROM nginx:1.27-alpine AS production
