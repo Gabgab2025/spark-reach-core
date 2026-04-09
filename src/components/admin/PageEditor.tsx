@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { usePageContent } from '@/hooks/usePageContent';
+import { useContentBlocks } from '@/hooks/useContentBlocks';
 import ImageUpload from './ImageUpload';
 import {
   Edit, Eye, Plus, Trash2, Home, Info, Phone, Save, X,
@@ -27,7 +28,7 @@ interface BlockDef {
 
 const PAGE_BLOCKS: Record<string, BlockDef[]> = {
   home: [
-    // Hero Section is managed via Content > Hero Section (HeroManager)
+    { key: 'hero', label: 'Hero Section', icon: <Layout className="w-4 h-4" /> },
     { key: 'services', label: 'Services Section', icon: <Briefcase className="w-4 h-4" /> },
     { key: 'license_section', label: 'License Section', icon: <Award className="w-4 h-4" /> },
   ],
@@ -65,8 +66,11 @@ const PAGE_BLOCKS: Record<string, BlockDef[]> = {
   ],
 };
 
+const HERO_BLOCK_NAME = 'home-hero';
+
 const PageEditor = () => {
   const { pages, isLoading, createMutation, updateMutation, deleteMutation } = usePageContent();
+  const { blocks: contentBlocks, updateMutation: cbUpdateMutation, createMutation: cbCreateMutation } = useContentBlocks();
 
   // ── Dialog / custom-page state ──
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -122,7 +126,21 @@ const PageEditor = () => {
   };
 
   // ── Block editing handlers ──
+  const heroBlock = contentBlocks?.find(b => b.name === HERO_BLOCK_NAME);
+
   const handleBlockEdit = (page: any, blockKey: string, blockLabel: string) => {
+    // Home hero → load from content blocks
+    if (page.slug === 'home' && blockKey === 'hero') {
+      const data = heroBlock?.content ? { ...heroBlock.content } : {};
+      if (!data.background_images && data.background_image) {
+        data.background_images = [data.background_image];
+      }
+      setBlockData(data);
+      setEditingBlock({ page, blockKey, blockLabel });
+      setDialogOpen(true);
+      return;
+    }
+
     const content = page.content || {};
     let data = content[blockKey];
 
@@ -159,6 +177,27 @@ const PageEditor = () => {
     if (!editingBlock) return;
     try {
       const { page, blockKey } = editingBlock;
+
+      // Home hero → save to content blocks
+      if (page.slug === 'home' && blockKey === 'hero') {
+        if (heroBlock) {
+          await cbUpdateMutation.mutateAsync({ id: heroBlock.id, content: blockData });
+        } else {
+          await cbCreateMutation.mutateAsync({
+            name: HERO_BLOCK_NAME,
+            label: 'Home - Hero Section',
+            block_type: 'hero',
+            status: 'published',
+            sort_order: 1,
+            page_assignments: ['home'],
+            content: blockData,
+          } as any);
+        }
+        setDialogOpen(false);
+        setEditingBlock(null);
+        return;
+      }
+
       const existingContent = page.content || {};
       const updatedContent = { ...existingContent, [blockKey]: blockData };
 
@@ -916,14 +955,6 @@ const PageEditor = () => {
                   {isExpanded && blocks.length > 0 && (
                     <div className="border-t bg-slate-50/50 dark:bg-slate-900/50 p-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {/* Home page hero note — managed via Content > Hero Section */}
-                        {page.slug === 'home' && (
-                          <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg col-span-full text-sm text-amber-800 dark:text-amber-200">
-                            <Layout className="w-4 h-4 flex-shrink-0" />
-                            <span>Hero Section is managed from <strong>Content &gt; Hero Section</strong> in the sidebar.</span>
-                          </div>
-                        )}
-
                         {blocks.map((block) => (
                           <div
                             key={block.key}
