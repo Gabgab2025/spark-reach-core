@@ -2,8 +2,15 @@
 FROM node:20-alpine AS deps
 
 WORKDIR /app
+
+# Skip Chromium download (puppeteer is a devDependency, not needed for build)
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
 COPY package.json package-lock.json ./
-RUN npm ci --legacy-peer-deps --ignore-scripts
+
+# --legacy-peer-deps: resolve peer dep conflicts
+# Do NOT use --ignore-scripts: esbuild and @swc/core need postinstall to fetch Linux binaries
+RUN npm ci --legacy-peer-deps
 
 # Stage 2: Vite build (skip prerender — no browser available in CI)
 FROM node:20-alpine AS vite-build
