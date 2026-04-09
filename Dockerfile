@@ -1,5 +1,5 @@
-# Stage 1: Install dependencies
-FROM node:20-alpine AS deps
+# Stage 1: Install dependencies (use Debian slim — Alpine musl breaks SWC/esbuild native binaries)
+FROM node:20-slim AS deps
 
 WORKDIR /app
 
@@ -12,8 +12,8 @@ COPY package.json package-lock.json ./
 # Do NOT use --ignore-scripts: esbuild and @swc/core need postinstall to fetch Linux binaries
 RUN npm ci --legacy-peer-deps
 
-# Stage 2: Vite build (skip prerender — no browser available in CI)
-FROM node:20-alpine AS vite-build
+# Stage 2: Vite build
+FROM node:20-slim AS vite-build
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -25,18 +25,7 @@ ENV VITE_API_URL=$VITE_API_URL
 # Increase Node memory for large builds (CKEditor bundle is ~1.3 MB)
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Build — use shell with error capture so BuildKit shows the actual error
-RUN set -e; \
-    echo "=== Node: $(node -e 'console.log(process.platform, process.arch)')"; \
-    echo "=== esbuild: $(./node_modules/.bin/esbuild --version 2>&1 || echo 'MISSING')"; \
-    echo "=== Starting vite build ==="; \
-    ./node_modules/.bin/vite build 2>&1 || { \
-      echo ""; \
-      echo "!!! VITE BUILD FAILED WITH EXIT CODE $? !!!"; \
-      echo ""; \
-      exit 1; \
-    }; \
-    echo "=== Vite build succeeded ==="
+RUN ./node_modules/.bin/vite build
 
 # Stage 3: Production — Nginx serves built assets
 FROM nginx:1.27-alpine AS production
