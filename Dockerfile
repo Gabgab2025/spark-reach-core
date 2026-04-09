@@ -15,6 +15,9 @@ COPY . .
 ARG VITE_API_URL=/api
 ENV VITE_API_URL=$VITE_API_URL
 
+# Increase Node memory for large builds (CKEditor bundle is ~1.3 MB)
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 # Run vite build directly — prerender.js requires puppeteer/Chrome, not needed in production
 RUN npx vite build
 

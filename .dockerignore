@@ -25,6 +25,12 @@ supabase/.temp
 # Dev archive — not needed in any Docker image
 _dev_archive/
 
+# Cloned skill repos — not needed in Docker image
+skills/
+
+# Backend has its own Dockerfile — exclude from frontend build context
+backend/
+
 # Python caches
 **/__pycache__/
 *.pyc
