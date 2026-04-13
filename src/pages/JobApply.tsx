@@ -234,7 +234,10 @@ const JobApply = () => {
     setSubmitting(true);
     try {
       const payload = new FormData();
-      payload.append('job_id', form.jobId);
+      // Don't send fallback job IDs — they don't exist in the database
+      if (form.jobId && !form.jobId.startsWith('fallback-')) {
+        payload.append('job_id', form.jobId);
+      }
       if (form.resumeFile) payload.append('resume', form.resumeFile);
       payload.append('applicant_data', JSON.stringify({
         suffix: form.suffix,

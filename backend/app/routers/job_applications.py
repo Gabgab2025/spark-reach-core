@@ -3,6 +3,7 @@ Job Applications routes: public apply endpoint + admin management.
 """
 import html as html_lib
 import json
+import logging
 import os
 import pathlib
 import time
@@ -16,6 +17,8 @@ from .. import crud, models, schemas
 from ..auth import require_admin
 from ..database import get_db
 from ..main_helpers import limiter, build_mail_config
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["job_applications"])
 
@@ -45,15 +48,26 @@ async def submit_job_application(
     try:
         payload = json.loads(applicant_data)
     except (json.JSONDecodeError, ValueError):
+        logger.warning("Job application: invalid JSON in applicant_data")
         raise HTTPException(status_code=422, detail="Invalid applicant_data JSON")
 
     # Override job_id in payload if provided as form field
     if job_id:
         payload["job_id"] = job_id
 
+    # Clear job_id if it references a non-existent listing (e.g. fallback jobs)
+    if payload.get("job_id"):
+        exists = db.query(models.JobListing).filter(
+            models.JobListing.id == payload["job_id"]
+        ).first()
+        if not exists:
+            logger.info("Job application: job_id '%s' not found, setting to null", payload["job_id"])
+            payload["job_id"] = None
+
     try:
         app_schema = schemas.JobApplicationCreate(**payload)
     except Exception as exc:
+        logger.warning("Job application: schema validation failed: %s", exc)
         raise HTTPException(status_code=422, detail=str(exc))
 
     # Sanitize nested dicts (previous_employment, certifications) that bypass field validators
@@ -73,17 +87,20 @@ async def submit_job_application(
     if resume and resume.filename:
         ext = pathlib.Path(resume.filename).suffix.lower()
         if ext not in ALLOWED_RESUME_EXTENSIONS:
+            logger.warning("Job application: bad resume ext '%s' (file: %s)", ext, resume.filename)
             raise HTTPException(
                 status_code=400,
                 detail=f"Resume must be PDF, DOC, or DOCX. Got '{ext}'",
             )
-        if resume.content_type and resume.content_type not in ALLOWED_RESUME_MIMES:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Invalid MIME type '{resume.content_type}'",
-            )
+        # Only reject obviously wrong MIME types; browsers often send
+        # application/octet-stream for .doc/.docx files
+        if resume.content_type and resume.content_type not in (
+            *ALLOWED_RESUME_MIMES, "application/octet-stream",
+        ):
+            logger.warning("Job application: unexpected MIME '%s' (file: %s, ext: %s)", resume.content_type, resume.filename, ext)
         contents = await resume.read()
         if len(contents) > MAX_RESUME_BYTES:
+            logger.warning("Job application: resume too large (%d bytes)", len(contents))
             raise HTTPException(status_code=400, detail="Resume must be 5 MB or less")
 
         os.makedirs(UPLOAD_DIR, exist_ok=True)
