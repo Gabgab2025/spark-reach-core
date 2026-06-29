@@ -4,6 +4,44 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
+// ── Settings (de)serialization helpers ────────────────────────────────────────
+// Settings are persisted as text key/value rows. Booleans and arrays/objects are
+// JSON-encoded; plain strings (phone numbers, tracking codes, etc.) are stored
+// verbatim and must NOT be run through JSON.parse (which would, e.g., turn the
+// phone string "123" into the number 123).
+const parseSettingValue = (raw: string): any => {
+  if (raw === 'true') return true;
+  if (raw === 'false') return false;
+  const trimmed = raw.trim();
+  if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return raw;
+    }
+  }
+  return raw;
+};
+
+const serializeSettingValue = (value: any): string => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+};
+
+// Convert an array of {key, value} rows into a settings object.
+const settingsArrayToObject = (rows?: Array<{ key?: string; value?: string }>): any => {
+  const obj: any = {};
+  rows?.forEach((row) => {
+    // Keep empty strings out (treated as "unset") but preserve "false"/"0".
+    if (row.key && row.value !== undefined && row.value !== null && row.value !== '') {
+      obj[row.key] = parseSettingValue(row.value);
+    }
+  });
+  return obj;
+};
+
 export interface CMSPage {
   id: string;
   title: string;
@@ -500,28 +538,29 @@ export const useCMS = () => {
     // Dashboard
     getDashboardStats,
 
-    // Settings
+    // Settings — public (non-sensitive) values, for the live site
     getSettings: async (): Promise<CMSSettings> => {
       try {
         const { data, error } = await api.get<any[]>('/settings/public');
 
         if (error) throw error;
 
-        // Convert array of key-value pairs to object
-        const settingsObject: any = {};
-        data?.forEach(setting => {
-          if (setting.key && setting.value) {
-            try {
-              // Try to parse JSON values
-              settingsObject[setting.key] = JSON.parse(setting.value);
-            } catch {
-              // If not JSON, store as string
-              settingsObject[setting.key] = setting.value;
-            }
-          }
-        });
+        return settingsArrayToObject(data);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+        return {};
+      }
+    },
 
-        return settingsObject;
+    // Settings — full set including sensitive keys (admin-authenticated).
+    // Use this in the admin settings panel so saved SMTP/API-key values are visible.
+    getAllSettings: async (): Promise<CMSSettings> => {
+      try {
+        const { data, error } = await api.get<any[]>('/settings');
+
+        if (error) throw error;
+
+        return settingsArrayToObject(data);
       } catch (error) {
         console.error('Error fetching settings:', error);
         return {};
@@ -533,7 +572,7 @@ export const useCMS = () => {
         // Convert settings object to key-value pairs for database storage
         const settingsArray = Object.entries(settings).map(([key, value]) => ({
           key,
-          value: typeof value === 'object' ? JSON.stringify(value) : String(value || '')
+          value: serializeSettingValue(value),
         }));
 
         // Delete existing settings and insert new ones

@@ -29,7 +29,7 @@ const SettingsManager = () => {
 
   const loadSettings = async () => {
     try {
-      const data = await cms.getSettings();
+      const data = await cms.getAllSettings();
       setSettings(data);
     } catch (error) {
       console.error('Failed to load settings:', error);
